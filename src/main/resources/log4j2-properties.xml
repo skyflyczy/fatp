@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<properties>
+	<property name="log.dir">c://log//fatp//</property>
+	<!-- 
+	<property name="pattern">[%d] [%level] [%C] [%M] - [%thread] @@ %msg%n</property>
+	 -->
+	<property name="pattern">[%d] [%level] [@@ %msg @@] [%C] [%M] - [%thread]%n</property>
+	<property name="roll.dir">${log.dir}\\%d{yyyyMM}\\</property>
+	<property name="roll.suffix">.%d{yyyy-MM-dd}.zip</property>
+</properties>
+
+

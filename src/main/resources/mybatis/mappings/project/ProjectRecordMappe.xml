@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.project.ProjectRecordDao">
+	<sql id="where">
+        <where>
+            <if test="@Ognl@isNotEmpty(id)">
+                AND project_recordinfo.Id = #{id}
+            </if>
+            <if test="@Ognl@isNotEmpty(recordCode)">
+                AND project_recordinfo.RecordCode = #{recordCode}
+            </if>
+             <if test="@Ognl@isNotEmpty(exchangeId)">
+				AND project_recordinfo.ExchangeId = #{exchangeId}
+			</if>
+            <if test="@Ognl@isNotEmpty(memberId)">
+                AND project_recordinfo.MemberId = #{memberId}
+            </if>
+            <if test="@Ognl@isNotEmpty(recordName)">
+                AND project_recordinfo.RecordName like "%"#{recordName}"%"
+            </if>
+            <if test="@Ognl@isNotEmpty(recordFullName)">
+                AND project_recordinfo.RecordFullName like "%"#{recordFullName}"%"
+            </if>
+            <if test="@Ognl@isNotEmpty(productTypeId)">
+                AND project_recordinfo.ProductTypeId = #{productTypeId}
+            </if>
+            <if test="@Ognl@isNotEmpty(projectTypeId)">
+                AND project_recordinfo.ProjectTypeId = #{projectTypeId}
+            </if>
+            <if test="@Ognl@isNotEmpty(recordGuid)">
+                AND project_recordinfo.RecordGuid = #{recordGuid}
+            </if>
+            <if test="@Ognl@isNotEmpty(partnerBizId)">
+                AND project_recordinfo.PartnerBizId = #{partnerBizId}
+            </if>
+            <if test="@Ognl@isNotEmpty(loanUserId)">
+                AND project_recordinfo.LoanUserId = #{loanUserId}
+            </if>
+            <if test="@Ognl@isNotEmpty(projectMoney)">
+                AND project_recordinfo.ProjectMoney = #{projectMoney}
+            </if>
+            <if test="@Ognl@isNotEmpty(projectMoneyBegin)">
+				AND project_recordinfo.ProjectMoney >= #{projectMoneyBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectMoneyEnd)">
+				AND project_recordinfo.ProjectMoney &lt;= #{projectMoneyEnd}
+			</if>
+            <if test="@Ognl@isNotEmpty(projectLimit)">
+                AND project_recordinfo.ProjectLimit = #{projectLimit}
+            </if>
+            <if test="@Ognl@isNotEmpty(repayTypeId)">
+                AND project_recordinfo.RepayTypeId = #{repayTypeId}
+            </if>
+            <if test="@Ognl@isNotEmpty(investProfit)">
+                AND project_recordinfo.InvestProfit = #{investProfit}
+            </if>
+            <if test="@Ognl@isNotEmpty(isGuarantee)">
+                AND project_recordinfo.IsGuarantee = #{isGuarantee}
+            </if>
+            <if test="@Ognl@isNotEmpty(isPledge)">
+                AND project_recordinfo.IsPledge = #{isPledge}
+            </if>
+            <if test="@Ognl@isNotEmpty(isInsurance)">
+                AND project_recordinfo.IsInsurance = #{isInsurance}
+            </if>
+             <if test="@Ognl@isNotEmpty(deadlineBegin)">
+				AND project_recordinfo.Deadline >= #{deadlineBegin}
+		   	</if>
+		   	<if test="@Ognl@isNotEmpty(deadlineEnd)">
+				AND project_recordinfo.Deadline &lt;= #{deadlineEnd}
+		   	</if>
+		   	 <if test="@Ognl@isNotEmpty(ratingOrgName)">
+				AND project_recordinfo.RatingOrgName = #{ratingOrgName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creditRating)">
+				AND project_recordinfo.CreditRating = #{creditRating}
+			</if>
+	       <if test="@Ognl@isNotEmpty(debtLevel)">
+				AND project_recordinfo.DebtLevel = #{debtLevel}
+			</if>
+			 <if test="@Ognl@isNotEmpty(underwriterLinkId)">
+				AND UnderwriterLinkId = #{underwriterLinkId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loanLinkId)">
+				AND LoanLinkId = #{loanLinkId}
+			</if>
+            <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                AND project_recordinfo.CreateTime >= #{createTimeBegin}
+            </if>
+            <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                AND project_recordinfo.CreateTime &lt;= #{createTimeEnd}
+            </if>
+            <if test="@Ognl@isNotEmpty(createOperatorId)">
+                AND project_recordinfo.CreateOperatorId = #{createOperatorId}
+            </if>
+            <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+                AND project_recordinfo.UpdateTime >= #{updateTimeBegin}
+            </if>
+            <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+                AND project_recordinfo.UpdateTime &lt;= #{updateTimeEnd}
+            </if>
+            <if test="@Ognl@isNotEmpty(upateOperatorId)">
+                AND project_recordinfo.UpateOperatorId = #{upateOperatorId}
+            </if>
+            <if test="@Ognl@isNotEmpty(recordStatus)">
+                AND project_recordinfo.RecordStatus = #{recordStatus}
+            </if>
+            <if test="@Ognl@isNotEmpty(auditStatus)">
+                AND project_recordinfo.AuditStatus = #{auditStatus}
+            </if>
+            <if test="@Ognl@isNotEmpty(jgAuditTimeBegin)">
+                AND project_recordinfo.JgAuditTime >= #{jgAuditTimeBegin}
+            </if>
+            <if test="@Ognl@isNotEmpty(jgAuditTimeEnd)">
+                AND project_recordinfo.JgAuditTime &lt;= #{jgAuditTimeEnd}
+            </if>
+            <if test="@Ognl@isNotEmpty(jdAuditOperatorId)">
+                AND project_recordinfo.JdAuditOperatorId = #{jdAuditOperatorId}
+            </if>
+            <if test="@Ognl@isNotEmpty(ptAuditTimeBegin)">
+                AND project_recordinfo.PtAuditTime >= #{ptAuditTimeBegin}
+            </if>
+            <if test="@Ognl@isNotEmpty(ptAuditTimeEnd)">
+                AND project_recordinfo.PtAuditTime &lt;= #{ptAuditTimeEnd}
+            </if>
+            <if test="@Ognl@isNotEmpty(ptAuditOperatorId)">
+                AND project_recordinfo.PtAuditOperatorId = #{ptAuditOperatorId}
+            </if>
+            <if test="@Ognl@isNotEmpty(source)">
+                AND project_recordinfo.source = #{source}
+            </if>
+            <if test="@Ognl@isNotEmpty(projectLimitTypeId)">
+                AND project_recordinfo.ProjectLimitTypeId = #{projectLimitTypeId}
+            </if>
+            <if test="@Ognl@isNotEmpty(versionNo)">
+				AND VersionNo = #{versionNo}
+			</if>
+            <if test="@Ognl@isNotEmpty(recordStatusList)">
+                AND project_recordinfo.RecordStatus in
+                <foreach collection="recordStatusList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="@Ognl@isNotEmpty(excludeMemberIds)">
+                AND project_recordinfo.MemberId not in
+                <foreach collection="excludeMemberIds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="@Ognl@isNotEmpty(ids)">
+                AND project_recordinfo.id in
+                <foreach collection="ids" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="@Ognl@isNotEmpty(loanUserName)">
+                AND uc_user.UserName like "%"#{loanUserName}"%"
+            </if>
+        </where>
+    </sql>
+
+	<select id="findByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.ProjectRecordComplex">
+        SELECT 
+        project_recordinfo.*  
+        ,uc_user.UserName AS loanUserName  
+        FROM project_recordinfo
+        <include refid="where"/>
+        <if test="@Ognl@isNotEmpty(sortColumns)">
+            ORDER BY ${sortColumns}
+        </if>
+    </select>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO project_recordinfo (
+			Id ,
+			ExchangeId ,
+			MemberId ,
+			RecordCode ,
+			RecordGuid ,
+			PartnerBizId ,
+			RecordName ,
+			RecordFullName ,
+			ProductTypeId ,
+			ProjectTypeId ,
+			LoanUserId ,
+			ProjectUnitPrice ,
+			ProjectMoney ,
+			ProjectLimit ,
+			ProjectLimitTypeId ,
+			RepayTypeId ,
+			ProjectUsing ,
+			InvestProfit ,
+			IsGuarantee ,
+			IsPledge ,
+			Deadline ,
+			OriginType ,
+			OriginatorId ,
+			RatingOrgName ,
+			CreditRating ,
+			DebtLevel ,
+			UnderwriterLinkId ,
+			LoanLinkId ,
+			RecordStatus ,
+			AuditStatus ,
+			CreditNote ,
+			JgAuditTime ,
+			JdAuditOperatorId ,
+			PtAuditTime ,
+			PtAuditOperatorId ,
+			CreateTime ,
+			CreateOperatorId ,
+			UpdateTime ,
+			UpateOperatorId ,
+			VersionNo
+		) VALUES (
+			#{id} ,
+			#{exchangeId} ,
+			#{memberId} ,
+			#{recordCode} ,
+			#{recordGuid} ,
+			#{partnerBizId} ,
+			#{recordName} ,
+			#{recordFullName} ,
+			#{productTypeId} ,
+			#{projectTypeId} ,
+			#{loanUserId} ,
+			#{projectUnitPrice} ,
+			#{projectMoney} ,
+			#{projectLimit} ,
+			#{projectLimitTypeId} ,
+			#{repayTypeId} ,
+			#{projectUsing} ,
+			#{investProfit} ,
+			#{isGuarantee} ,
+			#{isPledge} ,
+			#{deadline} ,
+			#{originType} ,
+			#{originatorId} ,
+			#{ratingOrgName} ,
+			#{creditRating} ,
+			#{debtLevel} ,
+			#{underwriterLinkId} ,
+			#{loanLinkId} ,
+			#{recordStatus} ,
+			#{auditStatus} ,
+			#{creditNote} ,
+			#{jgAuditTime} ,
+			#{jdAuditOperatorId} ,
+			#{ptAuditTime} ,
+			#{ptAuditOperatorId} ,
+			now() ,
+			#{createOperatorId} ,
+			now() ,
+			#{upateOperatorId} ,
+			1
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+</mapper>
+

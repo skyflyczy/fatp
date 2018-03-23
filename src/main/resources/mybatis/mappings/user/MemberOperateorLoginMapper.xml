@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.user.MemberOperateorLoginDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO member_operateor_login (
+        	Id ,
+        	LoginName ,
+        	LoginType ,
+        	OperatorId ,
+        	MemberId ,
+        	ExchangeId ,
+        	AppId ,
+        	FailNum ,
+        	SuccessNum ,
+        	FailNumLx ,
+        	SuccessNumLx ,
+        	PreLoginTime ,
+        	LastLoginTime ,
+        	LastSuccessTime ,
+        	LastFailTime ,
+        	RetCode ,
+        	RetMsg ,
+        	UpdateTime 
+        ) VALUES (
+        	#{id} ,
+        	#{loginName} ,
+        	#{loginType} ,
+        	#{operatorId} ,
+        	#{memberId} ,
+        	#{exchangeId} ,
+        	#{appId} ,
+        	#{failNum} ,
+        	#{successNum} ,
+        	#{failNumLx} ,
+        	#{successNumLx} ,
+        	#{preLoginTime} ,
+        	#{lastLoginTime} ,
+        	#{lastSuccessTime} ,
+        	#{lastFailTime} ,
+        	#{retCode} ,
+        	#{retMsg} ,
+        	now() 
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE member_operateor_login SET
+	        LoginName = #{loginName} ,
+	        LoginType = #{loginType} ,
+	        OperatorId = #{operatorId} ,
+	        MemberId = #{memberId} ,
+	        ExchangeId = #{exchangeId} ,
+	        AppId = #{appId} ,
+	        FailNum = #{failNum} ,
+	        SuccessNum = #{successNum} ,
+	        FailNumLx = #{failNumLx} ,
+	        SuccessNumLx = #{successNumLx} ,
+	        PreLoginTime = #{preLoginTime} ,
+	        LastLoginTime = #{lastLoginTime} ,
+	        LastSuccessTime = #{lastSuccessTime} ,
+	        LastFailTime = #{lastFailTime} ,
+	        RetCode = #{retCode} ,
+	        RetMsg = #{retMsg} ,
+	        UpdateTime = now() 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+	
+	<sql id="where">
+		<where>	   
+			ExchangeId = #{exchangeId}    				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loginName)">
+				AND LoginName = #{loginName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loginType)">
+				AND LoginType = #{loginType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(operatorId)">
+				AND OperatorId = #{operatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(appId)">
+				AND AppId = #{appId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(failNum)">
+				AND FailNum = #{failNum}
+			</if>
+	       <if test="@Ognl@isNotEmpty(successNum)">
+				AND SuccessNum = #{successNum}
+			</if>
+	       <if test="@Ognl@isNotEmpty(failNumLx)">
+				AND FailNumLx = #{failNumLx}
+			</if>
+	       <if test="@Ognl@isNotEmpty(successNumLx)">
+				AND SuccessNumLx = #{successNumLx}
+			</if>
+	       <if test="@Ognl@isNotEmpty(preLoginTimeBegin)">
+				AND PreLoginTime >= #{preLoginTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(preLoginTimeEnd)">
+				AND PreLoginTime &lt;= #{preLoginTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(lastLoginTimeBegin)">
+				AND LastLoginTime >= #{lastLoginTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(lastLoginTimeEnd)">
+				AND LastLoginTime &lt;= #{lastLoginTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(lastSuccessTimeBegin)">
+				AND LastSuccessTime >= #{lastSuccessTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(lastSuccessTimeEnd)">
+				AND LastSuccessTime &lt;= #{lastSuccessTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(lastFailTimeBegin)">
+				AND LastFailTime >= #{lastFailTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(lastFailTimeEnd)">
+				AND LastFailTime &lt;= #{lastFailTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(retCode)">
+				AND RetCode = #{retCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(retMsg)">
+				AND RetMsg = #{retMsg}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+		</where>
+	</sql>
+
+    <select id="getLoginRecord" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperateorLoginPo">
+    	SELECT *
+	    FROM member_operateor_login 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

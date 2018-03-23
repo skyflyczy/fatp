@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- log4j-api-2.3.jar log4j-core-2.3.jar disruptor-3.3.2.jar-->
+<!-- http://logging.apache.org/log4j/2.x/manual/ -->
+<!-- status:打印状态信息 monitorInterval:扫描周期，单位是秒 -->
+<configuration status="off" monitorInterval="60" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<xi:include href="log4j2-properties.xml" />
+	<!-- DynamicThresholdFilter key="userid" defaultThreshold="ERROR"
+                          onMatch="ACCEPT" onMismatch="DENY">
+    	<KeyValuePair key="abc" value="debug"/>
+  	</DynamicThresholdFilter> -->
+	<appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<!-- 配置输出格式 -->
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+		</Console>
+		<RollingRandomAccessFile name="file_baymax_info"
+			fileName="${log.dir}info.log"  
+            filePattern="${roll.dir}info.log${roll.suffix}">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" /> 
+                <!-- SizeBasedTriggeringPolicy size="250 MB"/>  -->
+            </Policies>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="file_baymax_error"
+			fileName="${log.dir}error.log"  
+            filePattern="${roll.dir}error.log${roll.suffix}">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" /> 
+            </Policies>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="file_access"
+			fileName="${log.dir}access.log"  
+            filePattern="${roll.dir}access.log${roll.suffix}">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" /> 
+            </Policies>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="file_biz"
+			fileName="${log.dir}biz.log"  
+            filePattern="${roll.dir}biz.log${roll.suffix}">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>  
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" /> 
+            </Policies>
+		</RollingRandomAccessFile>
+	</appenders>
+	<loggers>
+		<AsyncLogger name="info" level="info" additivity="false">
+			<AppenderRef ref="file_baymax_info" />
+		</AsyncLogger>
+		<AsyncLogger name="error" level="error" additivity="false">
+			<AppenderRef ref="file_baymax_error" />
+		</AsyncLogger>
+		<AsyncLogger name="access" level="info" additivity="false">
+			<AppenderRef ref="file_access" />
+		</AsyncLogger>
+		<AsyncLogger name="biz" level="info" additivity="false">
+			<AppenderRef ref="file_biz" />
+		</AsyncLogger>
+		<root level="info">
+			<AppenderRef ref="STDOUT" />
+		</root>
+	</loggers>
+</configuration>
+

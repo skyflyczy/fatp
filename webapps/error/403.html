@@ -1,0 +1,27 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/jslib/css/bootstrap.min.css" rel="stylesheet">
+<link href="/jslib/FA/css/font-awesome.min.css" rel="stylesheet">
+<link id="link1" _href="BJUI/themes/css/style.min.css" rel="stylesheet">
+<style>
+	body {height:100%}
+</style>
+<script type="text/javascript">
+	window.onload=function(){
+		var host = window.location.hostname;
+		if(host.indexOf(".com") > 0) {
+		host = host.substring(0, host.indexOf(".com"));
+		host = host.substring(host.lastIndexOf(".")+1);
+		}
+		var link1 = document.getElementById("link1")
+		link1.href = "//cf1." + host + ".com/" + link1.getAttribute("_href");
+	}
+	
+</script>
+<div class="bg-grey">
+	<div class="text-center" style="height:100%;display: table;width:100%;">
+		<div style="display:table-cell;vertical-align: middle;">
+			<div style="font-size:200px;"><i class="fa fa-frown-o"></i></div>
+			<p class="h2" style="font-family:'Microsoft Yahei';margin-bottom:50px;">您的访问请求被禁止</p>
+		</div>
+	</div>
+</div>

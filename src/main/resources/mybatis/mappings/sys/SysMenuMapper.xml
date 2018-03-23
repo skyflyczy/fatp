@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysMenuDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO sys_menu (
+        	Id ,
+        	MenuName ,
+        	ParentId ,
+        	MenuType ,
+        	AdminType ,
+        	AppId ,
+        	MenuUrl ,
+        	Target ,
+        	IsButton ,
+        	ShowIndex ,
+        	MenuImgUrl ,
+        	RelationUrl,
+        	UpdateOperatorId ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	IsValid ,
+        	Remark 
+        ) VALUES (
+        	#{id} ,
+        	#{menuName} ,
+        	#{parentId} ,
+        	#{menuType} ,
+        	#{adminType} ,
+        	#{appId} ,
+        	#{menuUrl} ,
+        	#{target} ,
+        	#{isButton} ,
+        	#{showIndex} ,
+        	#{menuImgUrl} ,
+        	#{relationUrl},
+        	#{updateOperatorId} ,
+        	#{createTime} ,
+        	#{createOperatorId} ,
+        	#{updateTime} ,
+        	#{isValid} ,
+        	#{remark} 
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE sys_menu SET
+	        MenuName = #{menuName} ,
+	        ParentId = #{parentId} ,
+	        MenuType = #{menuType} ,
+	        AdminType = #{adminType} ,
+	        AppId = #{appId} ,
+	        MenuUrl = #{menuUrl} ,
+	        Target = #{target} ,
+	        IsButton = #{isButton} ,
+	        ShowIndex = #{showIndex} ,
+	        MenuImgUrl = #{menuImgUrl} ,
+	        RelationUrl = #{relationUrl},
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        CreateTime = #{createTime} ,
+	        CreateOperatorId = #{createOperatorId} ,
+	        UpdateTime = #{updateTime} ,
+	        IsValid = #{isValid} ,
+	        Remark = #{remark} 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+
+	<update id="updateStatus" parameterType="java.util.Map">
+		UPDATE 	sys_menu SET 
+			MenuName = CONCAT(MenuName,'_',NOW()),
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        UpdateTime = #{updateTime} ,
+	        IsValid = #{isValid}
+	    WHERE (Id = #{id} or ParentId = #{id}) and IsValid = 1
+	</update>
+	
+	<delete id="delete" parameterType="java.util.List">
+		delete from sys_menu where Id in
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item} 
+		</foreach>
+	</delete>
+    
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+    <![CDATA[
+    	SELECT *
+	    FROM sys_menu 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(menuName)">
+				AND MenuName = #{menuName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(parentId)">
+				AND ParentId = #{parentId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(menuType)">
+				AND MenuType = #{menuType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(adminType)">
+				AND AdminType = #{adminType}
+			</if>
+			<if test="@Ognl@isNotEmpty(adminTypeList)">
+				AND AdminType in 
+				<foreach collection="adminTypeList" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+	       <if test="@Ognl@isNotEmpty(appId)">
+				AND AppId = #{appId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(menuUrl)">
+				AND MenuUrl = #{menuUrl}
+			</if>
+			<if test="@Ognl@isNotEmpty(relationUrl)">
+				AND RelationUrl = #{relationUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(target)">
+				AND Target = #{target}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isButton)">
+				AND IsButton = #{isButton}
+			</if>
+	       <if test="@Ognl@isNotEmpty(showIndex)">
+				AND ShowIndex = #{showIndex}
+			</if>
+	       <if test="@Ognl@isNotEmpty(menuImgUrl)">
+				AND MenuImgUrl = #{menuImgUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(isValid)">
+				AND IsValid = #{isValid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				AND Remark = #{remark}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+    	SELECT *
+	    FROM sys_menu 
+		<include refid="where"/>
+		order by ParentId ASC , ShowIndex ASC,Id ASC
+    </select>
+    
+    <select id="getUserMenus" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+   		SELECT DISTINCT sys_menu.* FROM sys_menu 
+		JOIN sys_member_rolemenu ON(sys_menu.Id=sys_member_rolemenu.MemberMenuId)
+		JOIN sys_member_operator_role ON(sys_member_rolemenu.MemberRoleId=sys_member_operator_role.MemberRoleId)
+		where MemberOperatorId = #{memberOperatorId}
+		and MenuType = #{menuType}  and isValid = #{isValid} 
+		<if test="@Ognl@isNotEmpty(isButton)">
+			and IsButton = #{isButton}
+		</if>
+		group by sys_menu.Id
+		order by ParentId ASC , ShowIndex ASC,Id ASC
+    </select>
+</mapper>
+

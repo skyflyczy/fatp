@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysMemberRoleDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO sys_member_role (
+        	Id ,
+        	RoleName ,
+        	RoleDesc ,
+        	RoleType,
+        	MemberId ,
+        	IsValid ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId 
+        ) VALUES (
+        	#{id} ,
+        	#{roleName} ,
+        	#{roleDesc} ,
+        	#{roleType},
+        	#{memberId} ,
+        	#{isValid} ,
+        	now() ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{updateOperatorId} 
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE sys_member_role SET
+	        RoleName = #{roleName} ,
+	        RoleDesc = #{roleDesc} ,
+	        RoleType = #{roleType},
+	        MemberId = #{memberId} ,
+	        IsValid = #{isValid} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMemberRolePo">
+    <![CDATA[
+    	SELECT *
+	    FROM sys_member_role 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(roleName)">
+				AND RoleName = #{roleName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(roleDesc)">
+				AND RoleDesc = #{roleDesc}
+			</if>
+			 <if test="@Ognl@isNotEmpty(roleType)">
+				AND RoleType = #{roleType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValid)">
+				AND IsValid = #{isValid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMemberRolePo">
+    	SELECT *
+	    FROM sys_member_role 
+		<include refid="where"/>
+		ORDER BY UpdateTime desc 
+		<if test="@Ognl@isNotEmpty(orderField)">
+			, ${orderField} ${orderDirection}
+		</if>
+    </select>
+    
+    <delete id="delete">
+    	delete from sys_member_role where id = #{id}
+    </delete>
+</mapper>
+

@@ -1,0 +1,21 @@
+server: 
+  port: 8104
+  
+spring: 
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+      
+mybatis: 
+  mapperLocations:
+  - classpath:mybatis/mappings/**/*.xml
+  typeAliasesPackage: com.telecwin.fatp
+  configLocation: classpath:/mybatis/mybatis-config.xml 
+    
+logging: 
+  level: 
+    root: info
+    org.springframework.jndi: info
+    com.telecwin.fatp.interceptor: debug
+  file: /data/Logs/fatp/springboot.log

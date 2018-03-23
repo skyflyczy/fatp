@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.FeExchangeDao">
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exChangeCode)">
+				AND ExChangeCode = #{exChangeCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exchangeName)">
+				AND ExchangeName = #{exchangeName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(accountType)">
+				AND AccountType = #{accountType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(channelId)">
+				AND ChannelId = #{channelId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cardAccount)">
+				AND CardAccount = #{cardAccount}
+			</if>
+	       <if test="@Ognl@isNotEmpty(accountName)">
+				AND AccountName = #{accountName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(provinceId)">
+				AND ProvinceId = #{provinceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityId)">
+				AND CityId = #{cityId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(subBankName)">
+				AND SubBankName = #{subBankName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.FeExchange">
+    	SELECT *
+	    FROM fe_exchange 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.FeExchange">
+    	SELECT *
+	    FROM fe_exchange 
+	    left join sysarea_city on (fe_exchange.CityId = sysarea_city.CityId )
+		left join sysarea_province on(fe_exchange.ProvinceId = sysarea_province.proId) 
+	    <where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+		</where>
+    </select>
+</mapper>
+

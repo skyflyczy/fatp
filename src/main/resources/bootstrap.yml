@@ -1,0 +1,4 @@
+# 存放系统不变的配置，会在 application.yml 前装载。
+spring:
+  application:
+    name: fatp

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysbizcodeSequenceDao">
+	<update id="update">
+    <![CDATA[
+        UPDATE sysbizcode_sequence SET
+	        CodeSeqName = #{codeSeqName} ,
+	        CodePrefix = #{codePrefix} ,
+	        CodeLength = #{codeLength} ,
+	        Remark = #{remark} ,
+	        CodeSeqDate = #{codeSeqDate} ,
+	        CurrentVal = #{currentVal} ,
+	        IncrementVal = #{incrementVal} ,
+	        UpdateTime = now() 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysbizcodeSequencePo">
+    <![CDATA[
+    	SELECT *
+	    FROM sysbizcode_sequence 
+        WHERE 
+	        Id = #{id} 
+	    FOR UPDATE
+    ]]>
+	</select>
+	
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysbizcodeSequencePo">
+    	SELECT *
+	    FROM sysbizcode_sequence 
+    </select>
+</mapper>
+

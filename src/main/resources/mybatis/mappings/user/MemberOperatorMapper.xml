@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.user.MemberOperatorDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO member_operator (
+        	Id ,
+        	OperatorGuid,
+        	OperatorCode,
+        	ExchangeId,
+        	MemberId ,
+        	LoginName ,
+        	Phone ,
+        	SecrectCode ,
+        	SecrectSalt ,
+        	IsValidPhone ,
+        	IdType ,
+        	RealName ,
+        	IdNumber ,
+        	IsValidId ,
+        	Email ,
+        	IsValidEmail ,
+        	OperatorType ,
+        	OperatorStatus ,
+        	DelStatus ,
+        	CreateTime ,
+        	UpdateTime ,
+        	FaceImgUrl ,
+        	Remark ,
+        	Department ,
+        	Duty,
+        	vipOperator,
+        	IsRegisterAgent,
+        	Gender
+        ) VALUES (
+        	#{id} ,
+        	#{operatorGuid},
+        	#{operatorCode},
+        	#{exchangeId},
+        	#{memberId} ,
+        	#{loginName} ,
+        	#{phone} ,
+        	#{secrectCode} ,
+        	#{secrectSalt} ,
+        	#{isValidPhone} ,
+        	#{idType} ,
+        	AES_ENCRYPT(#{realName},'fatp.com') ,
+        	#{idNumber} ,
+        	#{isValidId} ,
+        	#{email} ,
+        	#{isValidEmail} ,
+        	#{operatorType} ,
+        	#{operatorStatus} ,
+        	#{delStatus} ,
+        	#{createTime} ,
+        	#{updateTime} ,
+        	#{faceImgUrl} ,
+        	#{remark} ,
+        	#{department} ,
+        	#{duty},
+        	#{vipOperator} ,
+        	#{isRegisterAgent},
+        	#{gender}
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE member_operator SET
+            ExchangeId = #{exchangeId},
+	        MemberId = #{memberId} ,
+	        LoginName = #{loginName} ,
+	        Phone = #{phone} ,
+	        SecrectCode = #{secrectCode} ,
+	        SecrectSalt = #{secrectSalt} ,
+	        IsValidPhone = #{isValidPhone} ,
+	        IdType = #{idType} ,
+	        RealName = AES_ENCRYPT(#{realName},'fatp.com') ,
+	        IdNumber = #{idNumber} ,
+	        IsValidId = #{isValidId} ,
+	        Email = #{email} ,
+	        IsValidEmail = #{isValidEmail} ,
+	        OperatorType = #{operatorType} ,
+	        OperatorStatus = #{operatorStatus} ,
+	        DelStatus = #{delStatus} ,
+	        CreateTime = #{createTime} ,
+	        UpdateTime = #{updateTime} ,
+	        FaceImgUrl = #{faceImgUrl} ,
+	        Remark = #{remark} ,
+	        Department = #{department} ,
+	        Duty = #{duty} ,
+	        vipOperator = #{vipOperator},
+	        Gender = #{gender}
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+	
+	<sql id="field">
+		member_operator.Id, 
+		member_operator.MemberId, 
+		member_operator.ExchangeId, 
+		member_operator.LoginName, 
+		member_operator.Phone, 
+		member_operator.SecrectCode, 
+		member_operator.SecrectSalt, 
+		member_operator.IsValidPhone, 
+		member_operator.IdType, 
+		CONVERT(AES_DECRYPT(member_operator.RealName,'fatp.com')USING utf8) RealName, 
+		member_operator.IdNumber, 
+		member_operator.IsValidId, 
+		member_operator.Email, 
+		member_operator.IsValidEmail, 
+		member_operator.OperatorType, 
+		member_operator.OperatorStatus, 
+		member_operator.DelStatus, 
+		member_operator.CreateTime, 
+		member_operator.UpdateTime, 
+		member_operator.FaceImgUrl, 
+		member_operator.Remark, 
+		member_operator.Department, 
+		member_operator.Duty,
+		member_operator.vipOperator,
+		member_operator.isRegisterAgent,
+		member_operator.gender
+	</sql>
+
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT
+    	<include refid="field"/>
+	    FROM member_operator 
+        WHERE 
+	        Id = #{id} 
+	</select>
+	
+	<sql id="where">
+		<where>	 
+			ExchangeId = #{exchangeId}     				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+			<if test="@Ognl@isNotEmpty(memberIdList)">
+				AND MemberId in 
+				<foreach collection="memberIdList" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+	       <if test="@Ognl@isNotEmpty(loginName)">
+				AND LoginName = #{loginName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phone)">
+				AND Phone = #{phone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(secrectCode)">
+				AND SecrectCode = #{secrectCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(secrectSalt)">
+				AND SecrectSalt = #{secrectSalt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidPhone)">
+				AND IsValidPhone = #{isValidPhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(idType)">
+				AND IdType = #{idType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(realName)">
+				AND AES_DECRYPT(RealName,'fatp.com') like "%"#{realName}"%"
+			</if>
+	       <if test="@Ognl@isNotEmpty(idNumber)">
+				AND IdNumber = #{idNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidId)">
+				AND IsValidId = #{isValidId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(email)">
+				AND Email = #{email}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidEmail)">
+				AND IsValidEmail = #{isValidEmail}
+			</if>
+	       <if test="@Ognl@isNotEmpty(operatorType)">
+				AND OperatorType = #{operatorType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(operatorStatus)">
+				AND OperatorStatus = #{operatorStatus}
+			</if>
+			<if test="@Ognl@isNotEmpty(operatorStatusList)">
+				AND OperatorStatus in 
+				<foreach collection="operatorStatusList" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+	       <if test="@Ognl@isNotEmpty(delStatus)">
+				AND DelStatus = #{delStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(faceImgUrl)">
+				AND FaceImgUrl = #{faceImgUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				AND Remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(department)">
+				AND Department = #{department}
+			</if>
+	       <if test="@Ognl@isNotEmpty(duty)">
+				AND Duty = #{duty}
+			</if>
+			<if test="@Ognl@isNotEmpty(vipOperator)">
+				AND vipOperator = #{vipOperator}
+			</if>
+			<if test="@Ognl@isNotEmpty(isRegisterAgent)">
+				AND isRegisterAgent = #{isRegisterAgent}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT 
+    	<include refid="field"/>
+	    FROM member_operator 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(orderField)">
+			ORDER BY ${orderField} ${orderDirection}
+		</if>
+    </select>
+    <select id="getSuperAdmin" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT 
+    	<include refid="field"/>
+	    FROM member_operator 
+	    where memberId = #{memberId} and vipOperator = 1 and ExchangeId = #{exchangeId}
+    </select>
+    
+    <select id="getRegiserAgent" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT 
+    	<include refid="field"/>
+	    FROM member_operator 
+	    where memberId = #{memberId} and isRegisterAgent = 1 and ExchangeId = #{exchangeId}
+    </select>
+    
+    <select id="getByMemberId" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT 
+    	<include refid="field"/>
+	    FROM member_operator 
+	    where memberId = #{memberId} and ExchangeId = #{exchangeId}
+    </select>
+    
+    <select id="getByMenuIds" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	select 
+		<include refid="field"/>
+    	from member_operator
+  		join sys_member_operator_role on (member_operator.id =sys_member_operator_role.MemberOperatorId )
+  		join sys_member_rolemenu on(sys_member_rolemenu.MemberRoleId = sys_member_operator_role.MemberRoleId) 
+  		where sys_member_rolemenu.MemberMenuId in 
+  		<foreach collection="menuIds" item="item" open="(" separator="," close=")">
+					#{item} 
+		</foreach> 
+  		 and member_operator.DelStatus = #{delStatus} and member_operator.ExchangeId = #{exchangeId};
+    </select>
+    
+    <update id="deleteById">
+    	delete from member_operator where id = #{id} and ExchangeId = #{exchangeId} 
+	</update>
+    
+    <select id="getReceiveOperatorByNoticeType" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT DISTINCT(member_operator.Id),
+    	<include refid="field"/>
+	    FROM member_operator 
+	    LEFT JOIN sys_member_operator_role ON(member_operator.id=sys_member_operator_role.MemberOperatorId)
+		LEFT JOIN sys_member_role_notice ON(sys_member_operator_role.MemberRoleId=sys_member_role_notice.RoleId)
+	    Where
+	    	member_operator.MemberId in
+	    	<foreach collection="memberIds" item="item" open="(" separator="," close=")">
+				#{item} 
+			</foreach>
+	    	AND NoticeType = #{noticeType}
+	    	AND ValidSetting = 1
+	    	AND DelStatus = 1
+	    	AND OperatorStatus != 0
+	    	<if test="@Ognl@isNotEmpty(applyOperatorId)">
+				OR member_operator.id = #{applyOperatorId} AND DelStatus = 1 AND OperatorStatus != 0
+			</if>
+    </select>
+    <select id="getOperatorListByIds" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    	SELECT
+    	<include refid="field"/>
+	    FROM member_operator 
+        WHERE 
+	        Id in 
+	        <foreach collection="operatorIds" item="item" open="(" separator="," close=")">
+				#{item} 
+			</foreach> 
+	</select>
+</mapper>
+

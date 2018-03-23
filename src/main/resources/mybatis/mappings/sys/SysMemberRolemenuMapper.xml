@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysMemberRolemenuDao">
+    <insert id="insertBatch" parameterType="java.util.List">
+    	<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+    	INSERT INTO sys_member_rolemenu (
+        	Id ,
+        	MemberId ,
+        	MemberRoleId ,
+        	MemberMenuId ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId 
+        ) VALUES 
+        <foreach collection="list" item="rolemenu"  separator="," >
+		  (
+        	#{rolemenu.id} ,
+        	#{rolemenu.memberId} ,
+        	#{rolemenu.memberRoleId} ,
+        	#{rolemenu.memberMenuId} ,
+        	now() ,
+        	#{rolemenu.createOperatorId} ,
+        	now() ,
+        	#{rolemenu.updateOperatorId} 
+          )        	
+        </foreach>
+        
+    </insert>
+    
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberRoleId)">
+				AND MemberRoleId = #{memberRoleId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberMenuId)">
+				AND MemberMenuId = #{memberMenuId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+			<if test="@Ognl@isNotEmpty(menuIds)">
+				 AND MemberMenuId in
+		    	<foreach collection="menuIds" item="menuId" open="(" separator="," close=")">
+		    		#{menuId}
+		    	</foreach>
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMemberRolemenuPo">
+    	SELECT *
+	    FROM sys_member_rolemenu 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <delete id="delete" parameterType="java.util.Map">
+        DELETE FROM sys_member_rolemenu 
+		<include refid="where" />
+    </delete>
+    
+    <delete id="deleteByRoleOrMenu" parameterType="java.util.Map">
+    	DELETE FROM sys_member_rolemenu 
+    	<where>
+    	<if test="@Ognl@isNotEmpty(roleId)">
+    		AND MemberRoleId = #{roleId}
+    	</if>
+    	<if test="@Ognl@isNotEmpty(memeberId)">
+    		AND MemberId = #{memeberId}
+    	</if>
+    	<if test="@Ognl@isNotEmpty(noDelMenuIdArr)">
+	    	 AND MemberMenuId not in
+	    	<foreach collection="noDelMenuIdArr" item="menuId" open="(" separator="," close=")">
+	    		#{menuId}
+	    	</foreach>
+	    </if>
+    	</where>
+    </delete>
+    
+    <update id="updateByRoleOrMenu" parameterType="java.util.Map">
+    	UPDATE sys_member_rolemenu SET
+    	UpdateTime = now()
+    	<if test="@Ognl@isNotEmpty(operatorId)">
+    	,UpdateOperatorId = #{operatorId}
+    	</if>
+    	<where>
+    	<if test="@Ognl@isNotEmpty(roleId)">
+    		AND MemberRoleId = #{roleId}
+    	</if>
+    	<if test="@Ognl@isNotEmpty(memeberId)">
+    		AND MemberId = #{memeberId}
+    	</if>
+    	<if test="@Ognl@isNotEmpty(roleMenuIds)">
+	    	 AND MemberMenuId in
+	    	<foreach collection="roleMenuIds" item="menuId" open="(" separator="," close=")">
+	    		#{menuId}
+	    	</foreach>
+	    </if>
+	    </where>
+    </update>
+ 
+</mapper>
+

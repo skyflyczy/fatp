@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysMemberOperatorRoleDao">
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO sys_member_operator_role (
+        	Id ,
+        	MemberId ,
+        	MemberRoleId ,
+        	MemberOperatorId ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId 
+        ) VALUES 
+           <foreach collection="list" item="operatorRole" separator=",">
+            (
+            #{operatorRole.id} ,
+        	#{operatorRole.memberId} ,
+        	#{operatorRole.memberRoleId} ,
+        	#{operatorRole.memberOperatorId} ,
+        	now() ,
+        	#{operatorRole.createOperatorId} ,
+        	now() ,
+        	#{operatorRole.updateOperatorId} 
+        	)
+           </foreach>
+        	
+        
+     	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+     	</selectKey>
+    </insert>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberRoleId)">
+				AND MemberRoleId = #{memberRoleId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberOperatorId)">
+				AND MemberOperatorId = #{memberOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMemberOperatorRolePo">
+    	SELECT *
+	    FROM sys_member_operator_role 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <delete id="deleteByOpeartorOrRole" parameterType="java.util.Map">
+        DELETE FROM sys_member_operator_role WHERE 1=1
+      <if test="@Ognl@isNotEmpty(memberOperatorId)">
+		  AND MemberOperatorId = #{memberOperatorId}
+	  </if>
+	  <if test="@Ognl@isNotEmpty(memberRoleId)">
+		  AND MemberRoleId = #{memberRoleId}
+	  </if>
+	  <if test="@Ognl@isNotEmpty(noDelRoleArray)">
+	    AND MemberRoleId not in  
+		<foreach collection="noDelRoleArray" item="roleId" open="(" separator="," close=")">
+	  		#{roleId}
+	    </foreach>
+	  </if>
+    </delete>
+    
+    <update id="updateByOpeartorOrRole" parameterType="java.util.Map">
+    	UPDATE sys_member_operator_role SET
+    	UpdateTime = now() ,
+	    UpdateOperatorId = #{updateOperatorId}
+	    WHERE 1=1
+      <if test="@Ognl@isNotEmpty(memberOperatorId)">
+		  AND MemberOperatorId = #{memberOperatorId}
+	  </if>
+	  <if test="@Ognl@isNotEmpty(roleIds)">
+	    AND MemberRoleId in  
+		<foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+	  		#{roleId}
+	    </foreach>
+	  </if> 
+    </update>
+</mapper>
+

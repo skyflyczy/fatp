@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.TimelineDetailDao">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO timeline_detail (
+            Id ,
+            EntityType ,
+            EntityId ,
+            MemberId ,
+            EventId ,
+            EventName ,
+            EventTime ,
+            EventOperatorId ,
+            EventOperatorName ,
+            EventRemark ,
+            StatusChangeDesc
+        ) VALUES (
+            #{id} ,
+            #{entityType} ,
+            #{entityId} ,
+            #{memberId} ,
+            #{eventId} ,
+            #{eventName} ,
+            #{eventTime} ,
+            #{eventOperatorId} ,
+            #{eventOperatorName} ,
+            #{eventRemark} ,
+            #{statusChangeDesc}
+        )
+        <selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+    </insert>
+</mapper>
+

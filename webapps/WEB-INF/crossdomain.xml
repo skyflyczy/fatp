@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<cross-domain-policy>
+<allow-access-from domain="cf1.qdfae.com"/>
+<allow-access-from domain="cf2.qdfae.com"/>
+<allow-http-request-headers-from domain="*.qdfae.com" headers="*"/>
+</cross-domain-policy>
