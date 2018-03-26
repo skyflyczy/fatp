@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.user.UcUserPubinfoDao">
+	<sql id="userpub_field">
+		Id,
+		BirthDate, 
+		PostalCode, 
+		FaxPhone, 
+		TelePhone, 
+		Address, 
+		WebUrl, 
+		ProvinceId, 
+		CityId, 
+		DisId, 
+		IndustryId,
+		CompanyOrgCode, 
+		CONVERT(AES_DECRYPT(CompanyName,'fatp.com')USING utf8) CompanyName,
+		CompanyTypeId, 
+		CONVERT(AES_DECRYPT(CompanyShortName,'fatp.com')USING utf8) CompanyShortName, 
+		CompanyBusinessLicense, 
+		CompanyRepresentative, 
+		CompanyFaxNumber, 
+		CONVERT(AES_DECRYPT(CompanyRegAddress,'fatp.com')USING utf8) CompanyRegAddress, 
+		MainBuisness, 
+		MainDesc, 
+		MoneyUnit,
+		moneyUnitFinance,
+		FinancialBusinessIncome, 
+		FinancialGroupBusinessIncome, 
+		FinancialTotalAsset, 
+		FinancialNetAsset, 
+		FinancialGroupNetAsset, 
+		FinancialTotalProfit, 
+		FinancialNetProfit,
+		CreateOperatorId, 
+		CreateTime, 
+		UpdateOperatorId, 
+		UpdateTime
+	</sql>
+
+    <select id="getByCompanyOrgCode" parameterType="string" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    	SELECT 
+    	<include refid="userpub_field"/>
+	    FROM uc_user_pubinfo 
+        WHERE 
+	        companyOrgCode = #{companyOrgCode} 
+	</select>
+	
+	 <select id="getByCompanyNameEqual" parameterType="string" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    	SELECT 
+    	<include refid="userpub_field"/>
+	    FROM uc_user_pubinfo 
+        WHERE 
+	         AES_DECRYPT(CompanyName,'fatp.com') = #{companyNameEqual}
+	</select>
+	
+	<select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    	SELECT 
+    	<include refid="userpub_field"/>
+	    FROM uc_user_pubinfo 
+        WHERE 
+	        id = #{id} 
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(companyOrgCode)">
+				AND CompanyOrgCode = #{companyOrgCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(companyName)">
+				AND AES_DECRYPT(CompanyName,'fatp.com') like "%"#{companyName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(companyNameEqual)">
+				AND AES_DECRYPT(CompanyName,'fatp.com') = #{companyNameEqual}
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyShortName)">
+				AND AES_DECRYPT(CompanyShortName,'fatp.com') like "%"#{companyShortName}"%"
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyTypeId)">
+				AND CompanyTypeId = #{companyTypeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(birthDateBegin)">
+				AND BirthDate >= #{birthDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(birthDateEnd)">
+				AND BirthDate &lt;= #{birthDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(postalCode)">
+				AND PostalCode = #{postalCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(faxPhone)">
+				AND FaxPhone = #{faxPhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(telePhone)">
+				AND TelePhone = #{telePhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(address)">
+				AND Address = #{address}
+			</if>
+	       <if test="@Ognl@isNotEmpty(webUrl)">
+				AND WebUrl = #{webUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(provinceId)">
+				AND ProvinceId = #{provinceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityId)">
+				AND CityId = #{cityId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(disId)">
+				AND DisId = #{disId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(industryId)">
+				AND IndustryId = #{industryId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyBusinessLicense)">
+				AND CompanyBusinessLicense = #{companyBusinessLicense}
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyRepresentative)">
+				AND CompanyRepresentative = #{companyRepresentative}
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyFaxNumber)">
+				AND CompanyFaxNumber = #{companyFaxNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(companyRegAddress)">
+				AND AES_DECRYPT(CompanyRegAddress,'fatp.com') like "%"#{companyRegAddress}"%"
+			</if>
+	       <if test="@Ognl@isNotEmpty(mainBuisness)">
+				AND MainBuisness = #{mainBuisness}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mainDesc)">
+				AND MainDesc = #{mainDesc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialBusinessIncome)">
+				AND FinancialBusinessIncome = #{financialBusinessIncome}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialGroupBusinessIncome)">
+				AND FinancialGroupBusinessIncome = #{financialGroupBusinessIncome}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialTotalAsset)">
+				AND FinancialTotalAsset = #{financialTotalAsset}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialNetAsset)">
+				AND FinancialNetAsset = #{financialNetAsset}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialGroupNetAsset)">
+				AND FinancialGroupNetAsset = #{financialGroupNetAsset}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialTotalProfit)">
+				AND FinancialTotalProfit = #{financialTotalProfit}
+			</if>
+	       <if test="@Ognl@isNotEmpty(financialNetProfit)">
+				AND FinancialNetProfit = #{financialNetProfit}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    	SELECT 
+    	<include refid="userpub_field"/>
+	    FROM uc_user_pubinfo 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <insert id="insertPub" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO uc_user_pubinfo (
+        	CompanyGuid,
+        	CompanyOrgCode ,
+        	CompanyName ,
+        	CompanyShortName ,
+        	CompanyTypeId ,
+        	BirthDate ,
+        	PostalCode ,
+        	FaxPhone ,
+        	TelePhone ,
+        	Address ,
+        	WebUrl ,
+        	ProvinceId ,
+        	CityId ,
+        	DisId ,
+        	IndustryId ,
+        	CompanyBusinessLicense ,
+        	CompanyRepresentative ,
+        	CompanyFaxNumber ,
+        	CompanyRegAddress ,
+        	MainBuisness ,
+        	MainDesc ,
+        	MoneyUnit,
+        	moneyUnitFinance,
+        	FinancialBusinessIncome ,
+        	FinancialGroupBusinessIncome ,
+        	FinancialTotalAsset ,
+        	FinancialNetAsset ,
+        	FinancialGroupNetAsset ,
+        	FinancialTotalProfit ,
+        	FinancialNetProfit ,
+        	CreateOperatorId ,
+        	CreateTime ,
+        	UpdateOperatorId ,
+        	UpdateTime 
+        ) VALUES (
+        	#{companyGuid},
+        	#{companyOrgCode} ,
+        	AES_ENCRYPT(#{companyName},'fatp.com') ,
+        	AES_ENCRYPT(#{companyShortName},'fatp.com') ,
+        	#{companyTypeId} ,
+        	#{birthDate} ,
+        	#{postalCode} ,
+        	#{faxPhone} ,
+        	#{telePhone} ,
+        	#{address} ,
+        	#{webUrl} ,
+        	#{provinceId} ,
+        	#{cityId} ,
+        	#{disId} ,
+        	#{industryId} ,
+        	#{companyBusinessLicense} ,
+        	#{companyRepresentative} ,
+        	#{companyFaxNumber} ,
+        	AES_ENCRYPT(#{companyRegAddress},'fatp.com') ,
+        	#{mainBuisness} ,
+        	#{mainDesc} ,
+        	#{moneyUnit},
+        	#{moneyUnitFinance},
+        	#{financialBusinessIncome} ,
+        	#{financialGroupBusinessIncome} ,
+        	#{financialTotalAsset} ,
+        	#{financialNetAsset} ,
+        	#{financialGroupNetAsset} ,
+        	#{financialTotalProfit} ,
+        	#{financialNetProfit} ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{updateOperatorId} ,
+        	now()
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	
+	<update id="updatePub">
+    <![CDATA[
+        UPDATE uc_user_pubinfo SET
+        	companyOrgCode = #{companyOrgCode},
+	        CompanyName = AES_ENCRYPT(#{companyName},'fatp.com') ,
+	        CompanyShortName = AES_ENCRYPT(#{companyShortName},'fatp.com') ,
+	        CompanyTypeId = #{companyTypeId} ,
+	        BirthDate = #{birthDate} ,
+	        PostalCode = #{postalCode} ,
+	        FaxPhone = #{faxPhone} ,
+	        TelePhone = #{telePhone} ,
+	        Address = #{address} ,
+	        WebUrl = #{webUrl} ,
+	        ProvinceId = #{provinceId} ,
+	        CityId = #{cityId} ,
+	        DisId = #{disId} ,
+	        IndustryId = #{industryId} ,
+	        CompanyBusinessLicense = #{companyBusinessLicense} ,
+	        CompanyRepresentative = #{companyRepresentative} ,
+	        CompanyFaxNumber = #{companyFaxNumber} ,
+	        CompanyRegAddress = AES_ENCRYPT(#{companyRegAddress},'fatp.com') ,
+	        MainBuisness = #{mainBuisness} ,
+	        MainDesc = #{mainDesc} ,
+	        MoneyUnit = #{moneyUnit},
+	        moneyUnitFinance = #{moneyUnitFinance},
+	        FinancialBusinessIncome = #{financialBusinessIncome} ,
+	        FinancialGroupBusinessIncome = #{financialGroupBusinessIncome} ,
+	        FinancialTotalAsset = #{financialTotalAsset} ,
+	        FinancialNetAsset = #{financialNetAsset} ,
+	        FinancialGroupNetAsset = #{financialGroupNetAsset} ,
+	        FinancialTotalProfit = #{financialTotalProfit} ,
+	        FinancialNetProfit = #{financialNetProfit} ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        UpdateTime = now() 
+        WHERE 
+	         Id = #{id}
+    ]]>
+	</update>
+</mapper>
+

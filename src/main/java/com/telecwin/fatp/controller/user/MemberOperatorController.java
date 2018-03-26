@@ -20,7 +20,7 @@ import com.huajin.baymax.logger.Xlogger;
 import com.telecwin.fatp.controller.BaseController;
 import com.telecwin.fatp.controller.param.OperatorQueryParam;
 import com.telecwin.fatp.domain.PageData;
-import com.telecwin.fatp.enums.SystypeCategoryDesc;
+import com.telecwin.fatp.enums.user.IdTypeDesc;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.interceptor.WithoutAuth;
@@ -28,7 +28,6 @@ import com.telecwin.fatp.po.sys.SysMemberRolePo;
 import com.telecwin.fatp.po.user.MemberOperatorPo;
 import com.telecwin.fatp.service.sys.SysMemberOperatorRoleService;
 import com.telecwin.fatp.service.sys.SysMemberRoleService;
-import com.telecwin.fatp.service.sys.SystypeService;
 import com.telecwin.fatp.service.user.MemberOperatorService;
 
 @Controller
@@ -37,8 +36,6 @@ public class MemberOperatorController extends BaseController{
 
 	@Autowired
 	private MemberOperatorService memberOperatorService;
-	@Autowired
-	private SystypeService systypeService;
 	@Autowired
 	private SysMemberOperatorRoleService sysMemberOperatorRoleService;
 	@Autowired
@@ -55,7 +52,7 @@ public class MemberOperatorController extends BaseController{
 		int operatorId = getSelfId();
 		MemberOperatorPo memberOperator = memberOperatorService.getMemberOperatorById(operatorId);
 		request.setAttribute("memberOperator", memberOperator);
-		request.setAttribute("idTypeList", systypeService.getSystypeByCategory(SystypeCategoryDesc.个人证件类型.category));
+		request.setAttribute("idTypeList", IdTypeDesc.getPersonalTypes());
 		return viewPath + "myinfo";
 	}
 	
@@ -216,7 +213,7 @@ public class MemberOperatorController extends BaseController{
 	@RequestMapping("/add")
 	public ModelAndView viewAdd(){
 		ModelAndView mv = init("sys/operator/add");
-		request().setAttribute("idTypeList", systypeService.getSystypeByCategory(SystypeCategoryDesc.个人证件类型.category));
+		request().setAttribute("idTypeList", IdTypeDesc.getPersonalTypes());
 		return mv;
 	}
 	
@@ -260,7 +257,7 @@ public class MemberOperatorController extends BaseController{
 		try {
 			MemberOperatorPo memberOperator = memberOperatorService.getMemberOperatorById(id);
 			mv.addObject("memberOperator", memberOperator);
-			request().setAttribute("idTypeList", systypeService.getSystypeByCategory(SystypeCategoryDesc.个人证件类型.category));
+			request().setAttribute("idTypeList", IdTypeDesc.getPersonalTypes());
 		} catch (Exception e) {
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "edit", e));
 		}

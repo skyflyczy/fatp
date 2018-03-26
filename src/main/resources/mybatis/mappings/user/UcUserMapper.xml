@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.user.UcUserDao">
+<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO uc_user (
+        	Id ,
+        	UserGuid,
+        	UserCode ,
+        	OwnerUserId ,
+        	ExchangeId,
+        	UserName ,
+        	Phone ,
+        	SecrectCode ,
+        	SecrectSalt ,
+        	IsValidPhone ,
+        	IdTypeId ,
+        	RealName ,
+        	IdNumber ,
+        	IsValidId ,
+        	Email ,
+        	IsValidEmail ,
+        	OrgTypeId ,
+        	UserStatus ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId ,
+        	WeiXinId ,
+        	FaceImgUrl ,
+        	userIdentity,
+        	userChildType,
+        	companyInfoId,
+        	companyParentId,
+        	tradeSecrectSalt,
+        	tradeSecrectCode,
+        	isSetTradePwd,
+        	isBindBankCard,
+        	registerSource,
+        	IsSendSms
+        ) VALUES (
+        	#{id} ,
+        	#{userGuid},
+        	#{userCode} ,
+        	#{ownerUserId} ,
+        	#{exchangeId},
+        	#{userName} ,
+        	#{phone} ,
+        	#{secrectCode} ,
+        	#{secrectSalt} ,
+        	#{isValidPhone} ,
+        	#{idTypeId} ,
+        	AES_ENCRYPT(#{realName},'fatp.com') ,
+        	#{idNumber} ,
+        	#{isValidId} ,
+        	#{email} ,
+        	#{isValidEmail} ,
+        	#{orgTypeId} ,
+        	#{userStatus} ,
+        	now() ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{updateOperatorId} ,
+        	#{weiXinId} ,
+        	#{faceImgUrl} ,
+        	#{userIdentity},
+        	#{userChildType},
+        	#{companyInfoId},
+        	#{companyParentId},
+        	#{tradeSecrectSalt},
+        	#{tradeSecrectCode},
+        	#{isSetTradePwd},
+        	#{isBindBankCard},
+        	#{registerSource},
+        	#{isSendSms}
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	<update id="update">
+    <![CDATA[
+        UPDATE uc_user SET
+	        UserName = #{userName} ,
+	        Phone = #{phone} ,
+	        SecrectCode = #{secrectCode} ,
+	        SecrectSalt = #{secrectSalt} ,
+	        IsValidPhone = #{isValidPhone} ,
+	        IdTypeId = #{idTypeId} ,
+	        RealName = AES_ENCRYPT(#{realName},'fatp.com') ,
+	        IdNumber = #{idNumber} ,
+	        IsValidId = #{isValidId} ,
+	        Email = #{email} ,
+	        IsValidEmail = #{isValidEmail} ,
+	        OrgTypeId = #{orgTypeId} ,
+	        UserStatus = #{userStatus} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        WeiXinId = #{weiXinId} ,
+	        FaceImgUrl = #{faceImgUrl},
+	        companyInfoId = #{companyInfoId},
+	        auditOperatorId = #{auditOperatorId},
+	        auditRemark = #{auditRemark},
+	        auditTime = #{auditTime} ,
+	        companyParentId = #{companyParentId},
+	        tradeSecrectSalt = #{tradeSecrectSalt},
+        	tradeSecrectCode = #{tradeSecrectCode},
+        	isSetTradePwd = #{isSetTradePwd},
+        	isBindBankCard = #{isBindBankCard} ,
+        	IsSendSms = #{isSendSms} 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+	
+	<sql id="user_field">
+			u.Id, 
+			u.UserGuid,
+			u.UserCode, 
+			u.OwnerUserId, 
+			u.ExchangeId, 
+			u.UserName, 
+			u.Phone, 
+			u.SecrectCode, 
+			u.SecrectSalt, 
+			u.IsValidPhone, 
+			u.IdTypeId, 
+			CONVERT(AES_DECRYPT(u.RealName,'fatp.com')USING utf8) RealName,  
+			u.IdNumber, 
+			u.IsValidId, 
+			u.Email, 
+			u.IsValidEmail, 
+			u.OrgTypeId, 
+			u.UserStatus, 
+			u.CreateTime, 
+			u.CreateOperatorId, 
+			u.UpdateTime, 
+			u.UpdateOperatorId, 
+			u.WeiXinId, 
+			u.FaceImgUrl, 
+			u.UserIdentity, 
+			u.UserChildType, 
+			u.CompanyInfoId, 
+			u.AuditOperatorId, 
+			u.AuditRemark, 
+			u.AuditTime,
+			u.companyParentId,
+			u.TradeSecrectCode,
+			u.TradeSecrectSalt,
+			u.IsSetTradePwd,
+			u.IsBindBankCard,
+			u.registerSource,
+			u.isSendSms
+	</sql>
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
+    	SELECT 
+    	<include refid="user_field"/>,
+    	<include refid="userpub_field"/>
+	    FROM uc_user u
+	    left join uc_user_pubinfo up on(up.id=u.companyInfoId)
+        WHERE 
+	        u.Id = #{id} 
+	        <if test="@Ognl@isNotEmpty(exchangeId)">
+			 	AND u.ExchangeId = #{exchangeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerUserId)">
+				AND u.OwnerUserId = #{ownerUserId}
+			</if>
+	</select>
+	<select id="getUserExtById" parameterType="int" resultType="com.telecwin.fatp.domain.UcUser">
+    	SELECT 
+    	ue.Id,
+		<include refid="userext_field"/>
+	    FROM uc_userext ue
+        WHERE 
+	        ue.Id = #{id} 
+	</select>
+	<sql id="userpub_field">
+		up.BirthDate, 
+		up.PostalCode, 
+		up.FaxPhone, 
+		up.TelePhone, 
+		up.Address, 
+		up.WebUrl, 
+		up.ProvinceId, 
+		up.CityId, 
+		up.DisId, 
+		up.IndustryId,
+		up.CompanyOrgCode, 
+		CONVERT(AES_DECRYPT(up.CompanyName,'fatp.com')USING utf8) CompanyName,
+		up.CompanyTypeId, 
+		CONVERT(AES_DECRYPT(up.CompanyShortName,'fatp.com')USING utf8) CompanyShortName, 
+		up.CompanyBusinessLicense, 
+		up.CompanyRepresentative, 
+		up.CompanyFaxNumber, 
+		CONVERT(AES_DECRYPT(up.CompanyRegAddress,'fatp.com')USING utf8) CompanyRegAddress, 
+		up.MainBuisness, 
+		up.MainDesc, 
+		up.MoneyUnit,
+		up.moneyUnitFinance,
+		up.FinancialBusinessIncome, 
+		up.FinancialGroupBusinessIncome, 
+		up.FinancialTotalAsset, 
+		up.FinancialNetAsset, 
+		up.FinancialGroupNetAsset, 
+		up.FinancialTotalProfit, 
+		up.FinancialNetProfit
+	</sql>
+	<sql id="userext_field">
+		CONVERT(AES_DECRYPT(ue.LinkMan,'fatp.com')USING utf8) LinkMan, 
+		ue.LinkPhone, 
+		ue.LinkSex, 
+		ue.LinkIdTypeId, 
+		ue.LinkIdnumber, 
+		ue.LinkDepartment, 
+		ue.LinkCareer, 
+		ue.LinkEmail, 
+		ue.LinkDesc, 
+		ue.DeparmentName, 
+		ue.DeparmentProvinceId, 
+		ue.DeparmentCityId, 
+		ue.DeparmentDisId, 
+		CONVERT(AES_DECRYPT(ue.DeparmentAddress,'fatp.com')USING utf8) DeparmentAddress,
+		ue.DeparmentPhone, 
+		ue.DeparmentFax,
+		ue.DeparmentPostCode
+	</sql>
+	<sql id="where">
+		<where>	 
+			   u.ExchangeId = #{exchangeId}   				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND u.Id = #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(noId)">
+				AND u.Id != #{noId}
+			</if>
+			<if test="@Ognl@isNotEmpty(ids)">
+				AND u.Id in
+				<foreach collection="ids" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+			<if test="@Ognl@isNotEmpty(userGuid)">
+				AND u.UserGuid = #{userGuid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userCode)">
+				AND u.UserCode = #{userCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ownerUserId)">
+				AND u.OwnerUserId = #{ownerUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userName)">
+				AND u.UserName like "%"#{userName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(userNameEqual)">
+				AND u.UserName = #{userNameEqual}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phone)">
+				AND u.Phone = #{phone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidPhone)">
+				AND u.IsValidPhone = #{isValidPhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(idTypeId)">
+				AND u.IdTypeId = #{idTypeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(realName)">
+				AND AES_DECRYPT(u.RealName,'fatp.com') like "%"#{realName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(realNameEqual)">
+				AND AES_DECRYPT(u.RealName,'fatp.com') = #{realNameEqual}
+			</if>
+	       <if test="@Ognl@isNotEmpty(idNumber)">
+				AND u.IdNumber = #{idNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidId)">
+				AND u.IsValidId = #{isValidId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(email)">
+				AND u.Email = #{email}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isValidEmail)">
+				AND u.IsValidEmail = #{isValidEmail}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgTypeId)">
+				AND u.OrgTypeId = #{orgTypeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(delStatus)">
+				AND u.UserStatus = #{delStatus}
+			</if>
+			<if test="@Ognl@isNotEmpty(noDelStatus)">
+				AND u.UserStatus != #{noDelStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND u.CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND u.CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND u.CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND u.UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND u.UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND u.UpdateOperatorId = #{updateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weiXinId)">
+				AND u.WeiXinId = #{weiXinId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(faceImgUrl)">
+				AND u.FaceImgUrl = #{faceImgUrl}
+			</if>
+			<if test="@Ognl@isNotEmpty(userProductTypeId)">
+				AND u.UserProductTypeId = #{userProductTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(userStatus)">
+				AND u.UserStatus = #{userStatus}
+			</if>
+			<if test="@Ognl@isNotEmpty(userStatusList)">
+				AND u.UserStatus in
+				<foreach collection="userStatusList" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+			<if test="@Ognl@isNotEmpty(userIdentity)">
+			 	AND u.userIdentity = #{userIdentity}
+			</if>
+			<if test="@Ognl@isNotEmpty(userChildType)">
+			 	AND u.userChildType = #{userChildType}
+			</if>
+			<if test="@Ognl@isNotEmpty(companyName)">
+			 	AND AES_DECRYPT(up.CompanyName,'fatp.com') like "%"#{companyName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(companyNameEq)">
+			 	AND AES_DECRYPT(up.CompanyName,'fatp.com') = #{companyNameEq}
+			</if>
+			<if test="@Ognl@isNotEmpty(companyOrgCode)">
+			 	AND up.companyOrgCode = #{companyOrgCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(noOrgTypeId)">
+				AND u.OrgTypeId != #{noOrgTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerUserName)">
+				AND u1.UserName = #{ownerUserName}
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerUserCode)">
+				AND u1.UserCode = #{ownerUserCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(userTypeId)">
+		 		AND uc_user_biztype.UserProductTypeId = #{userTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(isPTAddList)">
+			 	AND member_operator.MemberId = 0
+			</if>
+			<if test="@Ognl@isNotEmpty(auditTimeBegin)">
+				AND u.AuditTime >= #{auditTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(auditTimeEnd)">
+				AND u.AuditTime &lt;= #{auditTimeEnd}
+		   </if>
+		</where>
+	</sql>
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
+    	SELECT 
+		<include refid="user_field"/>,
+    	<include refid="userpub_field"/>,
+    	<include refid="userext_field"/>
+    	,u1.UserName OwnerUserName
+	    FROM uc_user u
+	    left join uc_userext ue on(u.Id=ue.Id)
+	    left join uc_user_pubinfo up on(up.id=u.companyInfoId)
+	    left join uc_user u1 on(u.OwnerUserId=u1.Id)
+	    left join member_operator on(member_operator.id=u.CreateOperatorId)
+		<include refid="where"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    <insert id="insertExt">
+    <![CDATA[
+        INSERT INTO uc_userext (
+        	Id, 
+			LinkMan, 
+			LinkPhone, 
+			LinkSex, 
+			LinkIdTypeId, 
+			LinkIdnumber, 
+			LinkDepartment, 
+			LinkCareer, 
+			LinkEmail, 
+			LinkDesc, 
+			DeparmentName, 
+			DeparmentProvinceId, 
+			DeparmentCityId, 
+			DeparmentDisId, 
+			deparmentAddress,
+			DeparmentPhone, 
+			DeparmentFax, 
+			deparmentPostCode,
+			CreateOperatorId, 
+			CreateTime, 
+			UpdateOperatorId, 
+			UpdateTime
+			)
+			VALUES
+			(
+			#{id}, 
+			AES_ENCRYPT(#{linkMan},'fatp.com') ,
+			#{linkPhone},
+			#{linkSex},
+			#{linkIdTypeId},
+			#{linkIdnumber},
+			#{linkDepartment},
+			#{linkCareer},
+			#{linkEmail},
+			#{linkDesc},
+			#{deparmentName},
+			#{deparmentProvinceId},
+			#{deparmentCityId},
+			#{deparmentDisId},
+			AES_ENCRYPT(#{deparmentAddress},'fatp.com'),
+			#{deparmentPhone},
+			#{deparmentFax},
+			#{deparmentPostCode},
+			#{createOperatorId}, 
+			now(), 
+			#{updateOperatorId}, 
+			now()
+			)
+    ]]>
+	</insert>
+	<update id="updateExt">
+		UPDATE uc_userext 
+			SET
+			LinkMan = AES_ENCRYPT(#{linkMan},'fatp.com') , 
+			LinkPhone = #{linkPhone}, 
+			LinkSex = #{linkSex}, 
+			LinkIdTypeId = #{linkIdTypeId}, 
+			LinkIdnumber = #{linkIdnumber}, 
+			LinkDepartment = #{linkDepartment}, 
+			LinkCareer = #{linkCareer}, 
+			LinkEmail = #{linkEmail}, 
+			LinkDesc = #{linkDesc}, 
+			DeparmentName = #{deparmentName}, 
+			DeparmentProvinceId = #{deparmentProvinceId}, 
+			DeparmentCityId = #{deparmentCityId}, 
+			DeparmentDisId = #{deparmentDisId}, 
+			deparmentAddress = AES_ENCRYPT(#{deparmentAddress},'fatp.com'),
+			DeparmentPhone = #{deparmentPhone}, 
+			DeparmentFax = #{deparmentFax}, 
+			deparmentPostCode = #{deparmentPostCode},
+			UpdateOperatorId = #{updateOperatorId}, 
+			UpdateTime = now()
+			WHERE
+			Id = #{id}
+	</update>
+</mapper>
+

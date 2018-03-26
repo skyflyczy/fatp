@@ -1,12 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.huajin.ptoms.domain.UcUser, com.huajin.ptoms.util.StatusUtil,
-    com.huajin.ptoms.domain.MemberPageStatus" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="待处理" value="<%= MemberPageStatus.待处理  %>"/>
-<c:set var="审核退回" value="<%= MemberPageStatus.审核退回 %>"/>
-<c:set var="不通过" value="<%= MemberPageStatus.不通过 %>"/>
 
 <!-- 投资者/个人、企业 -->
 <div class="bjui-pageHeader">
@@ -35,14 +30,14 @@
     <table data-toggle="tablefixed">
     	<thead>
 	    	<tr>
-	    		<th align="center" width="6%">会员账号</th>
+	    		<th align="center" width="10%">会员编号</th>
 	    		<th width="14%">会员简称</th>
 	    		<th width="20%">会员全称</th>
 	    		<th align="center" width="12%">经办人</th>
 	    		<th align="center" width="10%">经办人手机</th>
 	    		<th align="center" width="14%">注册时间</th>
 	    		<th align="center" width="8%">状态</th>
-	    		<th align="center" width="16%">操作</th>
+	    		<th align="center" width="18%">操作</th>
 	    	</tr>
     	</thead>
     	<tbody>
@@ -55,23 +50,17 @@
 	    		<td><span id="agentphone_${obj.id}"></span></td>
 	    		<td><fmt:formatDate value="${obj.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	    		<td>
-		    		<% UcUser user = (UcUser)pageContext.getAttribute("obj"); 
-		    	       MemberPageStatus memberStatus = StatusUtil.userStatus(user);
-		    	       pageContext.setAttribute("memberStatus", memberStatus);
-		    	    %>
-		    		<%= memberStatus %>
+		    		${obj.showUserStatus() }
 	    		</td>
 	    		<td>
-		    		<c:if test="${memberStatus == 待处理 || memberStatus == 审核退回}">
+		    		<c:if test="${obj.canEdit()}">
 			    		<a href="<%=request.getContextPath()%>/user/member/toEditPage.do?id=${obj.id}&isSetPwd=0" 
 			    				class="btn btn-blue" data-toggle="dialog" data-width="1000"  
 			    				data-height="800" data-id="dialog-mask-editPage" data-mask="true" 
 			    				data-on-close="function(){$(this).navtab('refresh');}">编辑</a>
 		    		</c:if>
-		    		<c:if test="${memberStatus == 待处理 || memberStatus == 不通过}">
-			    		<a href="<%=request.getContextPath()%>/user/member/delete.do?id=${obj.id}" 
+			    	<a href="<%=request.getContextPath()%>/user/member/delete.do?id=${obj.id}" 
 			    				class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除吗？">删除</a>
-			    	</c:if>
 		    		<a href="<%=request.getContextPath()%>/user/view.do?id=${obj.id}"  data-width="1000"
 		    			data-height="600" data-mask="true"	data-toggle="dialog">会员详情</a>
 	    		

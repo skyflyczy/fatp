@@ -9,7 +9,7 @@ function customCallback(json) {
 	}
 }
 function validUserName(element){
-	return $.post( "<%=request.getContextPath()%>/user/validusername.do",
+	return $.post( "<%=request.getContextPath()%>/user/member/validusername.do",
 		{"userName":element.value,"isUpdate":0,"userId":-1},
 		function(data){
 		}
@@ -20,7 +20,7 @@ function validCompanyCodeName(element){
 		return;
 	if($("#companyName").val() == '')
 		return;
-	return $.post( "<%=request.getContextPath()%>/user/validCompanyName.do",
+	return $.post( "<%=request.getContextPath()%>/user/member/validCompanyName.do",
 		{"companyOrgCode":$("#companyOrgCode").val(),"companyName":$("#companyName").val()},
 		function(data){
 		}
@@ -30,8 +30,8 @@ $("#companyName").on("blur", function(){
 	if($("#companyName").val() == '')
 		return;
 	$.post("<%=request.getContextPath()%>/user/companySearchName.do","term="+$("#companyName").val(),function(data) {
-		if(data[0] != undefined) {
-			$("#companyOrgCode").val(data[0].value);
+		if(data.isNew == 0) {
+			$("#companyName").val(data.name);
 			$('#companyOrgCode').attr("readonly", "readonly");
 			$('#companyName').attr("readonly", "readonly");
 		}
@@ -41,8 +41,8 @@ $("#companyOrgCode").on("blur", function(){
 	if($("#companyOrgCode").val() == '')
 		return;
 	$.post("<%=request.getContextPath()%>/user/companySearchCode.do","term="+$("#companyOrgCode").val(),function(data) {
-		if(data[0] != undefined) {
-			$("#companyName").val(data[0].name);
+		if(data.isNew == 0) {
+			$("#companyName").val(data.name);
 			$('#companyOrgCode').attr("readonly", "readonly");
 			$('#companyName').attr("readonly", "readonly");
 		}
@@ -79,7 +79,6 @@ function reset() {
                     <tr id="companyOrgCodeTR">
                         <td colspan="2">
                             <label class="control-label x100"><span class="red">*</span>营业执照号码：</label>
-                            <!-- <input data-toggle="tags" data-width="210" data-url="<%=request.getContextPath()%>/user/companySearchCode.do" data-max="1" type="text" name="companyOrgCode" id="companyOrgCode" size="20"  data-rule="required;validCompanyName" data-rule-validCompanyName="validCompanyName">-->
                             <input data-toggle="lookup" data-title="机构选择" data-url="<%=request.getContextPath()%>/user/companySearch.do" data-width="600" data-height="400" type="text" name="companyOrgCode" value="${user.companyOrgCode }" id="companyOrgCode" size="20" data-rule="required" data-rule-validCompanyName="validCompanyName" data-ok="">
                              <span class="">(统一社会信用代码或注册号)</span>
                         </td>
@@ -87,7 +86,6 @@ function reset() {
                     <tr id="companyOrgCodeTR">
                         <td colspan="2">
                             <label class="control-label x100"><span class="red">*</span>机构全称：</label>
-                           <!-- <input data-toggle="tags" data-width="210" data-url="<%=request.getContextPath()%>/user/companySearchName.do" data-max="1" type="text" name="companyName" id="companyName" size="20"  data-rule="required;validCompanyName" data-rule-validCompanyName="validCompanyName">-->
                            <input maxlength="200" type="text" name="companyName" value="${user.companyName }" id="companyName" size="20" data-rule="required;" data-ok="">
                         </td>
                     </tr>

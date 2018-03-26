@@ -1,6 +1,7 @@
 package com.telecwin.fatp.service.user;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import com.telecwin.fatp.service.BaseService;
 import com.telecwin.fatp.service.datasupprot.sys.SysMemberOperatorRoleDataSupportService;
 import com.telecwin.fatp.service.datasupprot.sys.SysMemberRoleDataSupportService;
 import com.telecwin.fatp.service.datasupprot.user.MemberOperatorDataSupportService;
+import com.telecwin.fatp.service.sys.SysParamService;
 import com.telecwin.fatp.service.sys.SysbizcodeSequenceService;
 import com.telecwin.fatp.util.SessionUtil;
 import com.telecwin.fatp.util.UUIDUtil;
@@ -304,6 +306,17 @@ public class MemberOperatorService extends BaseService{
 		memberOperatorDataSupportService.updateMemberOperator(memberOperator);
 		SessionUtil.removeOperator(memcachedCache, id);
 		SessionUtil.removeOperatorMenus(memcachedCache, id);
+	}
+	
+	/**
+	 * 获取经办人信息
+	 * @param memberIds
+	 * @param exchangeId
+	 * @return
+	 * @return MemberOperatorPo
+	 */
+	public List<MemberOperatorPo> getRegisterAgentList(String memberIds,int exchangeId){
+		return memberOperatorDataSupportService.getRegisterAgentList(memberIds, exchangeId);
 	}
 	
 }

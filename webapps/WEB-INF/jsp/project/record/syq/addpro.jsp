@@ -9,7 +9,7 @@
 				<tr>
 					<td>
 						<label class="control-label x110">业务类型：</label> 
-						<span>金融产品发行</span>
+						<span>收益权转让计划</span>
 					</td>
 				</tr>
 				<tr>

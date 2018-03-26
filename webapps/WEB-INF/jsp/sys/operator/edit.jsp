@@ -97,7 +97,7 @@
 						<input type="hidden" id="idTypeval" value="<c:out value='${memberOperator.idType}'/>">
 						<select name="idType" id="idType" data-val="${memberOperator.idType}" data-toggle="selectpicker" data-rule="validate(idNumber)">
                         	<c:forEach var="idType" items="${idTypeList}">
-                        	<option value="${idType.typeId }" <c:if test="${idType.typeId==memberOperator.idType}">selected="selected"</c:if>>${idType.typeName }</option>	
+                        	<option value="${idType.idType }" <c:if test="${idType.idType==memberOperator.idType}">selected="selected"</c:if>>${idType }</option>	
                         	</c:forEach>
                         </select>
 					</td>

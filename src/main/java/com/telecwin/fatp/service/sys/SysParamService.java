@@ -1,4 +1,4 @@
-package com.telecwin.fatp.service.user;
+package com.telecwin.fatp.service.sys;
 
 import java.util.List;
 import java.util.Map;

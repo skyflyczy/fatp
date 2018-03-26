@@ -171,6 +171,26 @@ public class MemberOperatorDataSupportService {
 		}
 	}
 	/**
+	 * 获取经办人信息
+	 * @param memberIds
+	 * @param exchangeId
+	 * @return
+	 */
+	public List<MemberOperatorPo> getRegisterAgentList(String memberIds,int exchangeId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("isRegisterAgent", true);
+		map.put("exchangeId", exchangeId);
+		map.put("memberIdList", memberIds.split(","));
+		List<MemberOperatorPo> list = memberOperatorDao.select(map);
+		if(CollectionUtils.isNotEmpty(list)){
+			for(MemberOperatorPo po : list) {
+				doDecrypt(po);
+			}
+		}
+		return list;
+	}
+	
+	/**
 	 * 解密
 	 * @param o
 	 */

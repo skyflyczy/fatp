@@ -139,7 +139,9 @@
 	
 	<sql id="where">
 		<where>	 
-			ExchangeId = #{exchangeId}     				
+			<if test="@Ognl@isNotEmpty(exchangeId)">
+				ExchangeId = #{exchangeId}     	
+			</if>			
 	       <if test="@Ognl@isNotEmpty(id)">
 				AND Id = #{id}
 			</if>

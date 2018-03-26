@@ -19,8 +19,17 @@ public enum ErrorCode {
 	ROLE_NAME_ALREADY_EXIST(30006,"角色名称已存在。"),
 	ROLE_NOT_EXIST(30007,"角色不存在。"),
 	
-	RECORD_NAME_NOT_MATCH(40000,"备案简称不支持特殊字符。"),
-	RECORD_FULLNAME_NOT_MATCH(400001,"备案全称不支持特殊字符。"),
+	
+	COMPANY_ORGNAME_NOT_MACTH(40000,"营业执照号码与机构名称不符"),
+	MEMBER_REALNAME_ALREADY_EXIST(40001,"发行人全称已存在"),
+	MEMBER_NAME_ALREADY_EXIST(40001,"发行人简称已存在"),
+	
+	RECORD_NAME_NOT_MATCH(50000,"备案简称不支持特殊字符。"),
+	RECORD_FULLNAME_NOT_MATCH(500001,"备案全称不支持特殊字符。"),
+	
+	
+	
+	
 	
 	
 	SYSTEM_ERROR(90000,"系统处理异常。"),
