@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysareaCityDao">
+    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysareaCityPo">
+    <![CDATA[
+    	SELECT *
+	    FROM sysarea_city 
+        WHERE 
+	        CityId = #{cityId} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(cityId)">
+				AND sysarea_city.CityId = #{cityId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityName)">
+				AND sysarea_city.CityName = #{cityName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(proId)">
+				AND sysarea_city.ProId = #{proId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(citySort)">
+				AND sysarea_city.CitySort = #{citySort}
+			</if>
+			 <if test="@Ognl@isNotEmpty(bankId)">
+				AND sys_bank_serialno.BankId = #{bankId}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysareaCityPo">
+    	SELECT *
+	    FROM sysarea_city 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="selectBankCity" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysareaCityPo">
+    	SELECT distinct sysarea_city.* FROM sysarea_city 
+	    join sys_bank_serialno on sys_bank_serialno.CityId = sysarea_city.CityId 
+		<include refid="where"/>
+		ORDER BY sysarea_city.ProId , sysarea_city.CitySort
+    </select>
+</mapper>
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysareaDistrictDao">
+<insert id="insert">
+	INSERT INTO sysarea_district 
+		( 
+		DisName, 
+		CityID 
+		)
+		VALUES
+		( 
+		#{disName}, 
+		#{cityId}
+		);
+		<selectKey resultType="java.lang.Integer" keyProperty="disId">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	
+    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysareaDistrictPo">
+    <![CDATA[
+    	SELECT *
+	    FROM sysarea_district 
+        WHERE 
+	        DisId = #{disId} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(disId)">
+				AND DisId = #{disId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(disName)">
+				AND DisName = #{disName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityId)">
+				AND CityID = #{cityId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(disSort)">
+				AND DisSort = #{disSort}
+			</if>
+			<if test="@Ognl@isNotEmpty(cityIdDesc)">
+				AND CityID in 
+				<foreach collection="cityIdDesc" item="item" open="(" close=")" separator="," >
+					#{item} 
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysareaDistrictPo">
+    	SELECT *
+	    FROM sysarea_district 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

@@ -42,7 +42,7 @@
 				<td colspan="2">
 					<label class="control-label x130">证件类型：</label> 
 					<c:forEach var="idType" items="${idTypeList}">
-                       	<c:if test="${idType.typeId==operator.idType}">${idType.typeName }</c:if>
+                       	<c:if test="${idType.idType==operator.idType}">${idType }</c:if>
                       	</c:forEach>
 				</td>
 			</tr>

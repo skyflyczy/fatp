@@ -78,13 +78,13 @@ $(function(){
 				 </div>
 				 <div class="form-group">
 					<label for="cardAccount" class="control-label x110">开户行所在地：</label>
-					<select <c:if test="${empty bankcard }">disabled</c:if> data-style="btn-default btn-nm" data-autoClose="true" data-rule="required" id="bank_provinceId" name="provinceId" data-toggle="selectpicker" data-nextselect="#bank_cityId" data-refurl="<%=request.getContextPath()%>/systype/city.do?proId={value}">
+					<select <c:if test="${empty bankcard }">disabled</c:if> data-style="btn-default btn-nm" data-autoClose="true" data-rule="required" id="bank_provinceId" name="provinceId" data-toggle="selectpicker" data-nextselect="#bank_cityId" data-refurl="<%=request.getContextPath()%>/sys/area/city.do?proId={value}">
 			            <option value="">--省份--</option>
 			            <c:forEach var="obj" items="${provinceList}"> 
 						<option value="${obj.proId}" <c:if test="${obj.proId==bankcard.provinceId}">selected</c:if>>${obj.proName}</option>
 						</c:forEach>
 			       	</select>
-			       	<select <c:if test="${empty bankcard }">disabled</c:if> data-style="btn-default btn-nm" data-autoClose="true" data-rule="required" id="bank_cityId" name="cityId" data-toggle="selectpicker" data-nextselect="#bank_bankSerialId" data-refurl="<%=request.getContextPath()%>/systype/bankserialno.do?bankId={bankId}&cityId={cityId}" data-param='{"bankId":"bankId","cityId":"bank_cityId"}'>
+			       	<select <c:if test="${empty bankcard }">disabled</c:if> data-style="btn-default btn-nm" data-autoClose="true" data-rule="required" id="bank_cityId" name="cityId" data-toggle="selectpicker" data-nextselect="#bank_bankSerialId" data-refurl="<%=request.getContextPath()%>/sys/bank/bankserialno.do?bankId={bankId}&cityId={cityId}" data-param='{"bankId":"bankId","cityId":"bank_cityId"}'>
 			       		<option value="">--城市--</option>
 			       		<c:forEach var="obj" items="${cityList}"> 
 						<option value="${obj.cityId}" <c:if test="${obj.cityId==bankcard.cityId}">selected</c:if>>${obj.cityName}</option>

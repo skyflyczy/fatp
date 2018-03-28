@@ -15,10 +15,10 @@
                     <tr>
                         <td colspan="2">
                             <label class="control-label x100">所在地：</label>
-                                <select name="deparmentProvinceId" id="deparmentProvinceId" data-val="${userExt.deparmentProvinceId}" data-toggle="selectpicker" data-nextselect="#deparmentCityId" data-refurl="<%=request.getContextPath()%>/systype/city.do?proId={value}">
+                                <select name="deparmentProvinceId" id="deparmentProvinceId" data-val="${userExt.deparmentProvinceId}" data-toggle="selectpicker" data-nextselect="#deparmentCityId" data-refurl="<%=request.getContextPath()%>/sys/area/city.do?proId={value}">
                                     <option value="0">--省市--</option>
                                 </select>
-                                <select name="deparmentCityId" id="deparmentCityId" data-toggle="selectpicker" data-val="${userExt.deparmentCityId}" data-nextselect="#deparmentDisId" data-refurl="<%=request.getContextPath()%>/systype/district.do?cityId={value}" data-emptytxt="--城市--">
+                                <select name="deparmentCityId" id="deparmentCityId" data-toggle="selectpicker" data-val="${userExt.deparmentCityId}" data-nextselect="#deparmentDisId" data-refurl="<%=request.getContextPath()%>/sys/area/district.do?cityId={value}" data-emptytxt="--城市--">
                                     <option value="0">--城市--</option>
                                 </select>
                                 <select name="deparmentDisId" id="deparmentDisId" data-toggle="selectpicker" data-val="${userExt.deparmentDisId}" data-emptytxt="--区县--">
@@ -96,7 +96,7 @@
 </div>
 <script>
 	$.ajax({
-		url: '<%=request.getContextPath()%>/systype/province.do',
+		url: '<%=request.getContextPath()%>/sys/area/province.do',
 		type: 'get',
 		cache: 'false',
 		dataType: 'json',

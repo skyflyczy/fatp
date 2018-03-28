@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysBankDao">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO sys_bank (
+        	Id ,
+        	BankName ,
+        	BankSname ,
+        	BankFullname ,
+        	BankNo ,
+        	BankTel ,
+        	CreateOperatorId ,
+        	UpdateTime 
+        ) VALUES (
+        	#{id} ,
+        	#{bankName} ,
+        	#{bankSname} ,
+        	#{bankFullname} ,
+        	#{bankNo} ,
+        	#{bankTel} ,
+        	#{createOperatorId} ,
+        	now() 
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+    <update id="update">
+    <![CDATA[
+        UPDATE sys_bank SET
+	        BankName = #{bankName} ,
+	        BankSname = #{bankSname} ,
+	        BankFullname = #{bankFullname} ,
+	        BankNo = #{bankNo} ,
+	        BankTel = #{bankTel} ,
+	        UpdateTime = now() 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysBankPo">
+    	SELECT *
+	    FROM sys_bank 
+        WHERE 
+	        Id = #{id}
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND sys_bank.Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bankName)">
+				AND sys_bank.BankName like concat('%',#{bankName},'%')
+			</if>
+			<if test="@Ognl@isNotEmpty(bankNameEqual)">
+				AND sys_bank.BankName = #{bankNameEqual}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bankSname)">
+				AND sys_bank.BankSname = #{bankSname}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bankFullname)">
+				AND sys_bank.BankFullname = #{bankFullname}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bankNo)">
+				AND sys_bank.BankNo = #{bankNo}
+			</if>
+			<if test="@Ognl@isNotEmpty(useEnabled)">
+				AND sys_bank.UseEnabled = #{useEnabled}
+			</if>
+			<if test="@Ognl@isNotEmpty(noShowNull)">
+				AND sys_bank.ShowIndex IS NOT NULL
+			</if>
+			<if test="@Ognl@isNotEmpty(py)">
+				AND sys_bank.Pinyin like #{py}"%"
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysBankPo">
+    	SELECT *
+	    FROM sys_bank 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

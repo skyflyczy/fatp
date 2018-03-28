@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +22,7 @@ import com.telecwin.fatp.controller.BaseController;
 import com.telecwin.fatp.controller.param.OperatorQueryParam;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.enums.user.IdTypeDesc;
+import com.telecwin.fatp.enums.user.OperatorType;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.interceptor.WithoutAuth;
@@ -100,7 +102,7 @@ public class MemberOperatorController extends BaseController{
 		} catch (FatpException e) {
 			retMap.put("error",e.getErrorCode().getMessage());
 		} catch (Exception e) {
-			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "validPhone", e));
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "validloginname", e));
 			retMap.put("error", "校验失败");
 		}
 		return retMap;
@@ -151,7 +153,7 @@ public class MemberOperatorController extends BaseController{
 		} catch (FatpException e) {
 			retMap.put("error",e.getErrorCode().getMessage());
 		} catch (Exception e) {
-			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "validPhone", e));
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "valididnumber", e));
 			retMap.put("error", "校验失败");
 		}
 		return retMap;
@@ -392,6 +394,87 @@ public class MemberOperatorController extends BaseController{
 			retMap.put("message", "操作失败");
 		}
 		return retMap;
+	}
+	/**
+	 * 前往经办人页面
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping("/toeditregisteragent")
+	public String toEditRegisterAgent(@RequestParam Integer userId){
+		String memberIds = userId + "";
+		List<MemberOperatorPo> list  = memberOperatorService.getRegisterAgentList(memberIds, getExchangeId());
+		MemberOperatorPo o = CollectionUtils.isEmpty(list) ? null : list.get(0);
+		request().setAttribute("operator", o);
+		request().setAttribute("memberId", userId);
+		request().setAttribute("idTypeList", IdTypeDesc.getPersonalTypes());
+		return viewPath + "user/member/editRegisterAgent";
+	}
+	
+	/**
+	 * 前往管理员页面
+	 * @param userId
+	 * @return void
+	 */
+	@RequestMapping("advisor-rz/to-advisor-admin")
+	public String to_advisor_admin(@RequestParam Integer userId){
+		MemberOperatorPo o  = memberOperatorService.getSuperAdmin(userId,getExchangeId());
+		request().setAttribute("operator", o);
+		request().setAttribute("memberId", userId);
+		request().setAttribute("idTypeList", IdTypeDesc.getPersonalTypes());
+		return viewPath + "user/advisor-rz/advisor-admin";
+	}
+	/**
+	 * 编辑经办人
+	 * @param o
+	 * @return
+	 * @return Object
+	 */
+	@RequestMapping("/editregisteragent")
+	@ResponseBody
+	public Object editRegisterAgent(@ModelAttribute MemberOperatorPo o){
+		try {
+			o.setExchangeId(getExchangeId());
+			if(o.getId() == null) { //新增
+				o.setIsRegisterAgent(true);
+				o.setOperatorType(OperatorType.业务人员.value);
+				memberOperatorService.insertMemberOperator(o);
+			}else {
+				memberOperatorService.updateMemberOperator(o, false);
+			}
+			return resultSuccess();
+		} catch (FatpException e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "editregisteragent", e));
+			return resultError(e.getErrorCode().getMessage());
+		} catch (Exception e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "editregisteragent", e));
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
+		}
+	}
+	
+	/**
+	 * 编辑管理员
+	 * @param o
+	 * @return
+	 * @return Object
+	 */
+	@RequestMapping("advisor-rz/edit-advisor-admin")
+	@ResponseBody
+	public Object edit_advisor_admin(@ModelAttribute MemberOperatorPo o){
+		try {
+			o.setExchangeId(getExchangeId());
+			o.setVipOperator(1);
+			o.setOperatorType(OperatorType.超级管理员.value);
+			memberOperatorService.editSuperAdmin(o);
+			return resultSuccess();
+		} catch (FatpException e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "edit_advisor_admin", e));
+			return resultError(e.getErrorCode().getMessage());
+		} catch (Exception e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "edit_advisor_admin", e));
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
+		}
+		
 	}
 	
 }

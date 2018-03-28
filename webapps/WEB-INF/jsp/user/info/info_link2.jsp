@@ -49,7 +49,7 @@
                     	<td>
                             <label class="control-label x100">证件类型：</label>
                             <c:forEach var="idType" items="${idTypeList}">
-                           	<c:if test="${idType.typeId==user.linkIdTypeId}">${idType.typeName }</c:if>
+                           	<c:if test="${idType.idType==user.linkIdTypeId}">${idType }</c:if>
                            	</c:forEach>
                         </td>
                         <td>

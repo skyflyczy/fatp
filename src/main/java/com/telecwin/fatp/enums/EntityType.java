@@ -4,8 +4,9 @@ package com.telecwin.fatp.enums;
 public enum EntityType {
 	备案(1),
 	挂牌(2),
-	用户(3),
-	场外回传申请(4);
+	发行人(3),
+	投资者(4),
+	场外回传申请(5);
 
 	public int value;
 

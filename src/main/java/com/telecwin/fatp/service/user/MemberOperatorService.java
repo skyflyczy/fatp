@@ -3,6 +3,7 @@ package com.telecwin.fatp.service.user;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.enums.DelStatus;
 import com.telecwin.fatp.enums.YesNo;
 import com.telecwin.fatp.enums.user.OperatorStatus;
+import com.telecwin.fatp.enums.user.OperatorType;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.po.user.MemberOperatorPo;
@@ -107,11 +109,7 @@ public class MemberOperatorService extends BaseService{
 		if(operator.getOperatorStatus().intValue() == OperatorStatus.待激活.value) {
 			operator.setOperatorStatus(OperatorStatus.正常.value);
 		}
-		try {
-			memberOperatorDataSupportService.updateMemberOperator(operator);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		memberOperatorDataSupportService.updateMemberOperator(operator);
 	}
 	/**
 	 * 更新操作员
@@ -165,14 +163,12 @@ public class MemberOperatorService extends BaseService{
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public MemberOperatorPo insertMemberOperator(MemberOperatorPo operator) {
-		// 验证登录名
+		//验证登录名，手机号，idNumber,邮箱
 		validLoginName(operator.getMemberId(), operator.getLoginName());
-		// 验证手机号
 		validPhone(operator.getMemberId(), operator.getPhone(),null);
-		// 通过验证
-		operator.setIsValidPhone(YesNo.是.value);
 		validIdNumber(operator.getMemberId(), operator.getIdType(), null,operator.getIdNumber(),null);
 		validEmail(operator.getMemberId(), operator.getEmail(),null);
+		operator.setIsValidPhone(YesNo.是.value);
 		operator.setIsValidEmail(YesNo.是.value);
 		operator.setIsValidId(YesNo.是.value);
 		operator.setOperatorStatus(OperatorStatus.正常.value);
@@ -318,5 +314,81 @@ public class MemberOperatorService extends BaseService{
 	public List<MemberOperatorPo> getRegisterAgentList(String memberIds,int exchangeId){
 		return memberOperatorDataSupportService.getRegisterAgentList(memberIds, exchangeId);
 	}
+	/**
+	 * 获取经办人信息
+	 * @param memberId
+	 * @param exchangeId
+	 * @return
+	 */
+	public MemberOperatorPo getRegisterAgentByMemberId(int memberId,int exchangeId) {
+		String memberIds = memberId +"";
+		List<MemberOperatorPo> list =  memberOperatorDataSupportService.getRegisterAgentList(memberIds, exchangeId);
+		return CollectionUtils.isEmpty(list) ? null : list.get(0);
+	}
+	/**
+	 * 获取管理人员信息
+	 * @param memberId
+	 * @param exchangeId
+	 * @return
+	 */
+	public MemberOperatorPo getSuperAdmin(int memberId,int exchangeId){
+		return memberOperatorDataSupportService.getSuperAdmin(memberId, exchangeId);
+	}
 	
+	/**
+	 * 编辑管理员
+	 * @param globalDto
+	 * @param o
+	 * @return void
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void editSuperAdmin(MemberOperatorPo newOperator) {
+		//获取经办人信息
+		MemberOperatorPo agent = this.getRegisterAgentByMemberId(newOperator.getMemberId(),newOperator.getExchangeId());
+		//如果设置经办人为管理员，查询经办人信息，修改经办人操作员类型
+		if(newOperator.getIsRegisterAgent()) {
+			setAgentIsAdmin(newOperator, agent);
+			return ;
+		}
+		newOperator.setIsRegisterAgent(false);
+		//如果原来的经办人是管理员，需要修改经办人为非管理员
+		if(agent != null 
+				&& newOperator.getId() != null 
+				&& agent.getId().intValue() == newOperator.getId().intValue()) {
+			agent.setVipOperator(0);
+			agent.setUpdateTime(new Date());
+			agent.setOperatorType(OperatorType.业务人员.value);
+			memberOperatorDataSupportService.updateMemberOperator(agent);
+		}
+		if(newOperator.getId() == null) {
+			this.insertMemberOperator(newOperator);
+		} else {
+			this.updateMemberOperator(newOperator, false);
+		}
+	}
+	/**
+	 * 设置经办人为管理员
+	 * @param globalDto
+	 * @param newOperator
+	 * @param agent
+	 * @return void
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void setAgentIsAdmin(MemberOperatorPo newOperator,MemberOperatorPo agent){
+		if(agent == null ) {
+			throw new FatpException(ErrorCode.MEMBER_AGENT_NOT_EXIST);
+		}
+		//如果原来的经办人不是管理员，需要删除原来的管理员信息
+		if(agent.getVipOperator().intValue() != 1) {
+			MemberOperatorPo admin = memberOperatorDataSupportService.getSuperAdmin(newOperator.getMemberId(),agent.getExchangeId());
+			if(admin != null) {
+				memberOperatorDataSupportService.deleteById(admin.getId(),admin.getExchangeId());
+			}
+		}
+		agent.setOperatorType(newOperator.getOperatorType());
+		agent.setUpdateTime(new Date());
+		agent.setVipOperator(newOperator.getVipOperator());
+		agent.setExchangeId(newOperator.getExchangeId());
+		memberOperatorDataSupportService.updateMemberOperator(agent);
+	}
 }

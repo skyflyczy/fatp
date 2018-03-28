@@ -92,6 +92,27 @@ public class UcUserPubinfoDataSupportService {
 		pubinfo.setCompanyFaxNumber(companyFaxNumber);
 	}
 	/**
+	 * 查询解密
+	 * @param map
+	 * @return void
+	 */
+	private void doDecryptForSearch(Map<String,Object> map){
+		if(map.containsKey("companyOrgCode"))
+			map.put("companyOrgCode", SymmetricEncrypt.decryptStr(map.get("companyOrgCode").toString()));
+		if(map.containsKey("faxPhone"))
+			map.put("faxPhone", SymmetricEncrypt.decryptStr(map.get("faxPhone").toString()));
+		if(map.containsKey("telePhone"))
+			map.put("telePhone", SymmetricEncrypt.decryptStr(map.get("telePhone").toString()));
+		if(map.containsKey("address"))
+			map.put("address", SymmetricEncrypt.decryptStr(map.get("address").toString()));
+		if(map.containsKey("companyBusinessLicense"))
+			map.put("companyBusinessLicense", SymmetricEncrypt.decryptStr(map.get("companyBusinessLicense").toString()));
+		if(map.containsKey("companyRepresentative"))
+			map.put("companyRepresentative", SymmetricEncrypt.decryptStr(map.get("companyRepresentative").toString()));
+		if(map.containsKey("companyFaxNumber"))
+			map.put("companyFaxNumber", SymmetricEncrypt.decryptStr(map.get("companyFaxNumber").toString()));
+	}
+	/**
 	 * 查询加密
 	 * @param map
 	 * @return void
@@ -99,10 +120,6 @@ public class UcUserPubinfoDataSupportService {
 	private void doEncryptForSearch(Map<String,Object> map){
 		if(map.containsKey("companyOrgCode"))
 			map.put("companyOrgCode", SymmetricEncrypt.encryptStr(map.get("companyOrgCode").toString()));
-//		if(map.containsKey("companyName"))
-//			map.put("companyName", SymmetricEncrypt.encryptStr(map.get("companyName").toString()));
-//		if(map.containsKey("companyShortName"))
-//			map.put("companyShortName", SymmetricEncrypt.encryptStr(map.get("companyShortName").toString()));
 		if(map.containsKey("faxPhone"))
 			map.put("faxPhone", SymmetricEncrypt.encryptStr(map.get("faxPhone").toString()));
 		if(map.containsKey("telePhone"))
@@ -115,8 +132,6 @@ public class UcUserPubinfoDataSupportService {
 			map.put("companyRepresentative", SymmetricEncrypt.encryptStr(map.get("companyRepresentative").toString()));
 		if(map.containsKey("companyFaxNumber"))
 			map.put("companyFaxNumber", SymmetricEncrypt.encryptStr(map.get("companyFaxNumber").toString()));
-//		if(map.containsKey("companyRegAddress"))
-//			map.put("companyRegAddress", SymmetricEncrypt.encryptStr(map.get("companyRegAddress").toString()));
 	}
 	/**
 	 * 分页查找
@@ -132,6 +147,7 @@ public class UcUserPubinfoDataSupportService {
 		for(UcUserPubinfoPo o : list){
 			doDecryptPublicinfo(o);
 		}
+		doDecryptForSearch(map);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
 	}
 

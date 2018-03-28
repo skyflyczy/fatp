@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.user.UcUserBankcardDao">
+<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO uc_user_bankcard (
+        	Id ,
+        	UserCardGuid,
+        	UserId ,
+        	BankId,
+        	BankSerialId ,
+        	ChannelId,
+        	CardAccount ,
+        	AccountName ,
+        	CardStatus ,
+        	IdentifyStatus ,
+        	IdentifyData ,
+        	IdentifyType ,
+        	SubBankName ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId,
+        	isMyCard,
+        	provinceId,
+        	provinceName,
+        	cityId,
+        	cityName,
+        	defaultCard,
+        	PhoneInBank,
+        	PayCenterId,
+        	CardBindingNo 
+        ) VALUES (
+        	#{id} ,
+        	#{userCardGuid},
+        	#{userId} ,
+        	#{bankId},
+        	#{bankSerialId} ,
+        	#{channelId},
+        	#{cardAccount} ,
+        	#{accountName} ,
+        	#{cardStatus} ,
+        	#{identifyStatus} ,
+        	#{identifyData} ,
+        	#{identifyType} ,
+        	#{subBankName} ,
+        	now() ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{updateOperatorId},
+        	#{isMyCard},
+        	#{provinceId},
+        	#{provinceName},
+        	#{cityId},
+        	#{cityName},
+        	#{defaultCard},
+        	#{phoneInBank},
+        	#{payCenterId},
+        	#{cardBindingNo}  
+        )
+    ]]>
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE uc_user_bankcard SET
+        	Id = #{id} ,
+	        UserId = #{userId} ,
+	        bankId = #{bankId},
+	        bankSerialId = #{bankSerialId} ,
+	        channelId = #{channelId},
+	        CardAccount = #{cardAccount} ,
+	        AccountName = #{accountName} ,
+	        CardStatus = #{cardStatus} ,
+	        IdentifyStatus = #{identifyStatus} ,
+	        IdentifyData = #{identifyData} ,
+	        IdentifyType = #{identifyType} ,
+	        SubBankName = #{subBankName} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId},
+	        isMyCard = #{isMyCard},
+	        provinceId = #{provinceId},
+        	provinceName = #{provinceName},
+        	cityId = #{cityId},
+        	cityName = #{cityName},
+        	defaultCard = #{defaultCard},
+        	IsPayCollecting = #{isPayCollecting},
+        	PhoneInBank = #{phoneInBank},
+        	PayCenterId = #{payCenterId},
+        	CardBindingNo = #{cardBindingNo}  
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+
+	<update id="updateCardStatus">
+		UPDATE uc_user_bankcard SET
+			CardStatus = #{cardStatus} ,
+			CardAccount = #{cardAccount},
+			defaultCard = #{defaultCard},
+			UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} 
+        WHERE 
+	        Id = #{id} 
+	</update>
+	
+	<update id="updateCardStatusByUserId" parameterType="java.util.Map">
+		UPDATE uc_user_bankcard SET
+			CardStatus = #{cardStatus} ,
+			CardAccount = CONCAT(CardAccount,'_',DATE_FORMAT(NOW(),'%Y%m%d%H%i%S')),
+			UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} 
+        WHERE 
+	        UserId = #{userId} 
+	</update>
+	
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    	SELECT b.*
+    	,sb.BankName channelName
+    	,uu.OrgTypeId
+    	,sys_bank_serialno.SubBankNo
+	    FROM uc_user_bankcard b
+	    left join sys_bank_serialno on(sys_bank_serialno.id=b.bankSerialId)
+	    left join sys_bank sb on(sb.Id=b.BankId) 
+	    join uc_user uu on(b.UserId=uu.Id)
+        WHERE
+			b.UserId = #{userId}
+	        <if test="@Ognl@isNotEmpty(id)">
+				AND b.Id = #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(userCardGuid)">
+				AND b.UserCardGuid = #{userCardGuid}
+			</if>
+	</select>
+	 <select id="getByCardId" parameterType="int" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    	SELECT ub.*
+    	,sb.BankName channelName
+    	,sys_bank_serialno.SubBankNo 
+    	,uu.OrgTypeId
+    	,sysarea_province.ProvCodeInCmbc
+	    FROM uc_user_bankcard ub 
+	    left join sys_bank_serialno on(sys_bank_serialno.id=ub.bankSerialId)
+	    left join sys_bank sb on(sb.Id=ub.BankId) 
+	    left join sysarea_province on(sysarea_province.ProId=ub.ProvinceId)
+	    join uc_user uu on(ub.UserId=uu.Id)
+        WHERE 
+	        ub.Id = #{id}
+	</select>
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND b.Id = #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(ids)">
+				AND b.Id in
+				<foreach collection="ids" item="item" open="(" separator="," close=")">
+					#{item} 
+				</foreach>
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				AND UserId = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(channelId)">
+				AND ChannelId = #{channelId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cardAccount)">
+				AND CardAccount = #{cardAccount}
+			</if>
+			<if test="@Ognl@isNotEmpty(AccountName)">
+				AND AccountName = #{accountName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cardStatus)">
+				AND CardStatus = #{cardStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(identifyStatus)">
+				AND IdentifyStatus = #{identifyStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(identifyData)">
+				AND IdentifyData = #{identifyData}
+			</if>
+	       <if test="@Ognl@isNotEmpty(identifyType)">
+				AND IdentifyType = #{identifyType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(subBankName)">
+				AND SubBankName = #{subBankName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+			<if test="@Ognl@isNotEmpty(defaultCard)">
+				AND DefaultCard = #{defaultCard}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    	SELECT b.*
+    	,sb.BankName channelName
+    	,sb.BankNo bankNo 
+    	,uu.OrgTypeId orgTypeId
+	    FROM uc_user_bankcard b
+	    left join sys_bank sb on(sb.Id=b.BankId) 
+	    join uc_user uu on (uu.id = b.userId)
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getDefaultCard" parameterType="int" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    	select b.* 
+    	,sb.BankName channelName
+    	from uc_user_bankcard b 
+    	left join sys_bank sb on(sb.Id=b.BankId) 
+    	where UserId=#{userId} and DefaultCard=1
+    </select>
+    
+    <delete id="delete" parameterType="int">
+    	delete from uc_user_bankcard where Id=#{id}
+    </delete>
+</mapper>
+

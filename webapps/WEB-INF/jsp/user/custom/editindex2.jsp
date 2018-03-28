@@ -38,7 +38,7 @@
 </div>
 <script>
 $("#pass").on("click", function(){
-	var options = {url:'<%=request.getContextPath()%>/user/custom/updateCheck.do?id=${user.id}',type:'get',confirmMsg:'确定要提交审核吗？',callback:'userToCheckCallback'};
+	var options = {url:'<%=request.getContextPath()%>/user/member/audit_reg/submit.do?memberId=${user.id}',type:'get',confirmMsg:'确定要提交审核吗？',callback:'userToCheckCallback'};
 	$(this).bjuiajax('doAjax', options);
 });
 function userToCheckCallback(json) {

@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.huajin.baymax.encrypt.SymmetricEncrypt;
-import com.huajin.baymax.service.AbstractBaseService;
 import com.telecwin.fatp.po.sys.SysParamPo;
+import com.telecwin.fatp.service.BaseService;
 import com.telecwin.fatp.service.datasupprot.sys.SysParamDataSupportService;
 
 /**
  * SysParam
  */
 @Service
-public class SysParamService extends AbstractBaseService {
+public class SysParamService extends BaseService {
 	@Autowired
 	private SysParamDataSupportService sysParamDataSupportService;
 	

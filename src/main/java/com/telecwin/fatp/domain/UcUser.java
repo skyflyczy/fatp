@@ -643,8 +643,8 @@ public class UcUser extends UcUserPo{
 	 * @return true 可以
 	 */
 	public boolean canEdit() {
-		return super.getUserStatus() != null && (super.getUserStatus().intValue() == UserStatusDesc.待处理.value
-				|| super.getUserStatus().intValue() == UserStatusDesc.审核退回.value
+		return super.getUserStatus() != null && 
+				(super.getUserStatus().intValue() == UserStatusDesc.审核退回.value
 				|| super.getUserStatus().intValue() == UserStatusDesc.未提交.value);
 	}
 }

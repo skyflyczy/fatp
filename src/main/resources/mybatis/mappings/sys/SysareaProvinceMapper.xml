@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysareaProvinceDao">
+    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysareaProvincePo">
+    <![CDATA[
+    	SELECT *
+	    FROM sysarea_province 
+        WHERE 
+	        ProId = #{proId} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(proId)">
+				AND ProId = #{proId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(proName)">
+				AND ProName = #{proName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(proSort)">
+				AND ProSort = #{proSort}
+			</if>
+	       <if test="@Ognl@isNotEmpty(proRemark)">
+				AND ProRemark = #{proRemark}
+			</if>
+			<if test="@Ognl@isNotEmpty(proIdDesc)">
+				AND ProId in 
+				<foreach collection="proIdDesc" item="item" open="(" close=")" separator="," >
+					#{item} 
+				</foreach>
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysareaProvincePo">
+    	SELECT * FROM sysarea_province 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+</mapper>
+

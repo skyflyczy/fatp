@@ -13,7 +13,7 @@ import com.telecwin.fatp.domain.UcUser;
 @MyBatisDao
 public interface UcUserDao {
 	public List<UcUser> select(Map<String, Object> map);
-	public UcUser getById(Map<String, Object> map);
+	public UcUser getAllById(Map<String, Object> map);
 	public UcUser getUserExtById(Integer id);
 	
 	@NoRowAffectException
@@ -22,5 +22,8 @@ public interface UcUserDao {
 	public int updateExt(UcUser o);
 	
 	public int insert(UcUser o);
+	
 	public void insertExt(UcUser o);
+	@NoRowAffectException
+	public int updateUserStatus(UcUser o);
 }

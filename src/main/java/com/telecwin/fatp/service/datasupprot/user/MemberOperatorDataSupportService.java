@@ -189,6 +189,32 @@ public class MemberOperatorDataSupportService {
 		}
 		return list;
 	}
+	/**
+	 * 获取管理人
+	 * @param memberId
+	 * @return
+	 */
+	public MemberOperatorPo getSuperAdmin(int memberId,int exchangeId){
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("exchangeId", exchangeId);
+		MemberOperatorPo o = memberOperatorDao.getSuperAdmin(map);
+		if( o != null) {
+			doDecrypt(o);
+		}
+		return o;
+	}
+	/**
+	 * 根据Id删除操作员信息
+	 * @param id
+	 * @param exchangeId
+	 */
+	public void deleteById(Integer id,int exchangeId){
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("exchangeId", exchangeId);
+		memberOperatorDao.deleteById(map);
+	}
 	
 	/**
 	 * 解密

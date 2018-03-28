@@ -15,6 +15,7 @@ public enum IdTypeDesc {
 	外国人永久居留证(10),
 	边民出入境通行证(11),
 	组织机构代码(12),
+	营业执照(13),
 	其他(-1);
 	
 	private int idType;

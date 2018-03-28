@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.sys.SysBankSerialnoDao">
+	<insert id="insert">
+	INSERT INTO sys_bank_serialno 
+		( 
+		BankId, 
+		SubBankNo, 
+		SubBankName, 
+		ProvinceId, 
+		CityId, 
+		districtId,
+		CreateTime, 
+		UpdateTime,
+		OriginBankName
+		)
+		VALUES
+		( 
+		#{bankId}, 
+		#{subBankNo}, 
+		#{subBankName}, 
+		#{provinceId}, 
+		#{cityId}, 
+		#{districtId},
+		now(), 
+		now(),
+		#{originBankName}
+		);
+		<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+
+  <update id="update">
+    <![CDATA[
+        UPDATE sys_bank_serialno SET
+            BankId = #{bankId} ,
+	        SubBankNo = #{subBankNo} ,
+	        SubBankName = #{subBankName} ,
+	        ProvinceId = #{provinceId} ,
+	        CityId = #{cityId} ,
+	        DistrictId = #{districtId} ,
+	        OriginBankName = #{originBankName},
+	        UpdateTime = now()
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</update>
+    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.SysBankSerialno">
+    <![CDATA[
+    	SELECT *
+	    FROM sys_bank_serialno 
+        WHERE 
+	        Id = #{id} 
+    ]]>
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND sys_bank_serialno.Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bankId)">
+				AND sys_bank_serialno.BankId = #{bankId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(subBankNo)">
+				AND sys_bank_serialno.SubBankNo = #{subBankNo}
+			</if>
+	       <if test="@Ognl@isNotEmpty(subBankName)">
+				AND sys_bank_serialno.SubBankName like concat('%',#{subBankName},'%') 
+			</if>
+	       <if test="@Ognl@isNotEmpty(provinceId)">
+				AND sys_bank_serialno.ProvinceId = #{provinceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityId)">
+				AND sys_bank_serialno.CityId = #{cityId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(districtId)">
+				AND sys_bank_serialno.DistrictId = #{districtId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(useEnabled)">
+				AND sys_bank_serialno.UseEnabled = #{useEnabled}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND sys_bank_serialno.CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND sys_bank_serialno.CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND sys_bank_serialno.CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND sys_bank_serialno.UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND sys_bank_serialno.UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND sys_bank_serialno.UpdateOperatorId = #{updateOperatorId}
+			</if>
+			<if test="@Ognl@isNotEmpty(isOpen)">
+				AND sys_bank_serialno.isOpen = #{isOpen}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.SysBankSerialno">
+    	SELECT sys_bank_serialno.*,sys_bank.BankName BankName
+	    FROM sys_bank_serialno left join sys_bank on(sys_bank_serialno.BankId = sys_bank.Id)
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

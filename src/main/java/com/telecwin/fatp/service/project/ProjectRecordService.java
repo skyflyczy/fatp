@@ -10,7 +10,7 @@ import com.telecwin.fatp.controller.param.project.ProjectRecordinfoVo;
 import com.telecwin.fatp.convert.ProjectRecordConvertor;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.ProjectRecordComplex;
-import com.telecwin.fatp.enums.project.FlowFeedTypeDesc;
+import com.telecwin.fatp.enums.FlowFeedTypeDesc;
 import com.telecwin.fatp.po.project.ProjectRecordinfoPo;
 import com.telecwin.fatp.po.user.MemberOperatorPo;
 import com.telecwin.fatp.service.BaseService;

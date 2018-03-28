@@ -153,7 +153,7 @@
 			u.registerSource,
 			u.isSendSms
 	</sql>
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
+    <select id="getAllById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
     	SELECT 
     	<include refid="user_field"/>,
     	<include refid="userpub_field"/>
@@ -459,6 +459,20 @@
 			UpdateTime = now()
 			WHERE
 			Id = #{id}
+	</update>
+	<update id="updateUserStatus">
+		 UPDATE uc_user SET 
+		 	UserStatus = #{userStatus} , 
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        AuditOperatorId = #{auditOperatorId}, 
+			AuditRemark = #{auditRemark}, 
+			AuditTime = #{auditTime} 
+		 WHERE 
+	        Id = #{id} 
+	        <if test="@Ognl@isNotEmpty(exchangeId)">
+			 	AND ExchangeId = #{exchangeId}
+			</if>
 	</update>
 </mapper>
 

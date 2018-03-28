@@ -1,5 +1,7 @@
 package com.telecwin.fatp.enums.project;
 
+import com.telecwin.fatp.enums.FlowFeedTypeDesc;
+
 public enum ListingStatusDesc {
 	待提交(1),
 	待审核(2),

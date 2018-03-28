@@ -27,7 +27,34 @@ public class UcUserDataSupportService {
 
 	@Autowired
 	private UcUserDao ucUserDao;
-	
+	/**
+	 * 获取用户所有信息（uc_user和uc_user_pubinfo）
+	 * @param id
+	 * @param exchangeId
+	 * @return
+	 */
+	public UcUser getAllById(int id, int exchangeId){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("exchangeId", exchangeId);
+		UcUser user = ucUserDao.getAllById(map);
+		if(user != null) {
+			doDecryptUser(user);
+		}
+		return user;
+	}
+	/**
+	 * 获取用户扩展信息
+	 * @param userId
+	 * @return
+	 */
+	public UcUser getUserExtById(int userId) {
+		UcUser user = ucUserDao.getUserExtById(userId);
+		if(user != null) {
+			doDecryptUser(user);
+		}
+		return user;
+	}
 	/**
 	 * 根据条件分页查找
 	 * @param map
@@ -98,7 +125,30 @@ public class UcUserDataSupportService {
 	public void insertNoEncryptExt(UcUser o){
 		ucUserDao.insertExt(o);
 	}
-	
+	/**
+	 * 更新
+	 * @return int
+	 */
+	public int update(UcUser o){
+		if(o != null){
+			doEncryptUser(o);
+		}
+		return ucUserDao.update(o);
+	}
+	public void updateExt(UcUser o){
+		if(o != null){
+			doEncryptUser(o);
+		}
+		ucUserDao.updateExt(o);
+	}
+	/**
+	 * 更新用户状态
+	 * @param o
+	 * @return
+	 */
+	public int updateUserStatus(UcUser o) {
+		return ucUserDao.updateUserStatus(o);
+	}
 	/**
 	 * 加密
 	 * @param map

@@ -251,66 +251,8 @@
 	    FROM member_operator 
 	    where memberId = #{memberId} and vipOperator = 1 and ExchangeId = #{exchangeId}
     </select>
-    
-    <select id="getRegiserAgent" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
-    	SELECT 
-    	<include refid="field"/>
-	    FROM member_operator 
-	    where memberId = #{memberId} and isRegisterAgent = 1 and ExchangeId = #{exchangeId}
-    </select>
-    
-    <select id="getByMemberId" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
-    	SELECT 
-    	<include refid="field"/>
-	    FROM member_operator 
-	    where memberId = #{memberId} and ExchangeId = #{exchangeId}
-    </select>
-    
-    <select id="getByMenuIds" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
-    	select 
-		<include refid="field"/>
-    	from member_operator
-  		join sys_member_operator_role on (member_operator.id =sys_member_operator_role.MemberOperatorId )
-  		join sys_member_rolemenu on(sys_member_rolemenu.MemberRoleId = sys_member_operator_role.MemberRoleId) 
-  		where sys_member_rolemenu.MemberMenuId in 
-  		<foreach collection="menuIds" item="item" open="(" separator="," close=")">
-					#{item} 
-		</foreach> 
-  		 and member_operator.DelStatus = #{delStatus} and member_operator.ExchangeId = #{exchangeId};
-    </select>
-    
-    <update id="deleteById">
+     <update id="deleteById">
     	delete from member_operator where id = #{id} and ExchangeId = #{exchangeId} 
 	</update>
-    
-    <select id="getReceiveOperatorByNoticeType" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
-    	SELECT DISTINCT(member_operator.Id),
-    	<include refid="field"/>
-	    FROM member_operator 
-	    LEFT JOIN sys_member_operator_role ON(member_operator.id=sys_member_operator_role.MemberOperatorId)
-		LEFT JOIN sys_member_role_notice ON(sys_member_operator_role.MemberRoleId=sys_member_role_notice.RoleId)
-	    Where
-	    	member_operator.MemberId in
-	    	<foreach collection="memberIds" item="item" open="(" separator="," close=")">
-				#{item} 
-			</foreach>
-	    	AND NoticeType = #{noticeType}
-	    	AND ValidSetting = 1
-	    	AND DelStatus = 1
-	    	AND OperatorStatus != 0
-	    	<if test="@Ognl@isNotEmpty(applyOperatorId)">
-				OR member_operator.id = #{applyOperatorId} AND DelStatus = 1 AND OperatorStatus != 0
-			</if>
-    </select>
-    <select id="getOperatorListByIds" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
-    	SELECT
-    	<include refid="field"/>
-	    FROM member_operator 
-        WHERE 
-	        Id in 
-	        <foreach collection="operatorIds" item="item" open="(" separator="," close=")">
-				#{item} 
-			</foreach> 
-	</select>
 </mapper>
 

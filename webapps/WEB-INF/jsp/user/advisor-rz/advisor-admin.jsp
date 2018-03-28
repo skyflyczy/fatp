@@ -112,12 +112,6 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<label class="control-label x130">是否开设业务权限：</label> 
-						<input type="checkbox" name="all" value="1" data-toggle="icheck" data-label="" <c:if test="${operator.operatorType==3}">checked</c:if>>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
 						<label class="control-label x130"><span class="red">*</span>性别：</label> 
 						<input type="radio" class="adminGender" name="gender" value="1" <c:if test="${empty operator.gender || operator.gender==1 }">checked</c:if> data-toggle="icheck" data-label="男">
                     	<input type="radio" class="adminGender" name="gender" value="2" <c:if test="${not empty operator.gender && operator.gender==2 }">checked</c:if> data-toggle="icheck" data-label="女">
@@ -135,7 +129,7 @@
 						<input type="hidden" id="idTypeval" value="<c:out value='${operator.idType}'/>">
 						<select class="admin" name="idType" id="idType" data-val="${operator.idType}" data-toggle="selectpicker" data-rule="checkIdNumber" data-rule-checkIdNumber="checkIdNumber">
                         	<c:forEach var="idType" items="${idTypeList}">
-                        	<option value="${idType.typeId }" <c:if test="${idType.typeId==operator.idType}">selected="selected"</c:if>>${idType.typeName }</option>	
+                        	<option value="${idType.idType }" <c:if test="${idType.idType==operator.idType}">selected="selected"</c:if>>${idType }</option>	
                         	</c:forEach>
                         </select>
 					</td>

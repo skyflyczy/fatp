@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.huajin.baymax.exception.ExceptionThrowUtil;
-import com.huajin.baymax.service.AbstractBaseService;
 import com.huajin.baymax.support.ResponseCodeBase;
 import com.huajin.baymax.util.DateUtils;
 import com.telecwin.fatp.po.sys.SysbizcodeSequencePo;
+import com.telecwin.fatp.service.BaseService;
 import com.telecwin.fatp.service.datasupprot.sys.SysbizcodeSequenceDataSupportService;
 
 @Service
-public class SysbizcodeSequenceService extends AbstractBaseService {
+public class SysbizcodeSequenceService extends BaseService {
 	@Autowired
 	private SysbizcodeSequenceDataSupportService sysbizcodeSequenceDataSupportService;
 	

@@ -17,7 +17,6 @@ function amountInterval(element){
 	}
 }
 </script>
-<!-- 修改个人投资者 -->
 <div class="bjui-pageContent">
     <form action="<%=request.getContextPath()%>/user/member/updateFinance.do" data-toggle="validate" data-reload="false">
      <input type="hidden" value="${user.id}" name="id"/>

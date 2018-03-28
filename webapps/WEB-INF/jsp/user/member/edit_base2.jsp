@@ -15,7 +15,7 @@ function validCompanyCodeName(element){
 	);
 }
 function validUserName(element){
-	return $.post( "<%=request.getContextPath()%>/user/validusername.do",
+	return $.post( "<%=request.getContextPath()%>/user/member/validusername.do",
 		{"userName":element.value,"isUpdate":1,"userId":${user.id}},
 		function(data){
 		}
@@ -114,10 +114,10 @@ function amountInterval(element){
                     <tr>
                         <td colspan="2">
                             <label class="control-label x100"><span class="red">*</span>注册地：</label>
-                                <select name="provinceId" id="provinceId" data-val="${user.provinceId}" data-toggle="selectpicker" data-nextselect="#cityId" data-refurl="<%=request.getContextPath()%>/systype/city.do?proId={value}" data-rule="required;integer[+]" data-msg-integer="请选择" data-autoClose="true">
+                                <select name="provinceId" id="provinceId" data-val="${user.provinceId}" data-toggle="selectpicker" data-nextselect="#cityId" data-refurl="<%=request.getContextPath()%>/sys/area/city.do?proId={value}" data-rule="required;integer[+]" data-msg-integer="请选择" data-autoClose="true">
                                     <option value="0">--省市--</option>
                                 </select>
-                                <select name="cityId" id="cityId" data-toggle="selectpicker" data-val="${user.cityId}" data-nextselect="#disId" data-refurl="<%=request.getContextPath()%>/systype/district.do?cityId={value}" data-emptytxt="--城市--" data-rule="required;integer[+]" data-msg-integer="请选择" data-autoClose="true">
+                                <select name="cityId" id="cityId" data-toggle="selectpicker" data-val="${user.cityId}" data-nextselect="#disId" data-refurl="<%=request.getContextPath()%>/sys/area/district.do?cityId={value}" data-emptytxt="--城市--" data-rule="required;integer[+]" data-msg-integer="请选择" data-autoClose="true">
                                     <option value="0">--城市--</option>
                                 </select>
                                 <select name="disId" id="disId" data-toggle="selectpicker" data-val="${user.disId}" data-emptytxt="--区县--" data-rule="required;integer[+]" data-msg-integer="请选择" data-autoClose="true">
@@ -184,7 +184,7 @@ function amountInterval(element){
 </div>
 <script>
 	$.ajax({
-		url: '<%=request.getContextPath()%>/systype/province.do',
+		url: '<%=request.getContextPath()%>/sys/area/province.do',
 		type: 'get',
 		cache: 'false',
 		dataType: 'json',

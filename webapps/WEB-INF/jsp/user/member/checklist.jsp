@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!-- 投资者/个人、企业 -->
 <div class="bjui-pageHeader">
     <form id="pagerForm" data-toggle="ajaxsearch" action="<%=request.getContextPath()%>/user/member/checklist.do">
         <input type="hidden" name="pageSize" value="${pageSize}">
@@ -24,13 +23,13 @@
     <table data-toggle="tablefixed">
     	<thead>
 	    	<tr>
-	    		<th align="center" width="8%">会员账号</th>
+	    		<th align="center" width="10%">会员编号</th>
 	    		<th width="16%">会员简称</th>
 	    		<th width="22%">会员全称</th>
 	    		<th align="center" width="16%">经办人</th>
 	    		<th align="center" width="10%">经办人手机</th>
 	    		<th align="center" width="14%">注册时间</th>
-	    		<th align="center" width="6%">状态</th>
+	    		<th align="center" width="8%">状态</th>
 	    		<th align="center" width="8%">操作</th>
 	    	</tr>
     	</thead>
@@ -43,9 +42,9 @@
 	    		<td><span id="agent_${obj.id}"></span></td>
 	    		<td><span id="agentphone_${obj.id}"></span></td>
 	    		<td><fmt:formatDate value="${obj.createTime }" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-	    		<td><c:forEach var="item" items="${DelStatusDesc}"><c:if test="${item.value==obj.userStatus}">${item}</c:if></c:forEach></td>
+	    		<td>${obj.showUserStatus() }</td>
 	    		<td>
-	   				<a href="<%=request.getContextPath()%>/user/checkview.do?id=${obj.id}" 
+	   				<a href="<%=request.getContextPath()%>/user/member/checkview.do?id=${obj.id}" 
 	    				class="btn btn-blue" data-toggle="dialog" data-width="1000"  
 	    				data-height="800" data-id="dialog-mask" data-mask="true">审核</a>
 	    		</td>

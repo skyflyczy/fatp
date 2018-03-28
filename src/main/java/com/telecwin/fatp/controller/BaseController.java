@@ -96,6 +96,10 @@ public class BaseController {
 		MemberOperatorPo operator = getMemberOperator();
 		return operator.getId();
 	}
+	public String getSelfName() {
+		MemberOperatorPo operator = getMemberOperator();
+		return operator.getRealName();
+	}
 	public int getMemberId(){
 		return 0;
 	}

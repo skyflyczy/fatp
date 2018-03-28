@@ -10,16 +10,20 @@ import org.springframework.stereotype.Controller;
 import com.telecwin.fatp.controller.BaseController;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.UcUser;
+import com.telecwin.fatp.domain.UcUserBankcard;
 import com.telecwin.fatp.enums.user.OrgType;
 import com.telecwin.fatp.enums.user.UserIdentityDesc;
 import com.telecwin.fatp.enums.user.UserStatusDesc;
 import com.telecwin.fatp.service.user.UcUserService;
+import com.telecwin.fatp.service.user.UserBankCardService;
 
 @Controller
 public class UserSupport extends BaseController{
 	
 	@Autowired
 	protected UcUserService ucUserService;
+	@Autowired
+	protected UserBankCardService userBankCardService;
 
 	/**
 	 * 查询用户
@@ -64,6 +68,18 @@ public class UserSupport extends BaseController{
 		request().setAttribute("OrgType", OrgType.values());
 		request().setAttribute("userStatusList", allowStatusArray);
 		return ucUserList;
+	}
+	/**
+	 * 银行列表
+	 * @param userId
+	 */
+	public void cardList(int userId) {
+		//获取用户信息
+		UcUser user = ucUserService.getAllById(userId, super.getExchangeId());
+		request().setAttribute("user", user);
+		//银行卡列表
+		List<UcUserBankcard> list = userBankCardService.getUserBankcards(userId,getExchangeId());
+		request().setAttribute("list", list);
 	}
 	
 	private int[] handleUserStatusArray(UserStatusDesc[] allowStatusArray){

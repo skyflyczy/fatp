@@ -4,11 +4,10 @@ package com.telecwin.fatp.enums.user;
 public enum UserStatusDesc {
 	
 	UNKNOWN(-1),
-	待处理(0),
 	未提交(1),
 	待审核(2),
 	审核退回(3),
-	不通过(4),
+	审核不通过(4),
 	正常(5),
 	冻结(6),
 	待激活(7),
@@ -31,5 +30,9 @@ public enum UserStatusDesc {
     		}
     	}
     	return UNKNOWN;
+    }
+    
+    public static UserStatusDesc[] getAllNormalUserStatus(){
+    	return new UserStatusDesc[]{未提交,待审核,审核退回,审核不通过,正常,冻结,待激活};
     }
 }

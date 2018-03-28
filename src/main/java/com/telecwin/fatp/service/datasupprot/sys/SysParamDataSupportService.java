@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.cache.CacheKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import com.telecwin.fatp.util.CacheUtil;
 /**
  * SysParam
  * @author zhiya.chai
- * 2016年8月1日 下午8:24:34
  */
 @Service
 public class SysParamDataSupportService {
