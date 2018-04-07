@@ -348,7 +348,6 @@ public class UserMemberController extends UserSupport{
 		UserStatusDesc[] allowStatus = new UserStatusDesc[]{
 				UserStatusDesc.待审核
 		};
-		map.put("userIdentity", UserIdentityDesc.发行人.value);
 		listMembers(map, allowStatus);
 		return viewPath + "member/checklist";
 	}

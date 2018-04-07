@@ -128,10 +128,6 @@ public class ProjectRecordinfoPo implements Serializable{
 	 */
 	private Integer recordStatus;
 	/**
-	 * 平台审核状态
-	 */
-	private Integer auditStatus;
-	/**
 	 * 增信说明
 	 */
 	private String creditNote;
@@ -139,20 +135,13 @@ public class ProjectRecordinfoPo implements Serializable{
 	 * 机构最后一次审核时间
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date jgAuditTime;
+	private java.util.Date auditTime;
 	/**
-	 * 机构最后一次审核操作人
+	 * 最后一次审核操作人
 	 */
-	private Integer jdAuditOperatorId;
-	/**
-	 * 平台最后一次审核时间
-	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date ptAuditTime;
-	/**
-	 * 平台最后一次审核操作人
-	 */
-	private Integer ptAuditOperatorId;
+	private Integer auditOperatorId;
+	
+	private String auditRemark;
 	/**
 	 * 创建时间
 	 */
@@ -339,41 +328,11 @@ public class ProjectRecordinfoPo implements Serializable{
 	public Integer getRecordStatus() {
 		return this.recordStatus;
 	}
-	public void setAuditStatus(Integer value) {
-		this.auditStatus = value;
-	}
-	public Integer getAuditStatus() {
-		return this.auditStatus;
-	}
 	public void setCreditNote(String value) {
 		this.creditNote = value;
 	}
 	public String getCreditNote() {
 		return this.creditNote;
-	}
-	public void setJgAuditTime(java.util.Date value) {
-		this.jgAuditTime = value;
-	}
-	public java.util.Date getJgAuditTime() {
-		return this.jgAuditTime;
-	}
-	public void setJdAuditOperatorId(Integer value) {
-		this.jdAuditOperatorId = value;
-	}
-	public Integer getJdAuditOperatorId() {
-		return this.jdAuditOperatorId;
-	}
-	public void setPtAuditTime(java.util.Date value) {
-		this.ptAuditTime = value;
-	}
-	public java.util.Date getPtAuditTime() {
-		return this.ptAuditTime;
-	}
-	public void setPtAuditOperatorId(Integer value) {
-		this.ptAuditOperatorId = value;
-	}
-	public Integer getPtAuditOperatorId() {
-		return this.ptAuditOperatorId;
 	}
 	public void setCreateTime(java.util.Date value) {
 		this.createTime = value;
@@ -417,7 +376,23 @@ public class ProjectRecordinfoPo implements Serializable{
 	public void setIsPledge(Integer isPledge) {
 		this.isPledge = isPledge;
 	}
-
-	
+	public java.util.Date getAuditTime() {
+		return auditTime;
+	}
+	public void setAuditTime(java.util.Date auditTime) {
+		this.auditTime = auditTime;
+	}
+	public Integer getAuditOperatorId() {
+		return auditOperatorId;
+	}
+	public void setAuditOperatorId(Integer auditOperatorId) {
+		this.auditOperatorId = auditOperatorId;
+	}
+	public String getAuditRemark() {
+		return auditRemark;
+	}
+	public void setAuditRemark(String auditRemark) {
+		this.auditRemark = auditRemark;
+	}
 }
 

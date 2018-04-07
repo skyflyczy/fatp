@@ -23,5 +23,7 @@ public class ProjectContentDataSupportService {
 	public void deleteByProjectId(int id) {
 		projectContentDao.deleteByProjectId(id);
 	}
-	
+	public ProjectContentPo getByProjectId(int projectId) {
+		return projectContentDao.getByProjectId(projectId);
+	}
 }

@@ -12,17 +12,25 @@ import org.springframework.stereotype.Controller;
 import com.alibaba.fastjson.JSONObject;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
+import com.huajin.baymax.util.DateUtils;
 import com.telecwin.fatp.controller.BaseController;
-import com.telecwin.fatp.controller.param.project.ProjectRecordinfoVo;
 import com.telecwin.fatp.domain.PageData;
-import com.telecwin.fatp.domain.ProjectRecordComplex;
+import com.telecwin.fatp.domain.UcUser;
+import com.telecwin.fatp.domain.project.ProjectRecordComplex;
+import com.telecwin.fatp.domain.project.ProjectRecordinfo;
+import com.telecwin.fatp.enums.project.ProjectLimitType;
 import com.telecwin.fatp.enums.project.RecordSortColumn;
 import com.telecwin.fatp.enums.project.RecordStatusDesc;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.po.sys.SystypeProjectPo;
+import com.telecwin.fatp.po.user.MemberOperatorPo;
+import com.telecwin.fatp.service.project.ProjectContentService;
 import com.telecwin.fatp.service.project.ProjectRecordService;
+import com.telecwin.fatp.service.sys.FeExchangeService;
 import com.telecwin.fatp.service.sys.SystypeProjectService;
+import com.telecwin.fatp.service.sys.SystypeRepayService;
+import com.telecwin.fatp.service.user.UcUserService;
 import com.telecwin.fatp.util.Constant;
 import com.telecwin.fatp.util.SortUtil;
 
@@ -30,12 +38,21 @@ import com.telecwin.fatp.util.SortUtil;
 public class RecordSupport extends BaseController{
 	
 	@Autowired
-	private ProjectRecordService projectRecordService;
+	protected ProjectRecordService projectRecordService;
+	@Autowired
+	private ProjectContentService projectContentService;
 	@Autowired
 	private SystypeProjectService systypeProjectService;
+	@Autowired
+	protected UcUserService ucUserService;
+	@Autowired
+	private SystypeRepayService systypeRepayService;
+	@Autowired
+	private FeExchangeService feExchangeService;
 
 	//正在备案的产品状态
-	private static final RecordStatusDesc[] RECORDING_STATUS = new RecordStatusDesc[]{RecordStatusDesc.待提交,RecordStatusDesc.审核退回};
+	private static final RecordStatusDesc[] RECORDING_STATUS = new RecordStatusDesc[]{RecordStatusDesc.待提交,RecordStatusDesc.审核退回,RecordStatusDesc.审核不通过};
+	private static final RecordStatusDesc[] RECORD_CHECKING_STATUS = new RecordStatusDesc[]{RecordStatusDesc.待审核};
 	
 	protected String handleSortColumn(RecordSortColumn defaultRecordSortColumn) {
 		String orderField = request().getParameter("orderField");
@@ -64,6 +81,37 @@ public class RecordSupport extends BaseController{
 		request().setAttribute("list", pageData.getList());
 		request().setAttribute("total", pageData.getTotalsize());
 		request().setAttribute("search", map);
+		return pageData.getList();
+	}
+	/**
+	 * 获取审核列表
+	 * @param map
+	 * @return
+	 */
+	public List<ProjectRecordComplex> getRecordCheckingList(Map<String,Object> map) {
+		int[] searchStatus = new int[RECORD_CHECKING_STATUS.length];
+		for(int i=0; i<RECORD_CHECKING_STATUS.length; i++) {
+			searchStatus[i] = RECORD_CHECKING_STATUS[i].value;
+		}
+		map.put("recordStatusList", searchStatus);
+		map.put("memberId", super.getMemberId());
+		map.put("exchangeId", super.getExchangeId());
+		map.put("sortColumns", handleSortColumn(RecordSortColumn.updateTime));
+		Object updateTimeEnd = map.get("updateTimeEnd");
+		if(updateTimeEnd != null) {
+			map.put("updateTimeEnd", updateTimeEnd.toString() + " 23:59:59");
+		}
+		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
+		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
+		PageData<ProjectRecordComplex> pageData = projectRecordService.pageFindByCondition(map, pageNo, pageSize);
+		map.put("updateTimeEnd", updateTimeEnd);
+		request().setAttribute("list", pageData.getList());
+		request().setAttribute("total", pageData.getTotalsize());
+		request().setAttribute("pageCurrent", pageNo);
+		request().setAttribute("pageSize", pageSize);
+		request().setAttribute("systypeRepayList", systypeRepayService.findAll());
+		request().setAttribute("search", map);
+		request().setAttribute("projectLimitTypeList", ProjectLimitType.values());
 		return pageData.getList();
 	}
 	
@@ -117,7 +165,7 @@ public class RecordSupport extends BaseController{
 	 * @return
 	 * @return Object
 	 */
-	public Object doCreate(ProjectRecordinfoVo projectRrecordinfo) {
+	public Object doCreate(ProjectRecordinfo projectRrecordinfo) {
 		try {
 			projectRrecordinfo.setRecordName(projectRrecordinfo.getRecordFullName());
 			int id = projectRecordService.addRecord(projectRrecordinfo,super.getMemberOperator());
@@ -127,5 +175,30 @@ public class RecordSupport extends BaseController{
 		} catch (FatpException e) {
 			return resultError(e.getMessage());
 		} 
+	}
+	
+	/**
+	 * 获取备案相关信息（包含页面上需要的数据）
+	 * @param id
+	 * @return
+	 */
+	public ProjectRecordinfo getProjectRecordInfo(int id) {
+		MemberOperatorPo operator = super.getMemberOperator();
+		ProjectRecordinfo record = projectRecordService.getById(id);
+		UcUser user = ucUserService.getAllById(record.getLoanUserId(), operator.getExchangeId());
+		request().setAttribute("loanUserName", user.getUserName());
+		request().setAttribute("loanUserCompanyName", user.getCompanyName());
+		request().setAttribute("loanUserId", user.getId());
+		request().setAttribute("loanUser", user);
+		
+		request().setAttribute("obj", record);
+		//取项目类型
+		request().setAttribute("systypeProjectList", systypeProjectService.findByProductTypeId(record.getProductTypeId()));
+		//取还款方式
+		request().setAttribute("systypeRepayList", systypeRepayService.findAll());
+		request().setAttribute("projectLimitTypeList", ProjectLimitType.values());
+		request().setAttribute("todayForJudge", DateUtils.getDate());
+		request().setAttribute("content", projectContentService.getByProjectId(record.getId()));
+		return record;
 	}
 }

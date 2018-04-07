@@ -34,7 +34,7 @@
     
     <select id="getListByEntityType" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.TimelineDetailPo">
     	SELECT *
-	    FROM timeline_detail where entityType = #{entityType} order by id ASC
+	    FROM timeline_detail where entityType = #{entityType} AND entityId = #{entityId} order by id ASC
     </select>
 </mapper>
 

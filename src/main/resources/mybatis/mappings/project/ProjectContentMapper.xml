@@ -47,5 +47,10 @@
         DELETE FROM project_content WHERE
         ProjectId = #{projectId}
     </delete>
+    <select id="getByProjectId" parameterType="int" resultType="com.telecwin.fatp.po.project.ProjectContentPo">
+		SELECT *
+		FROM project_content
+		WHERE ProjectId = #{projectId}
+	</select>
 </mapper>
 

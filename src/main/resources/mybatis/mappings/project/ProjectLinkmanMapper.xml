@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.project.ProjectLinkmanDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO project_linkman (
+			Id ,
+			RealName ,
+			Phone ,
+			Email ,
+			Address
+		)
+		VALUES (
+			#{id} ,
+			#{realName} ,
+			#{phone} ,
+			#{email} ,
+			#{address}
+		)
+		<selectKey resultType="java.lang.Integer" keyProperty="id">
+			select LAST_INSERT_ID() as id
+		</selectKey>
+	</insert>
+
+	<select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.project.ProjectLinkmanPo">
+		SELECT *
+		FROM project_linkman
+		WHERE
+			Id = #{id}
+	</select>
+
+	<select id="getUniq" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ProjectLinkmanPo">
+		SELECT *
+		FROM project_linkman
+		WHERE
+			RealName = #{realName}
+			AND Phone = #{phone}
+			AND Email = #{email}
+			AND Address = #{address}
+	</select>
+</mapper>
+

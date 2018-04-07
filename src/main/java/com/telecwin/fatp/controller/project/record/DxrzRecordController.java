@@ -18,16 +18,16 @@ import com.telecwin.fatp.enums.project.RecordStatusDesc;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.interceptor.WithoutAuth;
+
 /**
- * 收益权转让计划备案
- * @author zhiya.chai
+ * 定向融资计划
  */
 @Controller
-@RequestMapping("/project/record/syq/")
-public class SyqRecordController extends RecordSupport{
+@RequestMapping("/project/record/dxrz/")
+public class DxrzRecordController extends RecordSupport{
 	
-	private String viewPath = super.viewPath + "project/record/syq";
-
+	private String viewPath = super.viewPath + "project/record/dxrz";
+	
 	/**
 	 * 备案列表查询
 	 * @return String
@@ -36,7 +36,7 @@ public class SyqRecordController extends RecordSupport{
 	@WithoutAuth
 	public String list(HttpServletRequest request) {
 		Map<String, Object> map = paramToMap(request);
-		map.put("productTypeId", ProductTypeDesc.收益权转让计划.value);
+		map.put("productTypeId", ProductTypeDesc.定向融资计划.value);
 		super.getRecordingList(map);
 		return viewPath + "/list";
 	}
@@ -49,7 +49,7 @@ public class SyqRecordController extends RecordSupport{
 	@WithoutAuth
 	public String add(HttpServletRequest request) {
 		Map<String, Object> map = paramToMap(request);
-		map.put("productTypeId", ProductTypeDesc.收益权转让计划.value);
+		map.put("productTypeId", ProductTypeDesc.定向融资计划.value);
 		this.beforeAdd(map);
 		return viewPath + "/addpro";
 	}
@@ -65,6 +65,7 @@ public class SyqRecordController extends RecordSupport{
 	public Object valid(HttpServletRequest request) {
 		return doValidProject(request);
 	}
+	
 	/**
 	 * 添加备案
 	 * @return Object
@@ -74,7 +75,7 @@ public class SyqRecordController extends RecordSupport{
 	@WithoutAuth
 	public Object create(@ModelAttribute ProjectRecordinfo projectRecordinfo) {
 		try {
-			projectRecordinfo.setProductTypeId(ProductTypeDesc.收益权转让计划.value);
+			projectRecordinfo.setProductTypeId(ProductTypeDesc.定向融资计划.value);
 			return super.doCreate(projectRecordinfo);
 		} catch (Exception e) {
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "create", e));
@@ -100,7 +101,7 @@ public class SyqRecordController extends RecordSupport{
 	@ResponseBody
 	public Object update(@ModelAttribute ProjectRecordinfo projectRecordinfo, boolean toAudit) {
 		try {
-			projectRecordinfo.setProductTypeId(ProductTypeDesc.收益权转让计划.value);
+			projectRecordinfo.setProductTypeId(ProductTypeDesc.定向融资计划.value);
 			if(toAudit) {
 				projectRecordinfo.setRecordStatus(RecordStatusDesc.待审核.value);
 			}
@@ -117,7 +118,6 @@ public class SyqRecordController extends RecordSupport{
 			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
 	}
-	
 	/**
 	 * 删除备案信息
 	 * @return Object

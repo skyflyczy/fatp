@@ -1,16 +1,19 @@
 package com.telecwin.fatp.controller.user;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.telecwin.fatp.controller.BaseController;
 import com.telecwin.fatp.domain.UcUser;
 import com.telecwin.fatp.domain.UcUserBankcard;
 import com.telecwin.fatp.enums.user.OrgType;
+import com.telecwin.fatp.enums.user.UserStatusDesc;
 import com.telecwin.fatp.service.sys.SysareaCityService;
 import com.telecwin.fatp.service.sys.SysareaDistrictService;
 import com.telecwin.fatp.service.sys.SysareaProvinceService;
@@ -22,7 +25,7 @@ import com.telecwin.fatp.service.user.UserBankCardService;
 
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends UserSupport{
 	
 	private String viewPath = super.viewPath + "user/";
 
@@ -38,10 +41,6 @@ public class UserController extends BaseController{
 	private SystypeIndustryService systypeIndustryService;
 	@Autowired
 	private SystypeCompanyService SystypeCompanyService;
-	@Autowired
-	protected UcUserService ucUserService;
-	@Autowired
-	protected UserBankCardService userBankCardService;
 	/**
 	 * 查看信息
 	 * @param id
@@ -78,5 +77,20 @@ public class UserController extends BaseController{
 			return viewPath + "info/info_base1";
 		}
 		return viewPath + "info/infoindex2";
+	}
+	/**
+	 * 用户查询
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("lookupload")
+	public String lookUpload(HttpServletRequest request) {
+		Map<String, Object> map = paramToMap(request);
+		map.put("ownerUserId", super.getMemberId()); 
+		UserStatusDesc[] allowStatus = new UserStatusDesc[]{
+				UserStatusDesc.正常
+		};
+		listMembers(map, allowStatus);
+		return viewPath + "lookupload";
 	}
 }

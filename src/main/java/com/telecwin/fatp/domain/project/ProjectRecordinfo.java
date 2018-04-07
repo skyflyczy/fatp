@@ -1,4 +1,4 @@
-package com.telecwin.fatp.controller.param.project;
+package com.telecwin.fatp.domain.project;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.telecwin.fatp.enums.project.ProjectLimitType;
 import com.telecwin.fatp.enums.project.RecordStatusDesc;
 import com.telecwin.fatp.enums.repay.RepayTypeDesc;
+import com.telecwin.fatp.po.project.ProjectLinkmanPo;
 
 /**
  * 
@@ -15,7 +16,7 @@ import com.telecwin.fatp.enums.repay.RepayTypeDesc;
  * 
  * 备案信息vo
  */
-public class ProjectRecordinfoVo implements Serializable{
+public class ProjectRecordinfo implements Serializable{
 
 	private static final long serialVersionUID = 6761429865297675161L;
 	
@@ -105,7 +106,7 @@ public class ProjectRecordinfoVo implements Serializable{
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
 	private java.util.Date deadline;
 	/**
-	 * 数据产生类型，0:三大web平台；1:开放API
+	 * 数据产生类型，0:平台
 	 */
 	private Integer originType;
 	/**
@@ -137,31 +138,18 @@ public class ProjectRecordinfoVo implements Serializable{
 	 */
 	private Integer recordStatus;
 	/**
-	 * 平台审核状态
-	 */
-	private Integer auditStatus;
-	/**
 	 * 增信说明
 	 */
 	private String creditNote;
 	/**
-	 * 机构最后一次审核时间
+	 * 最后一次审核时间
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date jgAuditTime;
+	private java.util.Date auditTime;
 	/**
-	 * 机构最后一次审核操作人
+	 * 最后一次审核操作人
 	 */
-	private Integer jdAuditOperatorId;
-	/**
-	 * 平台最后一次审核时间
-	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date ptAuditTime;
-	/**
-	 * 平台最后一次审核操作人
-	 */
-	private Integer ptAuditOperatorId;
+	private Integer auditOperatorId;
 	/**
 	 * 创建时间
 	 */
@@ -194,8 +182,8 @@ public class ProjectRecordinfoVo implements Serializable{
 	private Integer flowFeedType;
 	private String statusChangeDesc;
 	private String basicAssetNote;
-	private ProjectLinkmanVo agentLinkman;
-	private ProjectLinkmanVo loanLinkman;
+	private ProjectLinkmanPo agentLinkman;
+	private ProjectLinkmanPo loanLinkman;
 
 	/**
 	 * 拟定还款方式描述
@@ -376,41 +364,11 @@ public class ProjectRecordinfoVo implements Serializable{
 	public Integer getRecordStatus() {
 		return this.recordStatus;
 	}
-	public void setAuditStatus(Integer value) {
-		this.auditStatus = value;
-	}
-	public Integer getAuditStatus() {
-		return this.auditStatus;
-	}
 	public void setCreditNote(String value) {
 		this.creditNote = value;
 	}
 	public String getCreditNote() {
 		return this.creditNote;
-	}
-	public void setJgAuditTime(java.util.Date value) {
-		this.jgAuditTime = value;
-	}
-	public java.util.Date getJgAuditTime() {
-		return this.jgAuditTime;
-	}
-	public void setJdAuditOperatorId(Integer value) {
-		this.jdAuditOperatorId = value;
-	}
-	public Integer getJdAuditOperatorId() {
-		return this.jdAuditOperatorId;
-	}
-	public void setPtAuditTime(java.util.Date value) {
-		this.ptAuditTime = value;
-	}
-	public java.util.Date getPtAuditTime() {
-		return this.ptAuditTime;
-	}
-	public void setPtAuditOperatorId(Integer value) {
-		this.ptAuditOperatorId = value;
-	}
-	public Integer getPtAuditOperatorId() {
-		return this.ptAuditOperatorId;
 	}
 	public void setCreateTime(java.util.Date value) {
 		this.createTime = value;
@@ -490,16 +448,16 @@ public class ProjectRecordinfoVo implements Serializable{
 	public void setBasicAssetNote(String basicAssetNote) {
 		this.basicAssetNote = basicAssetNote;
 	}
-	public ProjectLinkmanVo getAgentLinkman() {
+	public ProjectLinkmanPo getAgentLinkman() {
 		return agentLinkman;
 	}
-	public void setAgentLinkman(ProjectLinkmanVo agentLinkman) {
+	public void setAgentLinkman(ProjectLinkmanPo agentLinkman) {
 		this.agentLinkman = agentLinkman;
 	}
-	public ProjectLinkmanVo getLoanLinkman() {
+	public ProjectLinkmanPo getLoanLinkman() {
 		return loanLinkman;
 	}
-	public void setLoanLinkman(ProjectLinkmanVo loanLinkman) {
+	public void setLoanLinkman(ProjectLinkmanPo loanLinkman) {
 		this.loanLinkman = loanLinkman;
 	}
 	public Integer getIsGuarantee() {
@@ -513,10 +471,6 @@ public class ProjectRecordinfoVo implements Serializable{
 	}
 	public void setIsPledge(Integer isPledge) {
 		this.isPledge = isPledge;
-	}
-	public boolean canEdit() {
-		return this.recordStatus == RecordStatusDesc.审核退回.value
-				|| this.recordStatus == RecordStatusDesc.待提交.value;
 	}
 	public String getProjectLimitTypeDesc() {
 		return ProjectLimitType.getProjectLimitType(this.projectLimitTypeId).toString();
@@ -544,4 +498,29 @@ public class ProjectRecordinfoVo implements Serializable{
 	public void setStatusChangeDesc(String statusChangeDesc) {
 		this.statusChangeDesc = statusChangeDesc;
 	}
+	
+	public java.util.Date getAuditTime() {
+		return auditTime;
+	}
+	public void setAuditTime(java.util.Date auditTime) {
+		this.auditTime = auditTime;
+	}
+	public Integer getAuditOperatorId() {
+		return auditOperatorId;
+	}
+	public void setAuditOperatorId(Integer auditOperatorId) {
+		this.auditOperatorId = auditOperatorId;
+	}
+	
+	public boolean canDelete() {
+		return this.recordStatus == RecordStatusDesc.审核退回.value
+				|| this.recordStatus == RecordStatusDesc.待提交.value
+				|| this.recordStatus == RecordStatusDesc.审核不通过.value;
+	}
+	
+	public boolean canEdit() {
+		return this.recordStatus == RecordStatusDesc.审核退回.value
+				||  this.recordStatus == RecordStatusDesc.待提交.value;
+	}
+	
 }

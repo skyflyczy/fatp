@@ -5,9 +5,9 @@ public enum ProjectLimitType {
 	月(2),
 	年(3);
 	
-	public Integer type;
+	public int type;
 	
-	private ProjectLimitType(Integer type){
+	private ProjectLimitType(int type){
 		this.type = type;
 	}
 	

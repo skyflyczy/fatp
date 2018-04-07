@@ -28,4 +28,10 @@ public class TimelineDetailController extends BaseController{
 		request().setAttribute("list", list);
 		return viewPath;
 	}
+	@RequestMapping("/record")
+	public String getRecordTimeline(Integer entityId) {
+		List<TimelineDetailPo> list = timelineDetailService.getListByEntityType(EntityType.备案.value,entityId);
+		request().setAttribute("list", list);
+		return viewPath;
+	}
 }

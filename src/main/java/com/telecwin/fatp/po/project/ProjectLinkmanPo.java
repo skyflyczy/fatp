@@ -1,13 +1,12 @@
-package com.telecwin.fatp.controller.param.project;
+package com.telecwin.fatp.po.project;
 
 import java.io.Serializable;
 
 /**
  * 
- * @author zhiya.chai
- * 联系人vo
+ * 联系人
  */
-public class ProjectLinkmanVo implements Serializable{
+public class ProjectLinkmanPo implements Serializable{
 
 	private static final long serialVersionUID = 8781310771880829076L;
 	

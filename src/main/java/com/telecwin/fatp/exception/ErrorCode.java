@@ -40,8 +40,8 @@ public enum ErrorCode {
 	
 	RECORD_NAME_NOT_MATCH(50000,"备案简称不支持特殊字符。"),
 	RECORD_FULLNAME_NOT_MATCH(500001,"备案全称不支持特殊字符。"),
-	
-	
+	RECORDINFO_NOT_EXIST(500002,"备案信息不存在。"),
+	RECORDINFO_STATUS_ERROR(500002,"备案信息状态错误。"),
 	
 	
 	

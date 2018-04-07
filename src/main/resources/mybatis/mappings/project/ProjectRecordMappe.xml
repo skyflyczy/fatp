@@ -105,26 +105,14 @@
             <if test="@Ognl@isNotEmpty(recordStatus)">
                 AND project_recordinfo.RecordStatus = #{recordStatus}
             </if>
-            <if test="@Ognl@isNotEmpty(auditStatus)">
-                AND project_recordinfo.AuditStatus = #{auditStatus}
+            <if test="@Ognl@isNotEmpty(auditTimeBegin)">
+                AND project_recordinfo.auditTime >= #{auditTimeBegin}
             </if>
-            <if test="@Ognl@isNotEmpty(jgAuditTimeBegin)">
-                AND project_recordinfo.JgAuditTime >= #{jgAuditTimeBegin}
+            <if test="@Ognl@isNotEmpty(auditTimeEnd)">
+                AND project_recordinfo.auditTime &lt;= #{auditTimeEnd}
             </if>
-            <if test="@Ognl@isNotEmpty(jgAuditTimeEnd)">
-                AND project_recordinfo.JgAuditTime &lt;= #{jgAuditTimeEnd}
-            </if>
-            <if test="@Ognl@isNotEmpty(jdAuditOperatorId)">
-                AND project_recordinfo.JdAuditOperatorId = #{jdAuditOperatorId}
-            </if>
-            <if test="@Ognl@isNotEmpty(ptAuditTimeBegin)">
-                AND project_recordinfo.PtAuditTime >= #{ptAuditTimeBegin}
-            </if>
-            <if test="@Ognl@isNotEmpty(ptAuditTimeEnd)">
-                AND project_recordinfo.PtAuditTime &lt;= #{ptAuditTimeEnd}
-            </if>
-            <if test="@Ognl@isNotEmpty(ptAuditOperatorId)">
-                AND project_recordinfo.PtAuditOperatorId = #{ptAuditOperatorId}
+            <if test="@Ognl@isNotEmpty(auditOperatorId)">
+                AND project_recordinfo.auditOperatorId = #{jauditOperatorId}
             </if>
             <if test="@Ognl@isNotEmpty(source)">
                 AND project_recordinfo.source = #{source}
@@ -159,11 +147,12 @@
         </where>
     </sql>
 
-	<select id="findByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.ProjectRecordComplex">
+	<select id="findByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ProjectRecordComplex">
         SELECT 
         project_recordinfo.*  
         ,uc_user.UserName AS loanUserName  
-        FROM project_recordinfo
+        FROM project_recordinfo 
+        LEFT JOIN uc_user ON (uc_user.ID = project_recordinfo.LoanUserId)
         <include refid="where"/>
         <if test="@Ognl@isNotEmpty(sortColumns)">
             ORDER BY ${sortColumns}
@@ -201,12 +190,9 @@
 			UnderwriterLinkId ,
 			LoanLinkId ,
 			RecordStatus ,
-			AuditStatus ,
 			CreditNote ,
-			JgAuditTime ,
-			JdAuditOperatorId ,
-			PtAuditTime ,
-			PtAuditOperatorId ,
+			AuditTime ,
+			AuditOperatorId ,
 			CreateTime ,
 			CreateOperatorId ,
 			UpdateTime ,
@@ -242,12 +228,9 @@
 			#{underwriterLinkId} ,
 			#{loanLinkId} ,
 			#{recordStatus} ,
-			#{auditStatus} ,
 			#{creditNote} ,
-			#{jgAuditTime} ,
-			#{jdAuditOperatorId} ,
-			#{ptAuditTime} ,
-			#{ptAuditOperatorId} ,
+			#{auditTime} ,
+			#{auditOperatorId} ,
 			now() ,
 			#{createOperatorId} ,
 			now() ,
@@ -258,5 +241,63 @@
 			select LAST_INSERT_ID() as id
 		</selectKey>
 	</insert>
+	
+	<select id="getById" parameterType="java.lang.Integer" resultType="com.telecwin.fatp.domain.project.ProjectRecordinfo">
+        SELECT *
+        FROM project_recordinfo
+        WHERE Id = #{id}
+    </select>
+    
+    <select id="getByRecordGuid" parameterType="java.lang.String" resultType="com.telecwin.fatp.domain.project.ProjectRecordinfo">
+        SELECT *
+        FROM project_recordinfo
+        WHERE RecordGuid = #{recordGuid}
+    </select>
+    
+    <update id="update">
+		UPDATE project_recordinfo SET
+			ExchangeId = #{exchangeId} ,
+			MemberId = #{memberId} ,
+			RecordCode = #{recordCode} ,
+			RecordGuid = #{recordGuid} ,
+			PartnerBizId = #{partnerBizId} ,
+			RecordName = #{recordName} ,
+			RecordFullName = #{recordFullName} ,
+			ProductTypeId = #{productTypeId} ,
+			ProjectTypeId = #{projectTypeId} ,
+			LoanUserId = #{loanUserId} ,
+			ProjectUnitPrice = #{projectUnitPrice} ,
+			ProjectMoney = #{projectMoney} ,
+			ProjectLimit = #{projectLimit} ,
+			ProjectLimitTypeId = #{projectLimitTypeId} ,
+			RepayTypeId = #{repayTypeId} ,
+			ProjectUsing = #{projectUsing} ,
+			InvestProfit = #{investProfit} ,
+			IsGuarantee = #{isGuarantee} ,
+			IsPledge = #{isPledge} ,
+			Deadline = #{deadline} ,
+			OriginType = #{originType} ,
+			OriginatorId = #{originatorId} ,
+			RatingOrgName = #{ratingOrgName} ,
+			CreditRating = #{creditRating} ,
+			DebtLevel = #{debtLevel} ,
+			UnderwriterLinkId = #{underwriterLinkId} ,
+			LoanLinkId = #{loanLinkId} ,
+			RecordStatus = #{recordStatus} ,
+			CreditNote = #{creditNote} ,
+			AuditTime = #{auditTime} ,
+			AuditOperatorId = #{auditOperatorId} ,
+			UpdateTime = now() ,
+			UpateOperatorId = #{upateOperatorId} ,
+			VersionNo = VersionNo + 1 
+		WHERE
+			Id = #{id}
+			AND VersionNo = #{versionNo}
+	</update>
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM project_recordinfo 
+		WHERE
+			Id = #{id} AND VersionNo = #{versionNo}
+	</delete>
 </mapper>
 

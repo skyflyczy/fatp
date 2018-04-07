@@ -17,4 +17,6 @@ public interface ProjectContentDao {
 	void insert(ProjectContentPo contentPo);
 	
 	void deleteByProjectId(int id);
+	
+	ProjectContentPo getByProjectId(int projectId);
 }

@@ -6,7 +6,7 @@
         <input type="hidden" name="orderField" value="${search.orderField}">         <!-- 排序字段 -->
 		<input type="hidden" name="orderDirection" value="${search.orderDirection}">
         <div class="bjui-searchBar">
-            <%@ include file="/WEB-INF/jsp/project/record/syq/search_itembase.jsp" %>
+            <%@ include file="/WEB-INF/jsp/project/record/search/search_itembase.jsp" %>
             <button type="submit" class="btn-default" data-icon="search" data-clear-query="false">查询</button>
             <a class="btn btn-default" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">重置查询</a>
             <div class="pull-right">
@@ -41,22 +41,13 @@
 	    	<tr>
 	    		<td align="center">${varStatus.count}</td>
 	    		<td align="center">${list.recordCode}</td>
-	    		<td><a href="<%=request.getContextPath()%>/project/record/syq/view.do?id=${list.id}" 
+	    		<td><a href="<%=request.getContextPath()%>/project/record/view.do?id=${list.id}" 
 	    				data-toggle="dialog" data-width="1000"  data-height="800" data-id="dialog-mask" 
 	    				data-mask="true" class="text-omit pull-left">${list.recordFullName}</a></td>
 	    		<td><span title="${list.loanUserName}">${list.loanUserName}</span></td>
 	    		<td align="right"><fmt:formatNumber value="${list.projectMoney}" pattern="#,##0.00"/></td>
 	    		<td align="center">
-	    			${list.projectLimit} 
-					<c:if test="${list.projectLimitTypeId == 1 }">
-						天
-					</c:if>
-					<c:if test="${list.projectLimitTypeId == 2 }">
-						月
-					</c:if>
-					<c:if test="${list.projectLimitTypeId == 3 }">
-						年
-					</c:if>
+	    			${list.projectLimit} ${list.getProjectLimitTypeDesc() }
 				</td>
 				<td align="center"><fmt:formatNumber value="${list.investProfit*100}" pattern="0.000"/> %</td>
 				<td align="center"><fmt:formatDate value="${list.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -67,15 +58,16 @@
 					</span>
 				</td>
 	    		<td align="center">
-	    				<c:if test="${list.recordStatus == 1 ||list.recordStatus == 3 ||list.recordStatus == 5 }">
+	    				<c:if test="${list.canEdit() }">
 			   				<a href="<%=request.getContextPath()%>/project/record/syq/edit.do?id=${list.id}" 
 			   					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
-			   					data-height="650" data-id="dialog-edit" data-mask="true" data-on-close="function(){$(this).navtab('refresh');}">编辑</a>
-			   				<a href="<%=request.getContextPath()%>/project/record/syq/delete.do?id=${list.id}" 
-			   					class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除吗？">删除</a>
+			   					data-height="500" data-id="dialog-edit" data-mask="true" data-on-close="function(){$(this).navtab('refresh');}">编辑</a>
 	   					</c:if>
+	   					<c:if test="${list.canDelete() }">
+	   					<a href="<%=request.getContextPath()%>/project/record/syq/delete.do?id=${list.recordGuid}" 
+			   					class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除吗？">删除</a>
+			   			</c:if>
 	    		</td>
-	
 	    	</tr>
 	    	</c:forEach>
     	</tbody>
