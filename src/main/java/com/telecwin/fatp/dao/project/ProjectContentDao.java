@@ -7,8 +7,6 @@ import com.telecwin.fatp.po.project.ProjectContentPo;
  * 
  * ProjectContent
  * 
- * @author zhiya.chai
- * @date 2017-06-01 48:14:09
  */
 @MyBatisDao
 public interface ProjectContentDao {

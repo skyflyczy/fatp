@@ -19,7 +19,7 @@
 				</tr>
 				<tr>
 					<td>
-						<label class="control-label x110">融资人：</label> 
+						<label class="control-label x110">发行人：</label> 
 						<span>${loanUserName}</span>
 					</td>
 					<td>
@@ -74,7 +74,7 @@
 				</tr>
 			</tbody>
 			<thead>
-		 		<tr><th colspan="2">融资人评级信息</th></tr>
+		 		<tr><th colspan="2">发行人评级信息</th></tr>
 		 	</thead>
 		 	<tbody>
 				<tr>
@@ -124,7 +124,7 @@
 				</tr>
 		 	</tbody>
 		 	<thead>
-		 		<tr><th colspan="2">融资人指定联系人</th></tr>
+		 		<tr><th colspan="2">发行人指定联系人</th></tr>
 		 	</thead>
 		 	<tbody>
 		 		<tr>

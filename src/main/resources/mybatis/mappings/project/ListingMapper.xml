@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.project.ListingDao">
+	<sql id="base_field">
+		listing_base.Id,
+		listing_base.ExchangeId,
+		listing_base.MemberId,
+		listing_base.LoanUserId,
+		listing_base.ProjectRecordId,
+		listing_base.ProjectCode,
+		listing_base.ProjectGuid,
+		listing_base.PartnerBizId,
+		listing_base.ProjectSettleCode,
+		listing_base.ProjectName,
+		listing_base.ProjectFullName,
+		listing_base.ProductTypeId,
+		listing_base.ProjectTypeId,
+		listing_base.ProjectUnitPrice,
+		listing_base.ProjectMoney,
+		listing_base.ProjectAmountMin,
+		listing_base.ProvinceId,
+		listing_base.CityId,
+		listing_base.IndustryId,
+		listing_base.ProjectCost,
+		listing_base.IsGuarantee,
+		listing_base.IsPledge,
+		listing_base.IsInsurance,
+		listing_base.ProjectUsing,
+		listing_base.ProjectLimit,
+		listing_base.ProjectLimitTypeId,
+		listing_base.ValueDateChangeStyle,
+		listing_base.ExpireDateChangeStyle,
+		listing_base.ValueDate,
+		listing_base.ExpireDate,
+		listing_base.ProjectStatus ProjectStatus,
+		listing_base.OriginType,
+		listing_base.OriginatorId,
+		listing_base.CreateTime 
+	</sql>
+	<sql id="trade_field">
+		listing_trade.InvestAmountMin,
+		listing_trade.InvestAmountMax,
+		listing_trade.InvestAmountAppend,
+		listing_trade.InvestProfit,
+		listing_trade.PublishTime,
+		listing_trade.BuyTimeStart,
+		listing_trade.BuyTimeEnd,
+		listing_trade.GuaranteeMoney,
+		listing_trade.GuaranteeValueType,
+		listing_trade.PaySettleDay,
+		listing_trade.TransferType,
+		listing_trade.TradeType,
+		listing_trade.CanTransfer,
+		listing_trade.TransferAfter,
+		listing_trade.TransferLimit 
+	</sql>
+	<sql id="clearing_field">
+		listing_clearing.PayclearId,
+		listing_clearing.SettleTypeId,
+		listing_clearing.ReceiveUserType,
+		listing_clearing.ReceiveAccountId,
+		listing_clearing.AdvioserFee,
+		listing_clearing.InvestAdvioserFee,
+		listing_clearing.PlatformFee,
+		listing_clearing.PlatformFeeType,
+		listing_clearing.OverduePayFee,
+		listing_clearing.RepayTypeId,
+		listing_clearing.ManageDuration,
+		listing_clearing.GeneratePlan,
+		listing_clearing.RepayPeriodDay,
+		listing_clearing.SettleInvestDay,
+		listing_clearing.PayinvestType,
+		listing_clearing.PayinvestId,
+		listing_clearing.PayinvestBankCardId,
+		listing_clearing.InvestSettleTypeId,
+		listing_clearing.InterestMode,
+		listing_clearing.InterestBaseType,
+		listing_clearing.InterestBaseDays 
+	</sql>
+
+	<select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingComplex">
+		SELECT 
+		<include refid="base_field"/>,
+		<include refid="trade_field"/>,
+		<include refid="clearing_field"/>,		
+		u.userName loanUserName,
+		u.UserGuid
+		,CONVERT(AES_DECRYPT(m.RealName,'${codestring}')USING utf8) createOperatorName 
+		<if test="@Ognl@isNotEmpty(needBankInfo)">
+			,CardAccount,AccountName,SubBankName,BankName bankChannelName
+		</if>
+		<if test="@Ognl@isNotEmpty(needContenct)">
+			,projectInfo,BasicAssetNote,tradePartyQualification
+		</if>
+		FROM listing_base
+		JOIN listing_trade ON(listing_base.Id=listing_trade.ProjectId)
+		JOIN listing_clearing ON(listing_base.Id=listing_clearing.ProjectId)
+		left join uc_user u on(LoanUserId=u.id)
+		left join member_operator m on(listing_base.CreateOperatorId=m.id)
+		<if test="@Ognl@isNotEmpty(needBankInfo)">
+			left join uc_user_bankcard on(uc_user_bankcard.id=ReceiveAccountId)
+			left join sys_bank on(sys_bank.id=uc_user_bankcard.bankId)
+		</if>
+		<if test="@Ognl@isNotEmpty(needContenct)">
+			left join listing_content on(listing_content.ProjectId=listing_base.id)
+		</if>
+		<include refid="where"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+	</select>
+	<sql id="where">
+		<where>
+			<if test="@Ognl@isNotEmpty(id)">
+				AND listing_base.Id = #{id}
+			</if>
+			<if test="@Ognl@isNotEmpty(ids)">
+				AND listing_base.Id in
+				<foreach collection="ids" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="@Ognl@isNotEmpty(projectCode)">
+				AND ProjectCode = #{projectCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectGuid)">
+				AND ProjectGuid = #{projectGuid}
+			</if>
+			<if test="@Ognl@isNotEmpty(memberId)">
+				AND listing_base.MemberId = #{memberId}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectName)">
+				AND ProjectFullName like "%"#{projectName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(projectNameEqual)">
+				AND ProjectName = #{projectNameEqual}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectFullName)">
+				AND ProjectFullName like "%"#{projectFullName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(productTypeId)">
+				AND productTypeId = #{productTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectTypeId)">
+				AND ProjectTypeId = #{projectTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUserId)">
+				AND LoanUserId = #{loanUserId}
+			</if>
+			<if test="@Ognl@isNotEmpty(orderUserId)">
+				AND LoanUserId != #{orderUserId}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectMoney)">
+				AND listing_base.ProjectMoney = #{projectMoney}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectMoneyBegin)">
+				AND listing_base.ProjectMoney >= #{projectMoneyBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectMoneyEnd)">
+				AND listing_base.ProjectMoney &lt;= #{projectMoneyEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectAmountMin)">
+				AND projectAmountMin = #{projectAmountMin}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectLimit)">
+				AND ProjectLimit = #{projectLimit}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectLimitBegin)">
+				AND ProjectLimit >= #{projectLimitBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectLimitEnd)">
+				AND ProjectLimit &lt;= #{projectLimitEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectLimitTypeId)">
+				AND projectLimitTypeId = #{projectLimitTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectCost)">
+				AND ProjectCost = #{projectCost}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectCostBegin)">
+				AND ProjectCost >= #{projectCostBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectCostEnd)">
+				AND ProjectCost &lt;= #{projectCostEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(repayTypeId)">
+				AND RepayTypeId = #{repayTypeId}
+			</if>
+			<if test="@Ognl@isNotEmpty(valueDateBegin)">
+				AND ValueDate >= #{valueDateBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(valueDateEnd)">
+				AND ValueDate &lt;= #{valueDateEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(expireDateBegin)">
+				AND ExpireDate >= #{expireDateBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(expireDateEnd)">
+				AND ExpireDate &lt;= #{expireDateEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(interestBaseType)">
+				AND InterestBaseType = #{interestBaseType}
+			</if>
+			<if test="@Ognl@isNotEmpty(interestBaseDays)">
+				AND InterestBaseDays = #{interestBaseDays}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectUsing)">
+				AND ProjectUsing = #{projectUsing}
+			</if>
+			<if test="@Ognl@isNotEmpty(receiveAccountId)">
+				AND ReceiveAccountId = #{receiveAccountId}
+			</if>
+			<if test="@Ognl@isNotEmpty(buyTimeStartBegin)">
+				AND BuyTimeStart >= #{buyTimeStartBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(buyTimeStartEnd)">
+				AND BuyTimeStart &lt;= #{buyTimeStartEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(buyTimeEndBegin)">
+				AND BuyTimeEnd >= #{buyTimeEndBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(buyTimeEndEnd)">
+				AND BuyTimeEnd &lt;= #{buyTimeEndEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(investAmountMin)">
+				AND investAmountMin = #{investAmountMin}
+			</if>
+			<if test="@Ognl@isNotEmpty(investAmountMinBegin)">
+				AND investAmountMin >= #{investAmountMinBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(investAmountMinEnd)">
+				AND investAmountMin &lt;= #{investAmountMinEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(investAmountMax)">
+				AND investAmountMax = #{investAmountMax}
+			</if>
+			<if test="@Ognl@isNotEmpty(investAmountAppend)">
+				AND investAmountAppend = #{investAmountAppend}
+			</if>
+			<if test="@Ognl@isNotEmpty(investProfit)">
+				AND InvestProfit = #{investProfit}
+			</if>
+			<if test="@Ognl@isNotEmpty(investProfitBegin)">
+				AND InvestProfit >= #{investProfitBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(investProfitEnd)">
+				AND InvestProfit &lt; #{investProfitEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(isGuarantee)">
+				AND IsGuarantee = #{isGuarantee}
+			</if>
+			<if test="@Ognl@isNotEmpty(isPledge)">
+				AND IsPledge = #{isPledge}
+			</if>
+			<if test="@Ognl@isNotEmpty(advioserFee)">
+				AND AdvioserFee = #{advioserFee}
+			</if>
+			<if test="@Ognl@isNotEmpty(platformFee)">
+				AND PlatformFee = #{platformFee}
+			</if>
+			<if test="@Ognl@isNotEmpty(overduePayFee)">
+				AND OverduePayFee = #{overduePayFee}
+			</if>
+			<if test="@Ognl@isNotEmpty(overdueDesc)">
+				AND OverdueDesc = #{overdueDesc}
+			</if>
+			<if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND listing_base.CreateTime >= #{createTimeBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND listing_base.CreateTime &lt;= #{createTimeEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(publishTimeBegin)">
+				AND PublishTime >= #{publishTimeBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(publishTimeEnd)">
+				AND PublishTime &lt;= #{publishTimeEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(ptAuditTimeBegin)">
+				AND AuditTime >= #{auditTimeBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(ptAuditTimeEnd)">
+				AND AuditTime &lt;= #{auditTimeEnd}
+			</if>
+			<if test="@Ognl@isNotEmpty(searchStatusList)">
+				AND listing_base.ProjectStatus in
+				<foreach collection="searchStatusList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="@Ognl@isNotEmpty(projectStatus)">
+				AND listing_base.ProjectStatus = #{projectStatus}
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUserName)">
+				AND u.userName like "%"#{loanUserName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(productTypeList)">
+				AND productTypeId in
+				<foreach collection="productTypeList" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="@Ognl@isNotEmpty(noTradeType)">
+				AND tradeType!=#{noTradeType}
+			</if>
+			<if test="@Ognl@isNotEmpty(originType)">
+				AND originType = #{originType}
+			</if>
+			<if test="@Ognl@isNotEmpty(partnerBizId)">
+				AND partnerBizId = #{partnerBizId}
+			</if>
+			<if test="@Ognl@isNotEmpty(projectRecordId)">
+				AND ProjectRecordId = #{projectRecordId}
+			</if>
+			<if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND listing_base.UpdateTime >= #{updateTimeBegin}
+			</if>
+			<if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND listing_base.UpdateTime &lt;= #{updateTimeEnd}
+			</if>
+		</where>
+	</sql>
+	
+</mapper>
+

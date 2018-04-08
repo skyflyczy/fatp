@@ -22,10 +22,10 @@
 				
 				<tr>
 					<td>
-						<label class="control-label x110">融资人：</label> 
+						<label class="control-label x110">发行人：</label> 
 						<input type="hidden" name="loanUserId" id="loanUserId">
 						<input readonly type="text" name="loader" id="loader" size="15" id="loader"
-							data-toggle="lookup" data-title="融资人选择" data-url="<%=request.getContextPath()%>/user/lookupload.do" data-width="800" data-height="400">
+							data-toggle="lookup" data-title="发行人选择" data-url="<%=request.getContextPath()%>/user/lookupload.do" data-width="800" data-height="400">
 					</td>
 				</tr>
 		 </table>

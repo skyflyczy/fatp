@@ -31,7 +31,7 @@
 						<label class="control-label x110">发行人：</label> 
 						<input type="hidden" name="loanUserId" id="loanUserId" value='${loanUserId}'>
 						<input readonly type="text" name="loader" id="loader" size="15" value="${loanUserName}" id="loader"
-							data-toggle="lookup" data-title="融资人选择" data-url="<%=request.getContextPath()%>/user/lookupload.do" data-width="800" data-height="400">
+							data-toggle="lookup" data-title="发行人选择" data-url="<%=request.getContextPath()%>/user/lookupload.do" data-width="800" data-height="400">
 					</td>
 					<td>
 						<label class="control-label x110"><span class="red">*</span>备案名称：</label>
@@ -88,7 +88,7 @@
 				</tr>
 			</tbody>
 			<thead>
-		 		<tr><th colspan="2">融资人评级信息</th></tr>
+		 		<tr><th colspan="2">发行人评级信息</th></tr>
 		 	</thead>
 		 	<tbody>
 				<tr>
@@ -138,7 +138,7 @@
 				</tr>
 		 	</tbody>
 		 	<thead>
-		 		<tr><th colspan="2">融资人指定联系人</th></tr>
+		 		<tr><th colspan="2">发行人指定联系人</th></tr>
 		 	</thead>
 		 	<tbody>
 				<tr>
