@@ -7,7 +7,7 @@
          <li><a id="otherfiles_link" href="<%=request.getContextPath()%>/income/right/profiles/recordlist.do?projectId=${obj.id}&projectTypeId=${obj.projectTypeId}&memberId=${obj.memberId}" 
          	role="tab" data-toggle="ajaxtab" data-target="#otherfiles" data-reload="true">附件</a></li>
          	 -->
-        <li><a href="<%=request.getContextPath()%><%=request.getContextPath()%>/timeline/record.do?entityId=${obj.id}" 
+        <li><a href="<%=request.getContextPath()%>/timeline/record.do?entityId=${obj.id}" 
             	role="tab" data-toggle="ajaxtab" data-target="#feedlist" data-reload="false">动态</a></li>
      </ul>
      <!-- Tab panes -->

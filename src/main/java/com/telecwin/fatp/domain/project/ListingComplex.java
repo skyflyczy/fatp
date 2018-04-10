@@ -2,8 +2,11 @@ package com.telecwin.fatp.domain.project;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.telecwin.fatp.enums.project.ListingStatusDesc;
 
 public class ListingComplex {
 	/**
@@ -389,1169 +392,363 @@ public class ListingComplex {
 	 * 交易对手方资质
 	 */
 	private String tradePartyQualification;
+	private String tradeTerm;
+	private String repayTypeName;
+	private Integer cfmright;
+	private Integer channelId;
+	private String companyName;
+	private BigDecimal collectMoney;
+	private BigDecimal cfmRightMoney;
+	private BigDecimal fee;
+	private Integer count;
+	private BigDecimal quotedMaxMoney;
+	private int quotedCnt;
+	private String industryName;
+	private String proName;
+	private String cityName;
+	private Integer buyCount;
+	private Integer settleStatus;
+	private Integer breakPayStatus;
+	private Integer buyCnt;
+	private String projectTypeName;
+	private String recordGuid;
+	private String recordCode;
+	private String recordName;
+	private String transferorBasicNote;
+	private Integer transfereeUserId;
+	private Integer settleInvestMonth;
+	private List<ListingSaleagent> projectSaleagent;
 	
-	/**
-	 * @return the id
-	 */
+	
 	public Integer getId() {
 		return id;
 	}
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	/**
-	 * @return the projectCode
-	 */
 	public String getProjectCode() {
 		return projectCode;
 	}
-	/**
-	 * @param projectCode the projectCode to set
-	 */
 	public void setProjectCode(String projectCode) {
 		this.projectCode = projectCode;
 	}
-	/**
-	 * @return the projectGuid
-	 */
 	public String getProjectGuid() {
 		return projectGuid;
 	}
-	/**
-	 * @param projectGuid the projectGuid to set
-	 */
 	public void setProjectGuid(String projectGuid) {
 		this.projectGuid = projectGuid;
 	}
-	/**
-	 * @return the projectSettleCode
-	 */
 	public String getProjectSettleCode() {
 		return projectSettleCode;
 	}
-	/**
-	 * @param projectSettleCode the projectSettleCode to set
-	 */
 	public void setProjectSettleCode(String projectSettleCode) {
 		this.projectSettleCode = projectSettleCode;
 	}
-	/**
-	 * @return the memberId
-	 */
 	public Integer getMemberId() {
 		return memberId;
 	}
-	/**
-	 * @param memberId the memberId to set
-	 */
 	public void setMemberId(Integer memberId) {
 		this.memberId = memberId;
 	}
-	/**
-	 * @return the exchangeId
-	 */
-	public Integer getExchangeId() {
-		return exchangeId;
-	}
-	/**
-	 * @param exchangeId the exchangeId to set
-	 */
-	public void setExchangeId(Integer exchangeId) {
-		this.exchangeId = exchangeId;
-	}
-	/**
-	 * @return the projectName
-	 */
-	public String getProjectName() {
-		return projectName;
-	}
-	/**
-	 * @param projectName the projectName to set
-	 */
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	/**
-	 * @return the projectFullName
-	 */
-	public String getProjectFullName() {
-		return projectFullName;
-	}
-	/**
-	 * @param projectFullName the projectFullName to set
-	 */
-	public void setProjectFullName(String projectFullName) {
-		this.projectFullName = projectFullName;
-	}
-	/**
-	 * @return the productTypeId
-	 */
-	public Integer getProductTypeId() {
-		return productTypeId;
-	}
-	/**
-	 * @param productTypeId the productTypeId to set
-	 */
-	public void setProductTypeId(Integer productTypeId) {
-		this.productTypeId = productTypeId;
-	}
-	/**
-	 * @return the projectTypeId
-	 */
-	public Integer getProjectTypeId() {
-		return projectTypeId;
-	}
-	/**
-	 * @param projectTypeId the projectTypeId to set
-	 */
-	public void setProjectTypeId(Integer projectTypeId) {
-		this.projectTypeId = projectTypeId;
-	}
-	/**
-	 * @return the projectSourceId
-	 */
-	public Integer getProjectSourceId() {
-		return projectSourceId;
-	}
-	/**
-	 * @param projectSourceId the projectSourceId to set
-	 */
-	public void setProjectSourceId(Integer projectSourceId) {
-		this.projectSourceId = projectSourceId;
-	}
-	/**
-	 * @return the loanUserId
-	 */
-	public Integer getLoanUserId() {
-		return loanUserId;
-	}
-	/**
-	 * @param loanUserId the loanUserId to set
-	 */
-	public void setLoanUserId(Integer loanUserId) {
-		this.loanUserId = loanUserId;
-	}
-	/**
-	 * @return the projectUnitPrice
-	 */
-	public java.math.BigDecimal getProjectUnitPrice() {
-		return projectUnitPrice;
-	}
-	/**
-	 * @param projectUnitPrice the projectUnitPrice to set
-	 */
-	public void setProjectUnitPrice(java.math.BigDecimal projectUnitPrice) {
-		this.projectUnitPrice = projectUnitPrice;
-	}
-	/**
-	 * @return the projectAmount
-	 */
-	public java.math.BigDecimal getProjectAmount() {
-		return projectAmount;
-	}
-	/**
-	 * @param projectAmount the projectAmount to set
-	 */
-	public void setProjectAmount(java.math.BigDecimal projectAmount) {
-		this.projectAmount = projectAmount;
-	}
-	/**
-	 * @return the projectMoney
-	 */
-	public java.math.BigDecimal getProjectMoney() {
-		return projectMoney;
-	}
-	/**
-	 * @param projectMoney the projectMoney to set
-	 */
-	public void setProjectMoney(java.math.BigDecimal projectMoney) {
-		this.projectMoney = projectMoney;
-	}
-	/**
-	 * @return the raiseMoney
-	 */
-	public java.math.BigDecimal getRaiseMoney() {
-		return raiseMoney;
-	}
-	/**
-	 * @param raiseMoney the raiseMoney to set
-	 */
-	public void setRaiseMoney(java.math.BigDecimal raiseMoney) {
-		this.raiseMoney = raiseMoney;
-	}
-	/**
-	 * @return the investSpareAmount
-	 */
-	public java.math.BigDecimal getInvestSpareAmount() {
-		return investSpareAmount;
-	}
-	/**
-	 * @param investSpareAmount the investSpareAmount to set
-	 */
-	public void setInvestSpareAmount(java.math.BigDecimal investSpareAmount) {
-		this.investSpareAmount = investSpareAmount;
-	}
-	/**
-	 * @return the projectAmountMin
-	 */
-	public java.math.BigDecimal getProjectAmountMin() {
-		return projectAmountMin;
-	}
-	/**
-	 * @param projectAmountMin the projectAmountMin to set
-	 */
-	public void setProjectAmountMin(java.math.BigDecimal projectAmountMin) {
-		this.projectAmountMin = projectAmountMin;
-	}
-	/**
-	 * @return the projectLimit
-	 */
-	public Integer getProjectLimit() {
-		return projectLimit;
-	}
-	/**
-	 * @param projectLimit the projectLimit to set
-	 */
-	public void setProjectLimit(Integer projectLimit) {
-		this.projectLimit = projectLimit;
-	}
-	/**
-	 * @return the projectCost
-	 */
-	public java.math.BigDecimal getProjectCost() {
-		return projectCost;
-	}
-	/**
-	 * @param projectCost the projectCost to set
-	 */
-	public void setProjectCost(java.math.BigDecimal projectCost) {
-		this.projectCost = projectCost;
-	}
-	/**
-	 * @return the repayTypeId
-	 */
-	public Integer getRepayTypeId() {
-		return repayTypeId;
-	}
-	/**
-	 * @param repayTypeId the repayTypeId to set
-	 */
-	public void setRepayTypeId(Integer repayTypeId) {
-		this.repayTypeId = repayTypeId;
-	}
-	/**
-	 * @return the valueDate
-	 */
-	public java.util.Date getValueDate() {
-		return valueDate;
-	}
-	/**
-	 * @param valueDate the valueDate to set
-	 */
-	public void setValueDate(java.util.Date valueDate) {
-		this.valueDate = valueDate;
-	}
-	/**
-	 * @return the expireDate
-	 */
-	public java.util.Date getExpireDate() {
-		return expireDate;
-	}
-	/**
-	 * @param expireDate the expireDate to set
-	 */
-	public void setExpireDate(java.util.Date expireDate) {
-		this.expireDate = expireDate;
-	}
-	/**
-	 * @return the interestBaseType
-	 */
-	public Integer getInterestBaseType() {
-		return interestBaseType;
-	}
-	/**
-	 * @param interestBaseType the interestBaseType to set
-	 */
-	public void setInterestBaseType(Integer interestBaseType) {
-		this.interestBaseType = interestBaseType;
-	}
-	/**
-	 * @return the interestBaseDays
-	 */
-	public Integer getInterestBaseDays() {
-		return interestBaseDays;
-	}
-	/**
-	 * @param interestBaseDays the interestBaseDays to set
-	 */
-	public void setInterestBaseDays(Integer interestBaseDays) {
-		this.interestBaseDays = interestBaseDays;
-	}
-	/**
-	 * @return the projectUsing
-	 */
-	public String getProjectUsing() {
-		return projectUsing;
-	}
-	/**
-	 * @param projectUsing the projectUsing to set
-	 */
-	public void setProjectUsing(String projectUsing) {
-		this.projectUsing = projectUsing;
-	}
-	/**
-	 * @return the receiveAccountId
-	 */
-	public Integer getReceiveAccountId() {
-		return receiveAccountId;
-	}
-	/**
-	 * @param receiveAccountId the receiveAccountId to set
-	 */
-	public void setReceiveAccountId(Integer receiveAccountId) {
-		this.receiveAccountId = receiveAccountId;
-	}
-	/**
-	 * @return the buyTimeStart
-	 */
-	public java.util.Date getBuyTimeStart() {
-		return buyTimeStart;
-	}
-	/**
-	 * @param buyTimeStart the buyTimeStart to set
-	 */
-	public void setBuyTimeStart(java.util.Date buyTimeStart) {
-		this.buyTimeStart = buyTimeStart;
-	}
-	/**
-	 * @return the buyTimeEnd
-	 */
-	public java.util.Date getBuyTimeEnd() {
-		return buyTimeEnd;
-	}
-	/**
-	 * @param buyTimeEnd the buyTimeEnd to set
-	 */
-	public void setBuyTimeEnd(java.util.Date buyTimeEnd) {
-		this.buyTimeEnd = buyTimeEnd;
-	}
-	/**
-	 * @return the investAmountMin
-	 */
-	public java.math.BigDecimal getInvestAmountMin() {
-		return investAmountMin;
-	}
-	/**
-	 * @param investAmountMin the investAmountMin to set
-	 */
-	public void setInvestAmountMin(java.math.BigDecimal investAmountMin) {
-		this.investAmountMin = investAmountMin;
-	}
-	/**
-	 * @return the investAmountMax
-	 */
-	public java.math.BigDecimal getInvestAmountMax() {
-		return investAmountMax;
-	}
-	/**
-	 * @param investAmountMax the investAmountMax to set
-	 */
-	public void setInvestAmountMax(java.math.BigDecimal investAmountMax) {
-		this.investAmountMax = investAmountMax;
-	}
-	/**
-	 * @return the investAmountAppend
-	 */
-	public java.math.BigDecimal getInvestAmountAppend() {
-		return investAmountAppend;
-	}
-	/**
-	 * @param investAmountAppend the investAmountAppend to set
-	 */
-	public void setInvestAmountAppend(java.math.BigDecimal investAmountAppend) {
-		this.investAmountAppend = investAmountAppend;
-	}
-	/**
-	 * @return the investProfit
-	 */
-	public java.math.BigDecimal getInvestProfit() {
-		return investProfit;
-	}
-	/**
-	 * @param investProfit the investProfit to set
-	 */
-	public void setInvestProfit(java.math.BigDecimal investProfit) {
-		this.investProfit = investProfit;
-	}
-	/**
-	 * @return the isGuarantee
-	 */
-	public Integer getIsGuarantee() {
-		return isGuarantee;
-	}
-	/**
-	 * @param isGuarantee the isGuarantee to set
-	 */
-	public void setIsGuarantee(Integer isGuarantee) {
-		this.isGuarantee = isGuarantee;
-	}
-	/**
-	 * @return the guaranteeUserId
-	 */
-	public Integer getGuaranteeUserId() {
-		return guaranteeUserId;
-	}
-	/**
-	 * @param guaranteeUserId the guaranteeUserId to set
-	 */
-	public void setGuaranteeUserId(Integer guaranteeUserId) {
-		this.guaranteeUserId = guaranteeUserId;
-	}
-	/**
-	 * @return the isPledge
-	 */
-	public Integer getIsPledge() {
-		return isPledge;
-	}
-	/**
-	 * @param isPledge the isPledge to set
-	 */
-	public void setIsPledge(Integer isPledge) {
-		this.isPledge = isPledge;
-	}
-	/**
-	 * @return the isInsurance
-	 */
-	public Integer getIsInsurance() {
-		return isInsurance;
-	}
-	/**
-	 * @param isInsurance the isInsurance to set
-	 */
-	public void setIsInsurance(Integer isInsurance) {
-		this.isInsurance = isInsurance;
-	}
-	/**
-	 * @return the advioserFee
-	 */
-	public java.math.BigDecimal getAdvioserFee() {
-		return advioserFee;
-	}
-	/**
-	 * @param advioserFee the advioserFee to set
-	 */
-	public void setAdvioserFee(java.math.BigDecimal advioserFee) {
-		this.advioserFee = advioserFee;
-	}
-	/**
-	 * @return the platformFee
-	 */
-	public java.math.BigDecimal getPlatformFee() {
-		return platformFee;
-	}
-	/**
-	 * @param platformFee the platformFee to set
-	 */
-	public void setPlatformFee(java.math.BigDecimal platformFee) {
-		this.platformFee = platformFee;
-	}
-	/**
-	 * @return the overduePayFee
-	 */
-	public java.math.BigDecimal getOverduePayFee() {
-		return overduePayFee;
-	}
-	/**
-	 * @param overduePayFee the overduePayFee to set
-	 */
-	public void setOverduePayFee(java.math.BigDecimal overduePayFee) {
-		this.overduePayFee = overduePayFee;
-	}
-	/**
-	 * @return the overdueDesc
-	 */
-	public String getOverdueDesc() {
-		return overdueDesc;
-	}
-	/**
-	 * @param overdueDesc the overdueDesc to set
-	 */
-	public void setOverdueDesc(String overdueDesc) {
-		this.overdueDesc = overdueDesc;
-	}
-	/**
-	 * @return the createTime
-	 */
-	public java.util.Date getCreateTime() {
-		return createTime;
-	}
-	/**
-	 * @param createTime the createTime to set
-	 */
-	public void setCreateTime(java.util.Date createTime) {
-		this.createTime = createTime;
-	}
-	/**
-	 * @return the createOperatorId
-	 */
-	public Integer getCreateOperatorId() {
-		return createOperatorId;
-	}
-	/**
-	 * @param createOperatorId the createOperatorId to set
-	 */
-	public void setCreateOperatorId(Integer createOperatorId) {
-		this.createOperatorId = createOperatorId;
-	}
-	/**
-	 * @return the updateTime
-	 */
-	public java.util.Date getUpdateTime() {
-		return updateTime;
-	}
-	/**
-	 * @param updateTime the updateTime to set
-	 */
-	public void setUpdateTime(java.util.Date updateTime) {
-		this.updateTime = updateTime;
-	}
-	/**
-	 * @return the upateOperatorId
-	 */
-	public Integer getUpateOperatorId() {
-		return upateOperatorId;
-	}
-	/**
-	 * @param upateOperatorId the upateOperatorId to set
-	 */
-	public void setUpateOperatorId(Integer upateOperatorId) {
-		this.upateOperatorId = upateOperatorId;
-	}
-	/**
-	 * @return the publishTime
-	 */
-	public java.util.Date getPublishTime() {
-		return publishTime;
-	}
-	/**
-	 * @param publishTime the publishTime to set
-	 */
-	public void setPublishTime(java.util.Date publishTime) {
-		this.publishTime = publishTime;
-	}
-	/**
-	 * @return the projectStatus
-	 */
-	public Integer getProjectStatus() {
-		return projectStatus;
-	}
-	/**
-	 * @param projectStatus the projectStatus to set
-	 */
-	public void setProjectStatus(Integer projectStatus) {
-		this.projectStatus = projectStatus;
-	}
-	/**
-	 * @return the versionNo
-	 */
-	public Integer getVersionNo() {
-		return versionNo;
-	}
-	/**
-	 * @param versionNo the versionNo to set
-	 */
-	public void setVersionNo(Integer versionNo) {
-		this.versionNo = versionNo;
-	}
-	/**
-	 * @return the provinceId
-	 */
-	public Integer getProvinceId() {
-		return provinceId;
-	}
-	/**
-	 * @param provinceId the provinceId to set
-	 */
-	public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
-	}
-	/**
-	 * @return the cityId
-	 */
-	public Integer getCityId() {
-		return cityId;
-	}
-	/**
-	 * @param cityId the cityId to set
-	 */
-	public void setCityId(Integer cityId) {
-		this.cityId = cityId;
-	}
-	/**
-	 * @return the industryId
-	 */
-	public Integer getIndustryId() {
-		return industryId;
-	}
-	/**
-	 * @param industryId the industryId to set
-	 */
-	public void setIndustryId(Integer industryId) {
-		this.industryId = industryId;
-	}
-	/**
-	 * @return the guaranteeMoney
-	 */
-	public java.math.BigDecimal getGuaranteeMoney() {
-		return guaranteeMoney;
-	}
-	/**
-	 * @param guaranteeMoney the guaranteeMoney to set
-	 */
-	public void setGuaranteeMoney(java.math.BigDecimal guaranteeMoney) {
-		this.guaranteeMoney = guaranteeMoney;
-	}
-	/**
-	 * @return the paySettleDay
-	 */
-	public Integer getPaySettleDay() {
-		return paySettleDay;
-	}
-	/**
-	 * @param paySettleDay the paySettleDay to set
-	 */
-	public void setPaySettleDay(Integer paySettleDay) {
-		this.paySettleDay = paySettleDay;
-	}
-	/**
-	 * @return the settleTypeId
-	 */
-	public Integer getSettleTypeId() {
-		return settleTypeId;
-	}
-	/**
-	 * @param settleTypeId the settleTypeId to set
-	 */
-	public void setSettleTypeId(Integer settleTypeId) {
-		this.settleTypeId = settleTypeId;
-	}
-	/**
-	 * @return the investAdvioserFee
-	 */
-	public java.math.BigDecimal getInvestAdvioserFee() {
-		return investAdvioserFee;
-	}
-	/**
-	 * @param investAdvioserFee the investAdvioserFee to set
-	 */
-	public void setInvestAdvioserFee(java.math.BigDecimal investAdvioserFee) {
-		this.investAdvioserFee = investAdvioserFee;
-	}
-	/**
-	 * @return the transferType
-	 */
-	public Integer getTransferType() {
-		return transferType;
-	}
-	/**
-	 * @param transferType the transferType to set
-	 */
-	public void setTransferType(Integer transferType) {
-		this.transferType = transferType;
-	}
-	/**
-	 * @return the payclearId
-	 */
-	public Integer getPayclearId() {
-		return payclearId;
-	}
-	/**
-	 * @param payclearId the payclearId to set
-	 */
-	public void setPayclearId(Integer payclearId) {
-		this.payclearId = payclearId;
-	}
-	/**
-	 * @return the repayPeriodDay
-	 */
-	public Integer getRepayPeriodDay() {
-		return repayPeriodDay;
-	}
-	/**
-	 * @param repayPeriodDay the repayPeriodDay to set
-	 */
-	public void setRepayPeriodDay(Integer repayPeriodDay) {
-		this.repayPeriodDay = repayPeriodDay;
-	}
-	/**
-	 * @return the settleInvestDay
-	 */
-	public Integer getSettleInvestDay() {
-		return settleInvestDay;
-	}
-	/**
-	 * @param settleInvestDay the settleInvestDay to set
-	 */
-	public void setSettleInvestDay(Integer settleInvestDay) {
-		this.settleInvestDay = settleInvestDay;
-	}
-	/**
-	 * @return the projectLimitTypeId
-	 */
-	public Integer getProjectLimitTypeId() {
-		return projectLimitTypeId;
-	}
-	/**
-	 * @param projectLimitTypeId the projectLimitTypeId to set
-	 */
-	public void setProjectLimitTypeId(Integer projectLimitTypeId) {
-		this.projectLimitTypeId = projectLimitTypeId;
-	}
-	/**
-	 * @return the source
-	 */
-	public Integer getSource() {
-		return source;
-	}
-	/**
-	 * @param source the source to set
-	 */
-	public void setSource(Integer source) {
-		this.source = source;
-	}
-	/**
-	 * @return the guaranteeValueType
-	 */
-	public Integer getGuaranteeValueType() {
-		return guaranteeValueType;
-	}
-	/**
-	 * @param guaranteeValueType the guaranteeValueType to set
-	 */
-	public void setGuaranteeValueType(Integer guaranteeValueType) {
-		this.guaranteeValueType = guaranteeValueType;
-	}
-	/**
-	 * @return the periodNum
-	 */
-	public Integer getPeriodNum() {
-		return periodNum;
-	}
-	/**
-	 * @param periodNum the periodNum to set
-	 */
-	public void setPeriodNum(Integer periodNum) {
-		this.periodNum = periodNum;
-	}
-	/**
-	 * @return the tradeType
-	 */
-	public Integer getTradeType() {
-		return tradeType;
-	}
-	/**
-	 * @param tradeType the tradeType to set
-	 */
-	public void setTradeType(Integer tradeType) {
-		this.tradeType = tradeType;
-	}
-	/**
-	 * @return the projectRecordId
-	 */
-	public Integer getProjectRecordId() {
-		return projectRecordId;
-	}
-	/**
-	 * @param projectRecordId the projectRecordId to set
-	 */
-	public void setProjectRecordId(Integer projectRecordId) {
-		this.projectRecordId = projectRecordId;
-	}
-	/**
-	 * @return the investSettleTypeId
-	 */
-	public Integer getInvestSettleTypeId() {
-		return investSettleTypeId;
-	}
-	/**
-	 * @param investSettleTypeId the investSettleTypeId to set
-	 */
-	public void setInvestSettleTypeId(Integer investSettleTypeId) {
-		this.investSettleTypeId = investSettleTypeId;
-	}
-	/**
-	 * @return the canTransfer
-	 */
-	public Integer getCanTransfer() {
-		return canTransfer;
-	}
-	/**
-	 * @param canTransfer the canTransfer to set
-	 */
-	public void setCanTransfer(Integer canTransfer) {
-		this.canTransfer = canTransfer;
-	}
-	/**
-	 * @return the transferAfter
-	 */
-	public Integer getTransferAfter() {
-		return transferAfter;
-	}
-	/**
-	 * @param transferAfter the transferAfter to set
-	 */
-	public void setTransferAfter(Integer transferAfter) {
-		this.transferAfter = transferAfter;
-	}
-	/**
-	 * @return the transferLimit
-	 */
-	public Integer getTransferLimit() {
-		return transferLimit;
-	}
-	/**
-	 * @param transferLimit the transferLimit to set
-	 */
-	public void setTransferLimit(Integer transferLimit) {
-		this.transferLimit = transferLimit;
-	}
-	/**
-	 * @return the manageDuration
-	 */
-	public Integer getManageDuration() {
-		return manageDuration;
-	}
-	/**
-	 * @param manageDuration the manageDuration to set
-	 */
-	public void setManageDuration(Integer manageDuration) {
-		this.manageDuration = manageDuration;
-	}
-	/**
-	 * @return the valueDateChangeStyle
-	 */
-	public Integer getValueDateChangeStyle() {
-		return valueDateChangeStyle;
-	}
-	/**
-	 * @param valueDateChangeStyle the valueDateChangeStyle to set
-	 */
-	public void setValueDateChangeStyle(Integer valueDateChangeStyle) {
-		this.valueDateChangeStyle = valueDateChangeStyle;
-	}
-	/**
-	 * @return the expireDateChangeStyle
-	 */
-	public Integer getExpireDateChangeStyle() {
-		return expireDateChangeStyle;
-	}
-	/**
-	 * @param expireDateChangeStyle the expireDateChangeStyle to set
-	 */
-	public void setExpireDateChangeStyle(Integer expireDateChangeStyle) {
-		this.expireDateChangeStyle = expireDateChangeStyle;
-	}
-	/**
-	 * @return the tradePlatform
-	 */
-	public String getTradePlatform() {
-		return tradePlatform;
-	}
-	/**
-	 * @param tradePlatform the tradePlatform to set
-	 */
-	public void setTradePlatform(String tradePlatform) {
-		this.tradePlatform = tradePlatform;
-	}
-	/**
-	 * @return the receiveUserType
-	 */
-	public Integer getReceiveUserType() {
-		return receiveUserType;
-	}
-	/**
-	 * @param receiveUserType the receiveUserType to set
-	 */
-	public void setReceiveUserType(Integer receiveUserType) {
-		this.receiveUserType = receiveUserType;
-	}
-	/**
-	 * @return the originType
-	 */
-	public int getOriginType() {
-		return originType;
-	}
-	/**
-	 * @param originType the originType to set
-	 */
-	public void setOriginType(int originType) {
-		this.originType = originType;
-	}
-	/**
-	 * @return the originatorId
-	 */
-	public String getOriginatorId() {
-		return originatorId;
-	}
-	/**
-	 * @param originatorId the originatorId to set
-	 */
-	public void setOriginatorId(String originatorId) {
-		this.originatorId = originatorId;
-	}
-	/**
-	 * @return the payinvestType
-	 */
-	public Short getPayinvestType() {
-		return payinvestType;
-	}
-	/**
-	 * @param payinvestType the payinvestType to set
-	 */
-	public void setPayinvestType(Short payinvestType) {
-		this.payinvestType = payinvestType;
-	}
-	/**
-	 * @return the payinvestId
-	 */
-	public Integer getPayinvestId() {
-		return payinvestId;
-	}
-	/**
-	 * @param payinvestId the payinvestId to set
-	 */
-	public void setPayinvestId(Integer payinvestId) {
-		this.payinvestId = payinvestId;
-	}
-	/**
-	 * @return the payinvestBankCardId
-	 */
-	public Integer getPayinvestBankCardId() {
-		return payinvestBankCardId;
-	}
-	/**
-	 * @param payinvestBankCardId the payinvestBankCardId to set
-	 */
-	public void setPayinvestBankCardId(Integer payinvestBankCardId) {
-		this.payinvestBankCardId = payinvestBankCardId;
-	}
-	/**
-	 * @return the generatePlan
-	 */
-	public Short getGeneratePlan() {
-		return generatePlan;
-	}
-	/**
-	 * @param generatePlan the generatePlan to set
-	 */
-	public void setGeneratePlan(Short generatePlan) {
-		this.generatePlan = generatePlan;
-	}
-	/**
-	 * @return the partnerBizId
-	 */
-	public String getPartnerBizId() {
-		return partnerBizId;
-	}
-	/**
-	 * @param partnerBizId the partnerBizId to set
-	 */
-	public void setPartnerBizId(String partnerBizId) {
-		this.partnerBizId = partnerBizId;
-	}
-	/**
-	 * @return the platformFeeType
-	 */
-	public Integer getPlatformFeeType() {
-		return platformFeeType;
-	}
-	/**
-	 * @param platformFeeType the platformFeeType to set
-	 */
-	public void setPlatformFeeType(Integer platformFeeType) {
-		this.platformFeeType = platformFeeType;
-	}
-	/**
-	 * @return the interestMode
-	 */
-	public Integer getInterestMode() {
-		return interestMode;
-	}
-	/**
-	 * @param interestMode the interestMode to set
-	 */
-	public void setInterestMode(Integer interestMode) {
-		this.interestMode = interestMode;
-	}
-	
 	public String getMemberName() {
 		return memberName;
 	}
-
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
 	}
-
 	public String getAccountName() {
 		return accountName;
 	}
-
 	public void setAccountName(String accountName) {
 		this.accountName = accountName;
 	}
-
 	public String getCardAccount() {
 		return cardAccount;
 	}
-
 	public void setCardAccount(String cardAccount) {
 		this.cardAccount = cardAccount;
 	}
-
 	public String getSubBankName() {
 		return subBankName;
 	}
-
 	public void setSubBankName(String subBankName) {
 		this.subBankName = subBankName;
 	}
-
 	public String getBankChannelName() {
 		return bankChannelName;
 	}
-
 	public void setBankChannelName(String bankChannelName) {
 		this.bankChannelName = bankChannelName;
 	}
-
+	public Integer getExchangeId() {
+		return exchangeId;
+	}
+	public void setExchangeId(Integer exchangeId) {
+		this.exchangeId = exchangeId;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getProjectFullName() {
+		return projectFullName;
+	}
+	public void setProjectFullName(String projectFullName) {
+		this.projectFullName = projectFullName;
+	}
+	public Integer getProductTypeId() {
+		return productTypeId;
+	}
+	public void setProductTypeId(Integer productTypeId) {
+		this.productTypeId = productTypeId;
+	}
+	public Integer getProjectTypeId() {
+		return projectTypeId;
+	}
+	public void setProjectTypeId(Integer projectTypeId) {
+		this.projectTypeId = projectTypeId;
+	}
+	public Integer getProjectSourceId() {
+		return projectSourceId;
+	}
+	public void setProjectSourceId(Integer projectSourceId) {
+		this.projectSourceId = projectSourceId;
+	}
+	public Integer getLoanUserId() {
+		return loanUserId;
+	}
+	public void setLoanUserId(Integer loanUserId) {
+		this.loanUserId = loanUserId;
+	}
 	public String getLoanUserName() {
 		return loanUserName;
 	}
-
 	public void setLoanUserName(String loanUserName) {
 		this.loanUserName = loanUserName;
 	}
-
 	public String getUserGuid() {
 		return userGuid;
 	}
-
 	public void setUserGuid(String userGuid) {
 		this.userGuid = userGuid;
 	}
-
 	public String getCreateOperatorName() {
 		return createOperatorName;
 	}
-
 	public void setCreateOperatorName(String createOperatorName) {
 		this.createOperatorName = createOperatorName;
 	}
-
-	public String getProjectInfo() {
-		return projectInfo;
+	public java.math.BigDecimal getProjectUnitPrice() {
+		return projectUnitPrice;
 	}
-
-	public void setProjectInfo(String projectInfo) {
-		this.projectInfo = projectInfo;
+	public void setProjectUnitPrice(java.math.BigDecimal projectUnitPrice) {
+		this.projectUnitPrice = projectUnitPrice;
 	}
-
-	public String getBasicAssetNote() {
-		return basicAssetNote;
+	public java.math.BigDecimal getProjectAmount() {
+		return projectAmount;
 	}
-
-	public void setBasicAssetNote(String basicAssetNote) {
-		this.basicAssetNote = basicAssetNote;
+	public void setProjectAmount(java.math.BigDecimal projectAmount) {
+		this.projectAmount = projectAmount;
 	}
-
-	public String getTradePartyQualification() {
-		return tradePartyQualification;
+	public java.math.BigDecimal getProjectMoney() {
+		return projectMoney;
 	}
-
-	public void setTradePartyQualification(String tradePartyQualification) {
-		this.tradePartyQualification = tradePartyQualification;
+	public void setProjectMoney(java.math.BigDecimal projectMoney) {
+		this.projectMoney = projectMoney;
 	}
-	
-	/**
-	 * @return the saleagentId
-	 */
-	public Integer getSaleagentId() {
-		return saleagentId;
+	public java.math.BigDecimal getRaiseMoney() {
+		return raiseMoney;
 	}
-	/**
-	 * @param saleagentId the saleagentId to set
-	 */
-	public void setSaleagentId(Integer saleagentId) {
-		this.saleagentId = saleagentId;
+	public void setRaiseMoney(java.math.BigDecimal raiseMoney) {
+		this.raiseMoney = raiseMoney;
 	}
-	/**
-	 * @return the projectId
-	 */
-	public Integer getProjectId() {
-		return projectId;
+	public java.math.BigDecimal getInvestSpareAmount() {
+		return investSpareAmount;
 	}
-	/**
-	 * @param projectId the projectId to set
-	 */
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
+	public void setInvestSpareAmount(java.math.BigDecimal investSpareAmount) {
+		this.investSpareAmount = investSpareAmount;
 	}
-	/**
-	 * @return the saleMoney
-	 */
-	public BigDecimal getSaleMoney() {
-		return saleMoney;
+	public java.math.BigDecimal getProjectAmountMin() {
+		return projectAmountMin;
 	}
-	/**
-	 * @param saleMoney the saleMoney to set
-	 */
-	public void setSaleMoney(BigDecimal saleMoney) {
-		this.saleMoney = saleMoney;
+	public void setProjectAmountMin(java.math.BigDecimal projectAmountMin) {
+		this.projectAmountMin = projectAmountMin;
 	}
-	/**
-	 * @return the saleFeeRate
-	 */
-	public BigDecimal getSaleFeeRate() {
-		return saleFeeRate;
+	public Integer getProjectLimit() {
+		return projectLimit;
 	}
-	/**
-	 * @param saleFeeRate the saleFeeRate to set
-	 */
-	public void setSaleFeeRate(BigDecimal saleFeeRate) {
-		this.saleFeeRate = saleFeeRate;
+	public void setProjectLimit(Integer projectLimit) {
+		this.projectLimit = projectLimit;
 	}
-	/**
-	 * @return the saleReceivedMoney
-	 */
-	public BigDecimal getSaleReceivedMoney() {
-		return saleReceivedMoney;
+	public java.math.BigDecimal getProjectCost() {
+		return projectCost;
 	}
-	/**
-	 * @param saleReceivedMoney the saleReceivedMoney to set
-	 */
-	public void setSaleReceivedMoney(BigDecimal saleReceivedMoney) {
-		this.saleReceivedMoney = saleReceivedMoney;
+	public void setProjectCost(java.math.BigDecimal projectCost) {
+		this.projectCost = projectCost;
 	}
-	/**
-	 * @return the saleCfmRightMoney
-	 */
-	public BigDecimal getSaleCfmRightMoney() {
-		return saleCfmRightMoney;
+	public Integer getRepayTypeId() {
+		return repayTypeId;
 	}
-	/**
-	 * @param saleCfmRightMoney the saleCfmRightMoney to set
-	 */
-	public void setSaleCfmRightMoney(BigDecimal saleCfmRightMoney) {
-		this.saleCfmRightMoney = saleCfmRightMoney;
+	public void setRepayTypeId(Integer repayTypeId) {
+		this.repayTypeId = repayTypeId;
 	}
-	public Date getDeadline() {
-		return deadline;
+	public java.util.Date getValueDate() {
+		return valueDate;
 	}
-	public void setDeadline(Date deadline) {
-		this.deadline = deadline;
+	public void setValueDate(java.util.Date valueDate) {
+		this.valueDate = valueDate;
+	}
+	public java.util.Date getExpireDate() {
+		return expireDate;
+	}
+	public void setExpireDate(java.util.Date expireDate) {
+		this.expireDate = expireDate;
+	}
+	public Integer getInterestBaseType() {
+		return interestBaseType;
+	}
+	public void setInterestBaseType(Integer interestBaseType) {
+		this.interestBaseType = interestBaseType;
+	}
+	public Integer getInterestBaseDays() {
+		return interestBaseDays;
+	}
+	public void setInterestBaseDays(Integer interestBaseDays) {
+		this.interestBaseDays = interestBaseDays;
+	}
+	public String getProjectUsing() {
+		return projectUsing;
+	}
+	public void setProjectUsing(String projectUsing) {
+		this.projectUsing = projectUsing;
+	}
+	public Integer getReceiveAccountId() {
+		return receiveAccountId;
+	}
+	public void setReceiveAccountId(Integer receiveAccountId) {
+		this.receiveAccountId = receiveAccountId;
+	}
+	public java.util.Date getBuyTimeStart() {
+		return buyTimeStart;
+	}
+	public void setBuyTimeStart(java.util.Date buyTimeStart) {
+		this.buyTimeStart = buyTimeStart;
+	}
+	public java.util.Date getBuyTimeEnd() {
+		return buyTimeEnd;
+	}
+	public void setBuyTimeEnd(java.util.Date buyTimeEnd) {
+		this.buyTimeEnd = buyTimeEnd;
+	}
+	public java.math.BigDecimal getInvestAmountMin() {
+		return investAmountMin;
+	}
+	public void setInvestAmountMin(java.math.BigDecimal investAmountMin) {
+		this.investAmountMin = investAmountMin;
+	}
+	public java.math.BigDecimal getInvestAmountMax() {
+		return investAmountMax;
+	}
+	public void setInvestAmountMax(java.math.BigDecimal investAmountMax) {
+		this.investAmountMax = investAmountMax;
+	}
+	public java.math.BigDecimal getInvestAmountAppend() {
+		return investAmountAppend;
+	}
+	public void setInvestAmountAppend(java.math.BigDecimal investAmountAppend) {
+		this.investAmountAppend = investAmountAppend;
+	}
+	public java.math.BigDecimal getInvestProfit() {
+		return investProfit;
+	}
+	public void setInvestProfit(java.math.BigDecimal investProfit) {
+		this.investProfit = investProfit;
+	}
+	public Integer getIsGuarantee() {
+		return isGuarantee;
+	}
+	public void setIsGuarantee(Integer isGuarantee) {
+		this.isGuarantee = isGuarantee;
+	}
+	public Integer getGuaranteeUserId() {
+		return guaranteeUserId;
+	}
+	public void setGuaranteeUserId(Integer guaranteeUserId) {
+		this.guaranteeUserId = guaranteeUserId;
+	}
+	public Integer getIsPledge() {
+		return isPledge;
+	}
+	public void setIsPledge(Integer isPledge) {
+		this.isPledge = isPledge;
+	}
+	public Integer getIsInsurance() {
+		return isInsurance;
+	}
+	public void setIsInsurance(Integer isInsurance) {
+		this.isInsurance = isInsurance;
+	}
+	public java.math.BigDecimal getAdvioserFee() {
+		return advioserFee;
+	}
+	public void setAdvioserFee(java.math.BigDecimal advioserFee) {
+		this.advioserFee = advioserFee;
+	}
+	public java.math.BigDecimal getPlatformFee() {
+		return platformFee;
+	}
+	public void setPlatformFee(java.math.BigDecimal platformFee) {
+		this.platformFee = platformFee;
+	}
+	public java.math.BigDecimal getOverduePayFee() {
+		return overduePayFee;
+	}
+	public void setOverduePayFee(java.math.BigDecimal overduePayFee) {
+		this.overduePayFee = overduePayFee;
+	}
+	public String getOverdueDesc() {
+		return overdueDesc;
+	}
+	public void setOverdueDesc(String overdueDesc) {
+		this.overdueDesc = overdueDesc;
+	}
+	public java.util.Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(java.util.Date createTime) {
+		this.createTime = createTime;
+	}
+	public Integer getCreateOperatorId() {
+		return createOperatorId;
+	}
+	public void setCreateOperatorId(Integer createOperatorId) {
+		this.createOperatorId = createOperatorId;
+	}
+	public java.util.Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(java.util.Date updateTime) {
+		this.updateTime = updateTime;
+	}
+	public Integer getUpateOperatorId() {
+		return upateOperatorId;
+	}
+	public void setUpateOperatorId(Integer upateOperatorId) {
+		this.upateOperatorId = upateOperatorId;
+	}
+	public java.util.Date getPublishTime() {
+		return publishTime;
+	}
+	public void setPublishTime(java.util.Date publishTime) {
+		this.publishTime = publishTime;
+	}
+	public Integer getProjectStatus() {
+		return projectStatus;
+	}
+	public void setProjectStatus(Integer projectStatus) {
+		this.projectStatus = projectStatus;
 	}
 	public java.util.Date getAuditTime() {
 		return auditTime;
@@ -1571,5 +768,455 @@ public class ListingComplex {
 	public void setAuditRemark(String auditRemark) {
 		this.auditRemark = auditRemark;
 	}
+	public Integer getVersionNo() {
+		return versionNo;
+	}
+	public void setVersionNo(Integer versionNo) {
+		this.versionNo = versionNo;
+	}
+	public Integer getProvinceId() {
+		return provinceId;
+	}
+	public void setProvinceId(Integer provinceId) {
+		this.provinceId = provinceId;
+	}
+	public Integer getCityId() {
+		return cityId;
+	}
+	public void setCityId(Integer cityId) {
+		this.cityId = cityId;
+	}
+	public Integer getIndustryId() {
+		return industryId;
+	}
+	public void setIndustryId(Integer industryId) {
+		this.industryId = industryId;
+	}
+	public java.math.BigDecimal getGuaranteeMoney() {
+		return guaranteeMoney;
+	}
+	public void setGuaranteeMoney(java.math.BigDecimal guaranteeMoney) {
+		this.guaranteeMoney = guaranteeMoney;
+	}
+	public Integer getPaySettleDay() {
+		return paySettleDay;
+	}
+	public void setPaySettleDay(Integer paySettleDay) {
+		this.paySettleDay = paySettleDay;
+	}
+	public Integer getSettleTypeId() {
+		return settleTypeId;
+	}
+	public void setSettleTypeId(Integer settleTypeId) {
+		this.settleTypeId = settleTypeId;
+	}
+	public java.math.BigDecimal getInvestAdvioserFee() {
+		return investAdvioserFee;
+	}
+	public void setInvestAdvioserFee(java.math.BigDecimal investAdvioserFee) {
+		this.investAdvioserFee = investAdvioserFee;
+	}
+	public Integer getTransferType() {
+		return transferType;
+	}
+	public void setTransferType(Integer transferType) {
+		this.transferType = transferType;
+	}
+	public Integer getPayclearId() {
+		return payclearId;
+	}
+	public void setPayclearId(Integer payclearId) {
+		this.payclearId = payclearId;
+	}
+	public Integer getRepayPeriodDay() {
+		return repayPeriodDay;
+	}
+	public void setRepayPeriodDay(Integer repayPeriodDay) {
+		this.repayPeriodDay = repayPeriodDay;
+	}
+	public Integer getSettleInvestDay() {
+		return settleInvestDay;
+	}
+	public void setSettleInvestDay(Integer settleInvestDay) {
+		this.settleInvestDay = settleInvestDay;
+	}
+	public Integer getProjectLimitTypeId() {
+		return projectLimitTypeId;
+	}
+	public void setProjectLimitTypeId(Integer projectLimitTypeId) {
+		this.projectLimitTypeId = projectLimitTypeId;
+	}
+	public Integer getSource() {
+		return source;
+	}
+	public void setSource(Integer source) {
+		this.source = source;
+	}
+	public Integer getGuaranteeValueType() {
+		return guaranteeValueType;
+	}
+	public void setGuaranteeValueType(Integer guaranteeValueType) {
+		this.guaranteeValueType = guaranteeValueType;
+	}
+	public Integer getPeriodNum() {
+		return periodNum;
+	}
+	public void setPeriodNum(Integer periodNum) {
+		this.periodNum = periodNum;
+	}
+	public Integer getTradeType() {
+		return tradeType;
+	}
+	public void setTradeType(Integer tradeType) {
+		this.tradeType = tradeType;
+	}
+	public Integer getProjectRecordId() {
+		return projectRecordId;
+	}
+	public void setProjectRecordId(Integer projectRecordId) {
+		this.projectRecordId = projectRecordId;
+	}
+	public Integer getInvestSettleTypeId() {
+		return investSettleTypeId;
+	}
+	public void setInvestSettleTypeId(Integer investSettleTypeId) {
+		this.investSettleTypeId = investSettleTypeId;
+	}
+	public Integer getCanTransfer() {
+		return canTransfer;
+	}
+	public void setCanTransfer(Integer canTransfer) {
+		this.canTransfer = canTransfer;
+	}
+	public Integer getTransferAfter() {
+		return transferAfter;
+	}
+	public void setTransferAfter(Integer transferAfter) {
+		this.transferAfter = transferAfter;
+	}
+	public Integer getTransferLimit() {
+		return transferLimit;
+	}
+	public void setTransferLimit(Integer transferLimit) {
+		this.transferLimit = transferLimit;
+	}
+	public Date getDeadline() {
+		return deadline;
+	}
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+	public Integer getManageDuration() {
+		return manageDuration;
+	}
+	public void setManageDuration(Integer manageDuration) {
+		this.manageDuration = manageDuration;
+	}
+	public Integer getValueDateChangeStyle() {
+		return valueDateChangeStyle;
+	}
+	public void setValueDateChangeStyle(Integer valueDateChangeStyle) {
+		this.valueDateChangeStyle = valueDateChangeStyle;
+	}
+	public Integer getExpireDateChangeStyle() {
+		return expireDateChangeStyle;
+	}
+	public void setExpireDateChangeStyle(Integer expireDateChangeStyle) {
+		this.expireDateChangeStyle = expireDateChangeStyle;
+	}
+	public String getTradePlatform() {
+		return tradePlatform;
+	}
+	public void setTradePlatform(String tradePlatform) {
+		this.tradePlatform = tradePlatform;
+	}
+	public Integer getReceiveUserType() {
+		return receiveUserType;
+	}
+	public void setReceiveUserType(Integer receiveUserType) {
+		this.receiveUserType = receiveUserType;
+	}
+	public int getOriginType() {
+		return originType;
+	}
+	public void setOriginType(int originType) {
+		this.originType = originType;
+	}
+	public String getOriginatorId() {
+		return originatorId;
+	}
+	public void setOriginatorId(String originatorId) {
+		this.originatorId = originatorId;
+	}
+	public Short getPayinvestType() {
+		return payinvestType;
+	}
+	public void setPayinvestType(Short payinvestType) {
+		this.payinvestType = payinvestType;
+	}
+	public Integer getPayinvestId() {
+		return payinvestId;
+	}
+	public void setPayinvestId(Integer payinvestId) {
+		this.payinvestId = payinvestId;
+	}
+	public Integer getPayinvestBankCardId() {
+		return payinvestBankCardId;
+	}
+	public void setPayinvestBankCardId(Integer payinvestBankCardId) {
+		this.payinvestBankCardId = payinvestBankCardId;
+	}
+	public Short getGeneratePlan() {
+		return generatePlan;
+	}
+	public void setGeneratePlan(Short generatePlan) {
+		this.generatePlan = generatePlan;
+	}
+	public String getPartnerBizId() {
+		return partnerBizId;
+	}
+	public void setPartnerBizId(String partnerBizId) {
+		this.partnerBizId = partnerBizId;
+	}
+	public Integer getPlatformFeeType() {
+		return platformFeeType;
+	}
+	public void setPlatformFeeType(Integer platformFeeType) {
+		this.platformFeeType = platformFeeType;
+	}
+	public Integer getInterestMode() {
+		return interestMode;
+	}
+	public void setInterestMode(Integer interestMode) {
+		this.interestMode = interestMode;
+	}
+	public Integer getSaleagentId() {
+		return saleagentId;
+	}
+	public void setSaleagentId(Integer saleagentId) {
+		this.saleagentId = saleagentId;
+	}
+	public Integer getProjectId() {
+		return projectId;
+	}
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+	public BigDecimal getSaleMoney() {
+		return saleMoney;
+	}
+	public void setSaleMoney(BigDecimal saleMoney) {
+		this.saleMoney = saleMoney;
+	}
+	public BigDecimal getSaleFeeRate() {
+		return saleFeeRate;
+	}
+	public void setSaleFeeRate(BigDecimal saleFeeRate) {
+		this.saleFeeRate = saleFeeRate;
+	}
+	public BigDecimal getSaleReceivedMoney() {
+		return saleReceivedMoney;
+	}
+	public void setSaleReceivedMoney(BigDecimal saleReceivedMoney) {
+		this.saleReceivedMoney = saleReceivedMoney;
+	}
+	public BigDecimal getSaleCfmRightMoney() {
+		return saleCfmRightMoney;
+	}
+	public void setSaleCfmRightMoney(BigDecimal saleCfmRightMoney) {
+		this.saleCfmRightMoney = saleCfmRightMoney;
+	}
+	public String getProjectInfo() {
+		return projectInfo;
+	}
+	public void setProjectInfo(String projectInfo) {
+		this.projectInfo = projectInfo;
+	}
+	public String getBasicAssetNote() {
+		return basicAssetNote;
+	}
+	public void setBasicAssetNote(String basicAssetNote) {
+		this.basicAssetNote = basicAssetNote;
+	}
+	public String getTradePartyQualification() {
+		return tradePartyQualification;
+	}
+	public void setTradePartyQualification(String tradePartyQualification) {
+		this.tradePartyQualification = tradePartyQualification;
+	}
+	public String getTradeTerm() {
+		return tradeTerm;
+	}
+	public void setTradeTerm(String tradeTerm) {
+		this.tradeTerm = tradeTerm;
+	}
+	public String getRepayTypeName() {
+		return repayTypeName;
+	}
+	public void setRepayTypeName(String repayTypeName) {
+		this.repayTypeName = repayTypeName;
+	}
+	public Integer getCfmright() {
+		return cfmright;
+	}
+	public void setCfmright(Integer cfmright) {
+		this.cfmright = cfmright;
+	}
+	public Integer getChannelId() {
+		return channelId;
+	}
+	public void setChannelId(Integer channelId) {
+		this.channelId = channelId;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public BigDecimal getCollectMoney() {
+		return collectMoney;
+	}
+	public void setCollectMoney(BigDecimal collectMoney) {
+		this.collectMoney = collectMoney;
+	}
+	public BigDecimal getCfmRightMoney() {
+		return cfmRightMoney;
+	}
+	public void setCfmRightMoney(BigDecimal cfmRightMoney) {
+		this.cfmRightMoney = cfmRightMoney;
+	}
+	public BigDecimal getFee() {
+		return fee;
+	}
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
+	}
+	public Integer getCount() {
+		return count;
+	}
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	public BigDecimal getQuotedMaxMoney() {
+		return quotedMaxMoney;
+	}
+	public void setQuotedMaxMoney(BigDecimal quotedMaxMoney) {
+		this.quotedMaxMoney = quotedMaxMoney;
+	}
+	public int getQuotedCnt() {
+		return quotedCnt;
+	}
+	public void setQuotedCnt(int quotedCnt) {
+		this.quotedCnt = quotedCnt;
+	}
+	public String getIndustryName() {
+		return industryName;
+	}
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+	public String getProName() {
+		return proName;
+	}
+	public void setProName(String proName) {
+		this.proName = proName;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	public Integer getBuyCount() {
+		return buyCount;
+	}
+	public void setBuyCount(Integer buyCount) {
+		this.buyCount = buyCount;
+	}
+	public Integer getSettleStatus() {
+		return settleStatus;
+	}
+	public void setSettleStatus(Integer settleStatus) {
+		this.settleStatus = settleStatus;
+	}
+	public Integer getBreakPayStatus() {
+		return breakPayStatus;
+	}
+	public void setBreakPayStatus(Integer breakPayStatus) {
+		this.breakPayStatus = breakPayStatus;
+	}
+	public Integer getBuyCnt() {
+		return buyCnt;
+	}
+	public void setBuyCnt(Integer buyCnt) {
+		this.buyCnt = buyCnt;
+	}
+	public String getProjectTypeName() {
+		return projectTypeName;
+	}
+	public void setProjectTypeName(String projectTypeName) {
+		this.projectTypeName = projectTypeName;
+	}
+	public String getRecordGuid() {
+		return recordGuid;
+	}
+	public void setRecordGuid(String recordGuid) {
+		this.recordGuid = recordGuid;
+	}
+	public String getRecordCode() {
+		return recordCode;
+	}
+	public void setRecordCode(String recordCode) {
+		this.recordCode = recordCode;
+	}
+	public String getRecordName() {
+		return recordName;
+	}
+	public void setRecordName(String recordName) {
+		this.recordName = recordName;
+	}
+	public String getTransferorBasicNote() {
+		return transferorBasicNote;
+	}
+	public void setTransferorBasicNote(String transferorBasicNote) {
+		this.transferorBasicNote = transferorBasicNote;
+	}
+	public Integer getTransfereeUserId() {
+		return transfereeUserId;
+	}
+	public void setTransfereeUserId(Integer transfereeUserId) {
+		this.transfereeUserId = transfereeUserId;
+	}
+	public Integer getSettleInvestMonth() {
+		return settleInvestMonth;
+	}
+	public void setSettleInvestMonth(Integer settleInvestMonth) {
+		this.settleInvestMonth = settleInvestMonth;
+	}
+	public List<ListingSaleagent> getProjectSaleagent() {
+		return projectSaleagent;
+	}
+	public void setProjectSaleagent(List<ListingSaleagent> projectSaleagent) {
+		this.projectSaleagent = projectSaleagent;
+	}
+	public boolean canEdit(){
+		return this.projectStatus.intValue() == ListingStatusDesc.待提交.value 
+				|| this.projectStatus.intValue() == ListingStatusDesc.审核退回.value;
+	}
 	
+	public boolean canDelete() {
+		return this.projectStatus.intValue() == ListingStatusDesc.待提交.value 
+				|| this.projectStatus.intValue() == ListingStatusDesc.审核退回.value
+				|| this.projectStatus.intValue() == ListingStatusDesc.审核不通过.value;
+	}
+	
+	public Integer getSettleInvestDayShow() {
+		return this.settleInvestDay == null ? null : Integer
+				.valueOf(this.settleInvestDay.intValue() % 100);
+	}
+	public Integer getSettleInvestMonthShow() {
+		return this.settleInvestDay == null ? null : Integer
+				.valueOf(this.settleInvestDay.intValue() / 100);
+	}
 }

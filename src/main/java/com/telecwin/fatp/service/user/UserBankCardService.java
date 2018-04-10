@@ -48,7 +48,10 @@ public class UserBankCardService extends BaseService{
 	 * @param exchangeId
 	 * @return
 	 */
-	public List<UcUserBankcard> getUserBankcards(int userId,int exchangeId) {
+	public List<UcUserBankcard> getUserBankcards(Integer userId,int exchangeId) {
+		if(userId == null) {
+			return null;
+		}
 		return ucUserBankcardDataSupportService.getUserBankcards(userId, exchangeId);
 	}
 	/**
@@ -57,7 +60,10 @@ public class UserBankCardService extends BaseService{
 	 * @param id
 	 * @return
 	 */
-	public UcUserBankcard getUserBankcardById(Integer userId,int id) {
+	public UcUserBankcard getUserBankcardById(Integer userId,Integer id) {
+		if(userId == null || id == null){
+			return null;
+		}
 		return ucUserBankcardDataSupportService.getUserBankcardById(userId, id);
 	}
 	/**

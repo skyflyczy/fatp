@@ -34,4 +34,10 @@ public class TimelineDetailController extends BaseController{
 		request().setAttribute("list", list);
 		return viewPath;
 	}
+	@RequestMapping("/listing")
+	public String getListingimeline(Integer entityId) {
+		List<TimelineDetailPo> list = timelineDetailService.getListByEntityType(EntityType.挂牌.value,entityId);
+		request().setAttribute("list", list);
+		return viewPath;
+	}
 }

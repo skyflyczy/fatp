@@ -114,7 +114,10 @@ public class UcUserService extends BaseService {
 	 * @param exchangeId
 	 * @return
 	 */
-	public UcUser getAllById(int id, int exchangeId) {
+	public UcUser getAllById(Integer id, int exchangeId) {
+		if(id == null) {
+			return null;
+		}
 		return ucUserDataSupportService.getAllById(id, exchangeId);
 	}
 	
@@ -250,5 +253,14 @@ public class UcUserService extends BaseService {
 		ucUserDataSupportService.updateUserStatus(member);
 		//创建动态
 		timelineDetailDataSupportService.createMemberTimeLine(member, flowType, auditRemark, operatorName);
+	}
+	/**
+	 * 根据公司名称获取用户
+	 * @param companyName
+	 * @param exchangeId
+	 * @return
+	 */
+	public UcUser getUserByCompanyName(String companyName, Integer exchangeId) {
+		return ucUserDataSupportService.getUserByCompanyName(companyName, exchangeId);
 	}
 }

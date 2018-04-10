@@ -1,5 +1,7 @@
 package com.telecwin.fatp.domain.project;
 
+import java.math.BigDecimal;
+
 import com.telecwin.fatp.enums.project.ProjectLimitType;
 import com.telecwin.fatp.enums.project.RecordStatusDesc;
 import com.telecwin.fatp.po.project.ProjectRecordinfoPo;
@@ -11,13 +13,28 @@ public class ProjectRecordComplex extends ProjectRecordinfoPo{
 	private static final long serialVersionUID = -3146644621081976210L;
 	//发行人
 	private String loanUserName;
+	private int quotedCnt;//挂牌数量
+	private BigDecimal quotedMoney;//挂牌金额
+	private String projectTypeName;
+	
 	public String getLoanUserName() {
 		return loanUserName;
 	}
 	public void setLoanUserName(String loanUserName) {
 		this.loanUserName = loanUserName;
 	}
-	
+	public int getQuotedCnt() {
+		return quotedCnt;
+	}
+	public void setQuotedCnt(int quotedCnt) {
+		this.quotedCnt = quotedCnt;
+	}
+	public BigDecimal getQuotedMoney() {
+		return quotedMoney;
+	}
+	public void setQuotedMoney(BigDecimal quotedMoney) {
+		this.quotedMoney = quotedMoney;
+	}
 	public String getRecordStatusDesc() {
 		return RecordStatusDesc.getDesc(super.getRecordStatus());
 	}
@@ -33,4 +50,11 @@ public class ProjectRecordComplex extends ProjectRecordinfoPo{
 	public String getProjectLimitTypeDesc() {
 		return ProjectLimitType.getProjectLimitType(super.getProjectLimitTypeId()).toString();
 	}
+	public String getProjectTypeName() {
+		return projectTypeName;
+	}
+	public void setProjectTypeName(String projectTypeName) {
+		this.projectTypeName = projectTypeName;
+	}
+	
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,4 +91,35 @@ public class ProjectRecordDataSupportService {
 		map.put("versionNo", versionNo);
 		projectRecordDao.delete(map);
 	}
+	
+	/**
+	 * 根据条件分页查找可挂牌列表
+	 * @param map
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<ProjectRecordComplex> getCanQuotedRecordList(Map<String,Object> map,int pageNo, int pageSize){
+		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
+		List<ProjectRecordComplex> list = projectRecordDao.getCanQuotedRecordList(map);
+		return new PageData<>(page.getTotal(), page.getPages(), list);
+	}
+	/**
+	 * 获取挂牌备案信息
+	 * @param recordId
+	 * @param exchangeId
+	 * @return
+	 */
+	public ProjectRecordComplex getCanQuotedRecord(int recordId,int exchangeId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", recordId);
+		map.put("exchangeId", exchangeId);
+		map.put("recordStatus", RecordStatusDesc.审核通过.value);
+		List<ProjectRecordComplex> list = projectRecordDao.getCanQuotedRecordList(map);
+		if(CollectionUtils.isEmpty(list)) {
+			return null;
+		}
+		return list.get(0);
+	}
+	
 }

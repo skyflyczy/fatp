@@ -52,18 +52,19 @@
 	    		<td align="center">
 	    			<span data-toggle="tooltip" data-placement="bottom" title="${list.auditRemark }">
 		    		<c:forEach var="item" items="${projectStatusDesc}"><c:if test="${item.value==list.projectStatus}">${item}</c:if></c:forEach>
-					<c:if test="${list.projectStatus==5}"><i tabindex="0" data-trigger="focus" class="fa fa-info-circle" data-toggle="popover" data-content=""></i></c:if>
+					<c:if test="${list.projectStatus==3}"><i tabindex="0" data-trigger="focus" class="fa fa-info-circle" data-toggle="popover" data-content=""></i></c:if>
 					</span>
 				</td>
 	    		<td align="center">
 	    			<c:if test="${list.canEdit()}">
-	    				<a href="<%=request.getContextPath()%>/income/right/register/edit.do?id=${list.id}" 
+	    				<a href="<%=request.getContextPath()%>/project/listing/syq/edit.do?id=${list.id}" 
 	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
 	    					data-height="600" data-id="dialog-edit" data-mask="true" data-on-close="function(){$(this).navtab('refresh');}">编辑</a>
 	    			</c:if>
+	    			<c:if test="${list.canDelete()}">
 	    				<a href="<%=request.getContextPath()%>/income/right/register/delete.do?id=${list.id}" 
 	    					class="btn btn-red" data-toggle="doajax" data-confirm-msg="确定要删除吗？">删除</a>
-	    			
+	    			</c:if>
 	    		</td>
 	    	</tr>
 	    	</c:forEach>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.telecwin.fatp.dao.project.ListingSaleagentDao">
+    <select id="findSaleAgentById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingSaleagentPo">
+    	SELECT * FROM listing_saleagent WHERE Id = #{id} AND ExchangeId = #{exchangeId}
+	</select>
+
+    <delete id="delete" parameterType="java.util.Map">
+        DELETE FROM listing_saleagent WHERE Id = #{id} 
+		<if test="@Ognl@isNotEmpty(memberId)">
+			AND MemberId = #{memberId}
+		</if>
+    </delete>
+    
+    <delete id="deleteByProjectId" parameterType="java.util.Map">
+        DELETE FROM listing_saleagent WHERE ProjectId = #{projectId} 
+		<if test="@Ognl@isNotEmpty(memberId)">
+			AND MemberId = #{memberId}
+		</if>
+    </delete>
+    
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO listing_saleagent (
+        	Id ,
+        	ProjectId ,
+        	SaleMemberId ,
+        	SaleTypeId ,
+        	SaleFeeRate ,
+        	SaleAmount ,
+        	SaleMoney ,
+        	MemberId ,
+        	ExchangeId ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId 
+        ) VALUES (
+        	#{id} ,
+        	#{projectId} ,
+        	#{saleMemberId} ,
+        	#{saleTypeId} ,
+        	#{saleFeeRate} ,
+        	#{saleAmount} ,
+        	#{saleMoney} ,
+        	#{memberId} ,
+        	#{exchangeId} ,
+        	#{createTime} ,
+        	#{createOperatorId} ,
+        	#{updateTime} ,
+        	#{updateOperatorId} 
+        )
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	
+	<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+         INSERT INTO listing_saleagent (
+        	Id ,
+        	ProjectId ,
+        	SaleMemberId ,
+        	SaleTypeId ,
+        	SaleFeeRate ,
+        	SaleAmount ,
+        	SaleMoney ,
+        	MemberId ,
+        	ExchangeId ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId 
+        ) VALUES 
+        <foreach collection="list" item="item" separator=",">
+       (
+        	#{item.id} ,
+        	#{item.projectId} ,
+        	#{item.saleMemberId} ,
+        	#{item.saleTypeId} ,
+        	#{item.saleFeeRate} ,
+        	#{item.saleAmount} ,
+        	#{item.saleMoney} ,
+        	#{item.memberId} ,
+        	#{item.exchangeId} ,
+        	#{item.createTime} ,
+        	#{item.createOperatorId} ,
+        	#{item.updateTime} ,
+        	#{item.updateOperatorId} 
+        )
+        </foreach>
+	</insert>
+    
+	<update id="update">
+        UPDATE listing_saleagent SET
+	        SaleMemberId = #{saleMemberId} ,
+	        SaleTypeId = #{saleTypeId} ,
+	        SaleFeeRate = #{saleFeeRate} ,
+	        SaleAmount = #{saleAmount} ,
+	        SaleMoney = #{saleMoney} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} 
+        WHERE 
+	        Id = #{id} 
+	</update>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(projectId)">
+				AND ProjectId = #{projectId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saleMemberId)">
+				AND SaleMemberId = #{saleMemberId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saleTypeId)">
+				AND SaleTypeId = #{saleTypeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saleFeeRate)">
+				AND SaleFeeRate = #{saleFeeRate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saleAmount)">
+				AND SaleAmount = #{saleAmount}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saleMoney)">
+				AND SaleMoney = #{saleMoney}
+			</if>
+	       <if test="@Ognl@isNotEmpty(memberId)">
+				AND MemberId = #{memberId}
+			</if>
+			<if test="@Ognl@isNotEmpty(memberIdNotEqual)">
+                AND SaleMemberId != #{memberIdNotEqual}
+            </if>
+	       <if test="@Ognl@isNotEmpty(exchangeId)">
+				AND ExchangeId = #{exchangeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingSaleagentPo">
+    	SELECT *
+	    FROM listing_saleagent 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getByProjectIdAndSaleMemberId" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingSaleagentPo">
+    	SELECT *
+	    FROM listing_saleagent 
+	    WHERE
+	    	ProjectId = #{projectId}
+	    	AND SaleMemberId = #{saleMemberId} 
+    </select>
+    
+    <select id="findMemberSaleagentNum" parameterType="java.util.Map" resultType="int">
+    	SELECT count(id) 
+    	FROM listing_saleagent
+    	WHERE 
+    		SaleMemberId = #{saleMemberId} AND ExchangeId = #{exchangeId}
+    </select>
+    
+    <select id="selectRecordSaleMemberIds" parameterType="int" resultType="java.lang.Integer">
+    	SELECT DISTINCT listing_saleagent.SaleMemberId 
+    	FROM listing_saleagent 
+		JOIN listing_base ON(listing_base.Id=listing_saleagent.ProjectId)
+		WHERE 
+			listing_base.ProjectRecordId=#{projectRecordId}
+			AND listing_saleagent.SaleMemberId != 0
+    </select>
+</mapper>
+

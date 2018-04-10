@@ -99,6 +99,22 @@ public class UcUserDataSupportService {
 		map.put("noDelStatus", UserStatusDesc.删除.value);
 		return getByMap(map);
 	}
+	/**
+	 * 根据公司名称获取用户
+	 * @param companyName
+	 * @param exchangeId
+	 * @return
+	 */
+	public UcUser getUserByCompanyName(String companyName, Integer exchangeId) {
+		if(StringUtils.isBlank(companyName)) {
+			return null;
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("companyNameEq", companyName);
+		map.put("exchangeId", exchangeId);
+		map.put("noDelStatus", UserStatusDesc.删除.value);
+		return getByMap(map);
+	}
 	
 	private UcUser getByMap(Map<String,Object> map) {
 		doEncryptUserByMap(map);

@@ -169,5 +169,24 @@ public class ProjectRecordService extends BaseService{
 		}
 		timelineDetailDataSupportService.createRecordTimeLine(recordinfoPo, flowType, param.getFlowFeedOpinion(), param.getOperatorName());
 	}
-	
+	/**
+	 * 获取可挂牌列表
+	 * @param map
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<ProjectRecordComplex> getCanQuotedRecordList(Map<String,Object> map,int pageNo, int pageSize) {
+		map.put("recordStatus", RecordStatusDesc.审核通过.value);
+		return projectRecordDataSupportService.getCanQuotedRecordList(map, pageNo, pageSize);
+	}
+	/**
+	 * 获取可挂牌备案
+	 * @param recordId
+	 * @param exchangeId
+	 * @return
+	 */
+	public ProjectRecordComplex getCanQuotedRecord(int recordId,int exchangeId) {
+		return projectRecordDataSupportService.getCanQuotedRecord(recordId, exchangeId);
+	}
 }

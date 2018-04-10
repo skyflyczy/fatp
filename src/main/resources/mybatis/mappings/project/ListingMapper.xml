@@ -2,40 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.telecwin.fatp.dao.project.ListingDao">
 	<sql id="base_field">
-		listing_base.Id,
-		listing_base.ExchangeId,
-		listing_base.MemberId,
-		listing_base.LoanUserId,
-		listing_base.ProjectRecordId,
-		listing_base.ProjectCode,
-		listing_base.ProjectGuid,
-		listing_base.PartnerBizId,
-		listing_base.ProjectSettleCode,
-		listing_base.ProjectName,
-		listing_base.ProjectFullName,
-		listing_base.ProductTypeId,
-		listing_base.ProjectTypeId,
-		listing_base.ProjectUnitPrice,
-		listing_base.ProjectMoney,
-		listing_base.ProjectAmountMin,
-		listing_base.ProvinceId,
-		listing_base.CityId,
-		listing_base.IndustryId,
-		listing_base.ProjectCost,
-		listing_base.IsGuarantee,
-		listing_base.IsPledge,
-		listing_base.IsInsurance,
-		listing_base.ProjectUsing,
-		listing_base.ProjectLimit,
-		listing_base.ProjectLimitTypeId,
-		listing_base.ValueDateChangeStyle,
-		listing_base.ExpireDateChangeStyle,
-		listing_base.ValueDate,
-		listing_base.ExpireDate,
-		listing_base.ProjectStatus ProjectStatus,
-		listing_base.OriginType,
-		listing_base.OriginatorId,
-		listing_base.CreateTime 
+		listing_base.Id, 
+		listing_base.ExchangeId, 
+		listing_base.MemberId, 
+		listing_base.LoanUserId, 
+		listing_base.ProjectRecordId, 
+		listing_base.ProjectCode, 
+		listing_base.ProjectGuid, 
+		listing_base.PartnerBizId, 
+		listing_base.ProjectSettleCode, 
+		listing_base.ProjectName, 
+		listing_base.ProjectFullName, 
+		listing_base.ProductTypeId, 
+		listing_base.ProjectTypeId, 
+		listing_base.ProjectUnitPrice, 
+		listing_base.ProjectMoney, 
+		listing_base.ProjectAmountMin, 
+		listing_base.ProvinceId, 
+		listing_base.CityId, 
+		listing_base.IndustryId, 
+		listing_base.ProjectCost, 
+		listing_base.IsGuarantee, 
+		listing_base.IsPledge, 
+		listing_base.IsInsurance, 
+		listing_base.ProjectUsing, 
+		listing_base.ProjectLimit, 
+		listing_base.ProjectLimitTypeId, 
+		listing_base.ValueDateChangeStyle, 
+		listing_base.ExpireDateChangeStyle, 
+		listing_base.ValueDate, 
+		listing_base.ExpireDate, 
+		listing_base.ProjectStatus, 
+		listing_base.OriginType, 
+		listing_base.OriginatorId, 
+		listing_base.CreateTime,
+		listing_base.UpdateTime,
+		listing_base.AuditTime,
+		listing_base.AuditOperatorId,
+		listing_base.RaiseMoney,
+		listing_base.InvestSpareAmount  
 	</sql>
 	<sql id="trade_field">
 		listing_trade.InvestAmountMin,
@@ -85,7 +90,7 @@
 		<include refid="clearing_field"/>,		
 		u.userName loanUserName,
 		u.UserGuid
-		,CONVERT(AES_DECRYPT(m.RealName,'${codestring}')USING utf8) createOperatorName 
+		,CONVERT(AES_DECRYPT(m.RealName,'fatp.com')USING utf8) createOperatorName 
 		<if test="@Ognl@isNotEmpty(needBankInfo)">
 			,CardAccount,AccountName,SubBankName,BankName bankChannelName
 		</if>
@@ -320,6 +325,20 @@
 			</if>
 		</where>
 	</sql>
-	
+	<select id="getListingDetailsById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingComplex">
+    	SELECT 
+    	<include refid="base_field"/>,
+		<include refid="trade_field"/>,
+		<include refid="clearing_field"/> ,
+		u.userName loanUserName 
+		FROM listing_base
+		JOIN listing_trade ON (listing_base.Id = listing_trade.ProjectId)
+		JOIN listing_clearing ON (listing_base.Id = listing_clearing.ProjectId)
+		LEFT JOIN uc_user u ON (LoanUserId=u.id)
+		WHERE listing_base.Id = #{id}
+		<if test="@Ognl@isNotEmpty(exchangeId)">
+			AND listing_base.ExchangeId = #{exchangeId}
+		</if>
+	</select>
 </mapper>
 

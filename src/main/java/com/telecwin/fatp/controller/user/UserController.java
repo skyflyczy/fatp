@@ -9,19 +9,20 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONObject;
 import com.telecwin.fatp.domain.UcUser;
 import com.telecwin.fatp.domain.UcUserBankcard;
 import com.telecwin.fatp.enums.user.OrgType;
 import com.telecwin.fatp.enums.user.UserStatusDesc;
+import com.telecwin.fatp.interceptor.WithoutAuth;
 import com.telecwin.fatp.service.sys.SysareaCityService;
 import com.telecwin.fatp.service.sys.SysareaDistrictService;
 import com.telecwin.fatp.service.sys.SysareaProvinceService;
 import com.telecwin.fatp.service.sys.SystypeCompanyService;
 import com.telecwin.fatp.service.sys.SystypeIndustryService;
 import com.telecwin.fatp.service.user.UcUserPubinfoService;
-import com.telecwin.fatp.service.user.UcUserService;
-import com.telecwin.fatp.service.user.UserBankCardService;
 
 @Controller
 @RequestMapping("/user")
@@ -92,5 +93,25 @@ public class UserController extends UserSupport{
 		};
 		listMembers(map, allowStatus);
 		return viewPath + "lookupload";
+	}
+	
+	/**
+	 * 选择用户
+	 * @param memberName
+	 * @return
+	 */
+	@RequestMapping("/chooseuser")
+	@ResponseBody
+	@WithoutAuth
+	public Object chooseUser(String memberName){
+		UcUser ucUser = ucUserService.getUserByCompanyName(memberName.trim(), getExchangeId());
+		if(ucUser == null){
+			return resultError("用户不存在。");
+		}else{
+			JSONObject json = resultSuccess();
+			json.put("", "");
+			json.put("userId", ucUser.getId());
+			return json;
+		}
 	}
 }

@@ -50,6 +50,12 @@ public class UserBankCardController extends UserSupport {
 		return viewPath + "bankcard";
 	}
 	
+	@RequestMapping("ajaxlist")
+	@ResponseBody
+	public Object ajaxlist(@RequestParam int userId) {
+		return userBankCardService.getUserBankcards(userId,getExchangeId());
+	}
+	
 	/**
 	 * 新增页面
 	 * @return

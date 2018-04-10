@@ -1,5 +1,7 @@
 package com.telecwin.fatp.util;
 
+import java.math.BigDecimal;
+
 import com.huajin.baymax.encrypt.SymmetricEncrypt;
 
 public class Constant {
@@ -20,5 +22,7 @@ public class Constant {
     public static final int DEFAULT_PAGESIZE = 20;
     public static final String _PAGEINDEX = "pageCurrent";
 	public static final String _PAGESIZE = "pageSize";
+	
+	 public static final BigDecimal _PLAT_DEFAULT_FEE = new BigDecimal("0.002");
 	
 }

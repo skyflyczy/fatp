@@ -26,4 +26,6 @@ public interface ProjectRecordDao {
 	public void delete(Map<String, Object> map);
 	
 	public ProjectRecordinfo getByRecordGuid(String recordGuid);
+	
+	public List<ProjectRecordComplex> getCanQuotedRecordList(Map<String,Object> map);
 }

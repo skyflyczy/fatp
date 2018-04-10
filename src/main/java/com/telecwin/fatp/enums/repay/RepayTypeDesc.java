@@ -37,4 +37,8 @@ public enum RepayTypeDesc {
 		}
 		return "";
 	}
+
+	public int getValue() {
+		return value;
+	}
 }

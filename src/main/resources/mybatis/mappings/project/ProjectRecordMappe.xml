@@ -159,6 +159,23 @@
         </if>
     </select>
     
+    <select id="getCanQuotedRecordList" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ProjectRecordComplex">
+        SELECT project_recordinfo.*
+        ,uc_user.UserName AS loanUserName
+        ,COUNT(listing_base.Id) AS quotedCnt
+        ,IFNULL(SUM(IF(listing_base.ProjectStatus>0,IF(listing_base.ProjectStatus=9,LEAST(listing_base.ProjectMoney,listing_base.RaiseMoney),listing_base.ProjectMoney),0)),0) AS quotedMoney 
+        ,systype_project.typeName AS projectTypeName 
+        FROM project_recordinfo
+        LEFT JOIN uc_user ON(project_recordinfo.LoanUserId=uc_user.Id) 
+        LEFT JOIN listing_base ON(listing_base.ProjectRecordId=project_recordinfo.Id) 
+        LEFT JOIN systype_project ON(systype_project.id=project_recordinfo.ProjectTypeId)
+        <include refid="where"/>
+            GROUP BY project_recordinfo.Id HAVING projectMoney-quotedMoney>0
+        <if test="@Ognl@isNotEmpty(sortColumns)">
+            ORDER BY ${sortColumns}
+         </if>
+    </select>
+    
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO project_recordinfo (
 			Id ,

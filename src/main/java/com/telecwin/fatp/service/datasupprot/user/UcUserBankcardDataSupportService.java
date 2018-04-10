@@ -44,7 +44,7 @@ public class UcUserBankcardDataSupportService {
 	 * @param id
 	 * @return
 	 */
-	public UcUserBankcard getUserBankcardById(Integer userId,int id) {
+	public UcUserBankcard getUserBankcardById(Integer userId,Integer id) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);
 		map.put("id", id);

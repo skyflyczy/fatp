@@ -43,7 +43,8 @@ public enum ErrorCode {
 	RECORDINFO_NOT_EXIST(500002,"备案信息不存在。"),
 	RECORDINFO_STATUS_ERROR(500002,"备案信息状态错误。"),
 	
-	
+	LISTING_SAVE_ERROR(600001,"挂牌产品保存失败。"),
+	LISTING_PAYINVEST_DATE_28(600002,"挂牌产品兑付日期不能超过28号。"),
 	
 	
 	SYSTEM_ERROR(90000,"系统处理异常。"),

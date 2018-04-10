@@ -15,6 +15,7 @@ import com.telecwin.fatp.domain.UcUser;
 import com.telecwin.fatp.enums.EntityType;
 import com.telecwin.fatp.enums.FlowFeedTypeDesc;
 import com.telecwin.fatp.po.TimelineDetailPo;
+import com.telecwin.fatp.po.project.ListingBasePo;
 import com.telecwin.fatp.po.project.ProjectRecordinfoPo;
 
 @Service
@@ -87,6 +88,36 @@ public class TimelineDetailDataSupportService {
 			timelineDetailDao.insert(timelineDetailPo);
 		} catch (Exception e) {
 			logger.error("创建会员动态错误。" , e);
+		}
+	}
+	
+	/**
+	 * 创建挂牌动态
+	 * @param listingBasePo
+	 * @param flowFeedTypeDesc
+	 * @param remark
+	 * @param operatorName
+	 */
+	public void createListingTimeLine(ListingBasePo listingBasePo,FlowFeedTypeDesc flowFeedTypeDesc,String remark,String operatorName){
+		try {
+			TimelineDetailPo timelineDetailPo = new TimelineDetailPo();
+			Date eventTime = listingBasePo.getUpdateTime();
+			if (eventTime == null) {
+				eventTime = new Date();
+			}
+			timelineDetailPo.setEntityType(EntityType.挂牌.getValue());
+			timelineDetailPo.setEntityId(listingBasePo.getId());
+			timelineDetailPo.setMemberId(listingBasePo.getMemberId());
+			timelineDetailPo.setEventId(flowFeedTypeDesc==null?null:flowFeedTypeDesc.getType());
+			timelineDetailPo.setEventName(flowFeedTypeDesc==null?"":flowFeedTypeDesc.name());
+			timelineDetailPo.setEventTime(new Date());
+			timelineDetailPo.setEventOperatorId(listingBasePo.getUpateOperatorId());
+			timelineDetailPo.setEventOperatorName(operatorName);
+			timelineDetailPo.setEventRemark(remark);
+			timelineDetailPo.setStatusChangeDesc(flowFeedTypeDesc==null?"":flowFeedTypeDesc.getText());
+			timelineDetailDao.insert(timelineDetailPo);
+		} catch (Exception e) {
+			logger.error("创建挂牌动态错误。" , e);
 		}
 	}
 }
