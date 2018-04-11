@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<script type="text/javascript">
+	function afterChangeStatus(json){
+		if(json.statusCode == 200){
+			$(this).alertmsg("correct", json.message);
+			$(this).navtab("refresh");
+		}else{
+			$(this).alertmsg("error", json.message);
+		}
+	}
+</script>
 <div class="bjui-pageHeader" id="prolist-review-search">
     <form id="pagerForm" data-toggle="ajaxsearch" action="<%=request.getContextPath()%>/project/listing/check/list.do" method="post">
         <input type="hidden" name="pageSize" value="${pageSize}">
