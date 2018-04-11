@@ -44,7 +44,7 @@ import com.telecwin.fatp.util.SortUtil;
 public class ListingSupport extends BaseController{
 	
 	protected static final ListingStatusDesc[] NEED_EDIT_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待提交,ListingStatusDesc.审核退回,ListingStatusDesc.审核不通过};
-	protected static final ListingStatusDesc[] LISTING_CHECKING_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待审核};
+	protected static final ListingStatusDesc[] LISTING_CHECKING_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待审核,ListingStatusDesc.待发布,ListingStatusDesc.已发布,ListingStatusDesc.认购中};
 	@Autowired
 	private ProjectRecordService projectRecordService;
 	@Autowired

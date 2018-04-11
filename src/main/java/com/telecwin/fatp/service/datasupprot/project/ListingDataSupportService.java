@@ -113,6 +113,9 @@ public class ListingDataSupportService {
 	public ListingBasePo findBasePoById(Integer id) {
 		return listingBaseDao.findById(id);
 	}
+	public ListingBasePo findBasePoByGuid(String projectGuid) {
+		return listingBaseDao.findByGuid(projectGuid);
+	}
 	public void updateBasePoByVersion(ListingBasePo listingBasePo) {
 		int row = listingBaseDao.updateByVersion(listingBasePo);
 		if(row < 1){
@@ -156,6 +159,16 @@ public class ListingDataSupportService {
 		}
 	}
 	
+	public ListingTradePo getTradePoByProjectId(Integer projectId) {
+		return listingTradeDao.findByProjectId(projectId);
+	}
+	
+	public void updateTradePoByVersion(ListingTradePo tradePo) {
+		int row = listingTradeDao.updateByVersion(tradePo);
+		if(row < 1){
+			throw new FatpException(ErrorCode.LISTING_SAVE_ERROR);
+		}
+	}
 	/**
 	 * 设置信息且插入结算信息
 	 * @param listingClearingPo

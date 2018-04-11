@@ -1219,7 +1219,16 @@ public class ListingComplex {
 				|| this.projectStatus.intValue() == ListingStatusDesc.审核退回.value
 				|| this.projectStatus.intValue() == ListingStatusDesc.审核不通过.value;
 	}
-	
+	public boolean canCheck(){
+		return this.projectStatus.intValue() == ListingStatusDesc.待审核.value;
+	}
+	public boolean canStartBuy() {
+		return this.projectStatus.intValue() == ListingStatusDesc.待发布.value 
+				|| this.projectStatus.intValue() == ListingStatusDesc.已发布.value;
+	}
+	public boolean canEndBuy() {
+		return this.projectStatus.intValue() == ListingStatusDesc.认购中.value;
+	}
 	public Integer getSettleInvestDayShow() {
 		return this.settleInvestDay == null ? null : Integer
 				.valueOf(this.settleInvestDay.intValue() % 100);

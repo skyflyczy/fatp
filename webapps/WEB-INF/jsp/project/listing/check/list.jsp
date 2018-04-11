@@ -58,9 +58,24 @@
 	    		<td><fmt:formatNumber value="${obj.investProfit*100}" pattern="0.000"/> %</td>
 	    		<td><fmt:formatDate value="${obj.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	    		<td>
-	    			<a href="<%=request.getContextPath()%>/project/listing/check/view.do?id=${obj.projectGuid}" 
-		   				class="btn btn-blue" data-toggle="dialog" data-width="800"  
-		   				data-height="480" data-id="dialog-mask" data-mask="true">审核</a>
+	    			<!-- 可审核 -->
+	    			<c:if test="${obj.canCheck() }">
+		    			<a href="<%=request.getContextPath()%>/project/listing/check/view.do?id=${obj.projectGuid}" 
+			   				class="btn btn-blue" data-toggle="dialog" data-width="800"  
+			   				data-height="480" data-id="dialog-mask" data-mask="true">审核</a>
+		   			</c:if>
+		   			<!-- 可认购 -->
+		   			<c:if test="${obj.canStartBuy() }">
+		   				<a href="<%=request.getContextPath()%>/project/listing/startbuy.do?id=${obj.projectGuid}" 
+		    				class="btn btn-blue" data-toggle="doajax" data-mask="true"
+		    				data-callback="afterChangeStatus()" data-confirm-msg="确定要启动认购？">立即启动认购</a><br/>
+		   			</c:if>
+		   			<!-- 可认购结束 -->
+		   			<c:if test="${obj.canEndBuy() }">
+		   				<a href="<%=request.getContextPath()%>/project/listing/endbuy.do?id=${obj.projectGuid}" 
+		    				class="btn btn-blue" data-toggle="doajax" data-mask="true"
+		    				data-callback="afterChangeStatus()" data-confirm-msg="确定要结束认购？">结束认购</a><br/>
+		   			</c:if>
 	    		</td>
 	    	</tr>
 	    	</c:forEach>

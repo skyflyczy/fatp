@@ -292,11 +292,17 @@
         WHERE 
 	        Id = #{id}  AND VersionNo = #{versionNo}
 	</update>
-	<select id="findById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingBasePo">
+	<select id="findById" parameterType="java.lang.Integer" resultType="com.telecwin.fatp.po.project.ListingBasePo">
     	SELECT *
 	    FROM listing_base 
         WHERE 
 	        Id = #{id} 
+	</select>
+	<select id="findByGuid" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.project.ListingBasePo">
+    	SELECT *
+	    FROM listing_base 
+        WHERE 
+	        ProjectGuid = #{projectGuid}
 	</select>
 </mapper>
 

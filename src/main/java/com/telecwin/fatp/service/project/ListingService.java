@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,6 +125,7 @@ public class ListingService extends BaseService{
 		listing.setAuditTime(new Date());
 		listing.setValueDateChangeStyle(param.getValueDateChangeStyle());
 		listing.setExpireDateChangeStyle(param.getExpireDateChangeStyle());
+		listing.setUpateOperatorId(param.getOperatorId());
 		listingDataSupportService.updateBasePoByVersion(listing);
 		
 		//更新结算信息
@@ -216,6 +218,67 @@ public class ListingService extends BaseService{
 			infoVo.setRepayTypeId(record.getRepayTypeId());
 		}
 	}
+	/**
+	 * 开始认购
+	 * @param guid
+	 * @param operatorId
+	 * @param operatorName
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void startBuy(String guid, Integer operatorId,String operatorName) {
+		if(StringUtils.isBlank(guid)) {
+			throw new FatpException(ErrorCode.SYSTEM_PARAMETERS_EMPTY);
+		}
+		//更新基本信息
+		ListingBasePo listing = listingDataSupportService.findBasePoByGuid(guid);
+		if(listing == null) {
+			throw new FatpException(ErrorCode.LISTING_NOT_EXIST);
+		}
+		if(listing.getProjectStatus().intValue() != ListingStatusDesc.待发布.value 
+				&& listing.getProjectStatus().intValue() != ListingStatusDesc.已发布.value){
+			throw new FatpException(ErrorCode.LISTING_STATUS_ERROR);
+		}
+		listing.setProjectStatus(ListingStatusDesc.认购中.value);
+		listing.setUpateOperatorId(operatorId);
+		listingDataSupportService.updateBasePoByVersion(listing);
+		//更新交易信息
+		ListingTradePo tradePo = listingDataSupportService.getTradePoByProjectId(listing.getId());
+		if(listing.getProjectStatus().intValue() == ListingStatusDesc.待发布.value) {
+			tradePo.setPublishTime(new Date());
+		}
+		tradePo.setBuyTimeStart(new Date());
+		tradePo.setUpateOperatorId(operatorId);
+		listingDataSupportService.updateTradePoByVersion(tradePo);
+		//新建动态
+		timelineDetailDataSupportService.createListingTimeLine(listing, FlowFeedTypeDesc.开始认购, "",operatorName);
+	}
+	
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void endBuy(String guid, Integer operatorId,String operatorName) {
+		if(StringUtils.isBlank(guid)) {
+			throw new FatpException(ErrorCode.SYSTEM_PARAMETERS_EMPTY);
+		}
+		//更新基本信息
+		ListingBasePo listing = listingDataSupportService.findBasePoByGuid(guid);
+		if(listing == null) {
+			throw new FatpException(ErrorCode.LISTING_NOT_EXIST);
+		}
+		if(listing.getProjectStatus().intValue() != ListingStatusDesc.认购中.value){
+			throw new FatpException(ErrorCode.LISTING_STATUS_ERROR);
+		}
+		listing.setProjectStatus(ListingStatusDesc.认购结束.value);
+		listing.setUpateOperatorId(operatorId);
+		listingDataSupportService.updateBasePoByVersion(listing);
+		//更新交易信息
+		ListingTradePo tradePo = listingDataSupportService.getTradePoByProjectId(listing.getId());
+		tradePo.setBuyTimeEnd(new Date());
+		tradePo.setUpateOperatorId(operatorId);
+		listingDataSupportService.updateTradePoByVersion(tradePo);
+		//新建动态
+		timelineDetailDataSupportService.createListingTimeLine(listing, FlowFeedTypeDesc.认购结束, "",operatorName);
+	}
+	
 	/**
 	 * 获取挂牌详细信息
 	 * @param id
