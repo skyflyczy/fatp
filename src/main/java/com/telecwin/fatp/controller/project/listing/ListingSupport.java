@@ -60,7 +60,7 @@ public class ListingSupport extends BaseController{
 	@Autowired
 	private UserBankCardService userBankCardService;
 	@Autowired
-	private SystypeProjectService systypeProjectService;
+	protected SystypeProjectService systypeProjectService;
 	
 	
 	protected String handleSortColumn(ListingSortColumns defaultListingSortColumns) {
@@ -171,8 +171,12 @@ public class ListingSupport extends BaseController{
 		listing.setUpateOperatorId(operator.getId());
 		listing.setCreateOperatorName(operator.getRealName());
 	}
-	
-	private ListingComplex listingView(int id){
+	/**
+	 * 根据id查找挂牌信息
+	 * @param id
+	 * @return
+	 */
+	public ListingComplex listingView(int id){
 		ListingComplex listingInfo = listingService.getListingDetailsById(id, super.getExchangeId());
 		if(listingInfo.getProvinceId() != null) {
 			listingInfo.setProName(sysareaProvinceService.getById(listingInfo.getProvinceId()).getProName());

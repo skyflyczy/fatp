@@ -8,8 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 承销信息
- * @author zhiya.chai
- * @date 2017年6月21日 上午11:38:18
  */
 public class ListingSaleagent implements Serializable{
 	private static final long serialVersionUID = -1403869757243155545L;

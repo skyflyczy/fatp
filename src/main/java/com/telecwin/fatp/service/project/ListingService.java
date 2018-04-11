@@ -169,7 +169,7 @@ public class ListingService extends BaseService{
 	 * @param projectId
 	 * @return
 	 */
-	public List<ListingSaleagentPo> findByProjectIdExcludeNoAgent(int projectId) {
+	public List<ListingSaleagent> findByProjectIdExcludeNoAgent(int projectId) {
 		return listingDataSupportService.findByProjectIdExcludeNoAgent(projectId);
 	}
 	

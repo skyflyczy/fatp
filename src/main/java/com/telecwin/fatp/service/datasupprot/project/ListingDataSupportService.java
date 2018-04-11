@@ -21,6 +21,7 @@ import com.telecwin.fatp.dao.project.ListingSaleagentDao;
 import com.telecwin.fatp.dao.project.ListingTradeDao;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.project.ListingComplex;
+import com.telecwin.fatp.domain.project.ListingSaleagent;
 import com.telecwin.fatp.enums.project.InterestBaseType;
 import com.telecwin.fatp.enums.project.ListingStatusDesc;
 import com.telecwin.fatp.enums.project.ProductTypeDesc;
@@ -80,7 +81,8 @@ public class ListingDataSupportService {
 		po.setProjectAmountMin(BigDecimal.ZERO);
 		po.setProjectLimit(1);
 		po.setProjectLimitTypeId(ProjectLimitType.天.type);
-		return listingBaseDao.insert(po);
+		listingBaseDao.insert(po);
+		return po.getId();
 	}
 	
 	/**
@@ -203,7 +205,8 @@ public class ListingDataSupportService {
 	 */
 	public int addListingContent(ListingContentPo listingContent,int listingId) {
 		listingContent.setProjectId(listingId);
-		return listingContentDao.insert(listingContent);
+		listingContentDao.insert(listingContent);
+		return listingContent.getId();
 	}
 	/**
 	 * 根据项目Id更新挂牌信息内容表数据
@@ -232,7 +235,7 @@ public class ListingDataSupportService {
 	 * @param projectId
 	 * @return
 	 */
-	public List<ListingSaleagentPo> findByProjectIdExcludeNoAgent(int projectId) {
+	public List<ListingSaleagent> findByProjectIdExcludeNoAgent(int projectId) {
 		Map<String, Object> map = new HashMap<>(2);
 		map.put("projectId", projectId);
 		map.put("memberIdNotEqual", 0);
@@ -261,7 +264,7 @@ public class ListingDataSupportService {
 		}
 		Map<String, Object> map = new HashMap<>(1);
 		map.put("projectId", listingId);
-		List<ListingSaleagentPo> dbList = listingSaleagentDao.select(map);
+		List<ListingSaleagent> dbList = listingSaleagentDao.select(map);
 		Set<Integer> updateIds = new HashSet<>();
 		for(ListingSaleagentPo saleAgent : saleAgentList){
 			if(saleAgent.getId() == null){
@@ -271,7 +274,7 @@ public class ListingDataSupportService {
 				updateIds.add(saleAgent.getId());
 			}
 		}
-		for(ListingSaleagentPo agent : dbList){
+		for(ListingSaleagent agent : dbList){
 			if(!updateIds.contains(agent.getId())){
 				listingSaleagentDao.delete(agent.getMemberId(),agent.getId());
 			}

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.huajin.baymax.db.annotation.MyBatisDao;
+import com.telecwin.fatp.domain.project.ListingSaleagent;
 import com.telecwin.fatp.po.project.ListingSaleagentPo;
 
 /**
@@ -25,7 +26,7 @@ public interface ListingSaleagentDao {
 
 	int update(ListingSaleagentPo listingSaleagentPo);
 
-	List<ListingSaleagentPo> select(Map<String, Object> map);
+	List<ListingSaleagent> select(Map<String, Object> map);
 
 	ListingSaleagentPo getByProjectIdAndSaleMemberId(Map<String, Object> map);
 

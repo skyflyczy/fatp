@@ -128,12 +128,12 @@ public class ListingComplex {
 	/**
 	 * 项目起息日(计划迁移至发行表)
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date valueDate;
 	/**
 	 * 项目到期日(计划迁移至发行表)
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd")  
 	private java.util.Date expireDate;
 	/**
 	 * 计息基准类型 0:自定义天数，1:365/366
@@ -357,7 +357,7 @@ public class ListingComplex {
 	/**
 	 * 兑付收款类型
 	 */
-	private Short payinvestType;
+	private Integer payinvestType;
 	/**
 	 * 兑付中间方ID
 	 */
@@ -366,7 +366,7 @@ public class ListingComplex {
 	 * 兑付中间方银行卡
 	 */
 	private Integer payinvestBankCardId;
-	private Short generatePlan=0;	
+	private Integer generatePlan=0;	
 	/**
 	 * 合作方挂牌业务ID
 	 */
@@ -948,10 +948,10 @@ public class ListingComplex {
 	public void setOriginatorId(String originatorId) {
 		this.originatorId = originatorId;
 	}
-	public Short getPayinvestType() {
+	public Integer getPayinvestType() {
 		return payinvestType;
 	}
-	public void setPayinvestType(Short payinvestType) {
+	public void setPayinvestType(Integer payinvestType) {
 		this.payinvestType = payinvestType;
 	}
 	public Integer getPayinvestId() {
@@ -966,10 +966,10 @@ public class ListingComplex {
 	public void setPayinvestBankCardId(Integer payinvestBankCardId) {
 		this.payinvestBankCardId = payinvestBankCardId;
 	}
-	public Short getGeneratePlan() {
+	public Integer getGeneratePlan() {
 		return generatePlan;
 	}
-	public void setGeneratePlan(Short generatePlan) {
+	public void setGeneratePlan(Integer generatePlan) {
 		this.generatePlan = generatePlan;
 	}
 	public String getPartnerBizId() {

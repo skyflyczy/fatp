@@ -105,59 +105,63 @@
 	<sql id="where">
 		<where>	      				
 	       <if test="@Ognl@isNotEmpty(id)">
-				AND Id = #{id}
+				AND listing_saleagent.Id = #{id}
 			</if>
 	       <if test="@Ognl@isNotEmpty(projectId)">
-				AND ProjectId = #{projectId}
+				AND listing_saleagent.ProjectId = #{projectId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(saleMemberId)">
-				AND SaleMemberId = #{saleMemberId}
+				AND listing_saleagent.SaleMemberId = #{saleMemberId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(saleTypeId)">
-				AND SaleTypeId = #{saleTypeId}
+				AND listing_saleagent.SaleTypeId = #{saleTypeId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(saleFeeRate)">
-				AND SaleFeeRate = #{saleFeeRate}
+				AND listing_saleagent.SaleFeeRate = #{saleFeeRate}
 			</if>
 	       <if test="@Ognl@isNotEmpty(saleAmount)">
-				AND SaleAmount = #{saleAmount}
+				AND listing_saleagent.SaleAmount = #{saleAmount}
 			</if>
 	       <if test="@Ognl@isNotEmpty(saleMoney)">
-				AND SaleMoney = #{saleMoney}
+				AND listing_saleagent.SaleMoney = #{saleMoney}
 			</if>
 	       <if test="@Ognl@isNotEmpty(memberId)">
-				AND MemberId = #{memberId}
+				AND listing_saleagent.MemberId = #{memberId}
 			</if>
 			<if test="@Ognl@isNotEmpty(memberIdNotEqual)">
-                AND SaleMemberId != #{memberIdNotEqual}
+                AND listing_saleagent.SaleMemberId != #{memberIdNotEqual}
             </if>
 	       <if test="@Ognl@isNotEmpty(exchangeId)">
-				AND ExchangeId = #{exchangeId}
+				AND listing_saleagent.ExchangeId = #{exchangeId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
-				AND CreateTime >= #{createTimeBegin}
+				AND listing_saleagent.CreateTime >= #{createTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
-				AND CreateTime &lt;= #{createTimeEnd}
+				AND listing_saleagent.CreateTime &lt;= #{createTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(createOperatorId)">
-				AND CreateOperatorId = #{createOperatorId}
+				AND listing_saleagent.CreateOperatorId = #{createOperatorId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
-				AND UpdateTime >= #{updateTimeBegin}
+				AND listing_saleagent.UpdateTime >= #{updateTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
-				AND UpdateTime &lt;= #{updateTimeEnd}
+				AND listing_saleagent.UpdateTime &lt;= #{updateTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
-				AND UpdateOperatorId = #{updateOperatorId}
+				AND listing_saleagent.UpdateOperatorId = #{updateOperatorId}
 			</if>
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingSaleagentPo">
-    	SELECT *
+    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingSaleagent">
+    	SELECT listing_saleagent.*
+    	,CONVERT(AES_DECRYPT(uc_user.RealName,'fatp.com')USING utf8) saleMemberName,
+    	CONVERT(AES_DECRYPT(up.CompanyName,'fatp.com')USING utf8) companyName  
 	    FROM listing_saleagent 
+	    LEFT JOIN uc_user ON(uc_user.id = listing_saleagent.SaleMemberId) 
+	    LEFT JOIN uc_user_pubinfo up on(up.id=uc_user.companyInfoId)
 		<include refid="where"/>
 		
 		<if test="@Ognl@isNotEmpty(sortColumns)">

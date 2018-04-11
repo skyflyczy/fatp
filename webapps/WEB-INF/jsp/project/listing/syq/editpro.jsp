@@ -91,6 +91,7 @@
                
                 
 		 	</tbody>
+		 	
 			<thead>
 		 		<tr><th colspan="2">交易信息</th></tr>
 		 	</thead>
@@ -142,7 +143,6 @@
                             </c:forEach>
                         </select>
                     </td>
-                    </td>
 					
 				</tr>
 					
@@ -157,7 +157,7 @@
 				                    	<select data-rule="required;" data-width="98%" name="projectSaleagent[#index#].saleTypeId" data-toggle="selectpicker">
 					                    <option value="">--请选择--</option>
 					                    <c:forEach var="saleType" items="${saleTypeIdList}"> 
-					                    	<option value="${saleType.type}">${saleType.type}</option>
+					                    	<option value="${saleType.type}">${saleType}</option>
 					                    </c:forEach> 
 					                    </select>
 				                    </th>
@@ -192,6 +192,7 @@
 					</td>
 				</tr>
 			</tbody>
+			
 			<thead>
 		 		<tr><th colspan="2">结算信息</th></tr>
 		 	</thead>
@@ -319,7 +320,7 @@
     				<td>
         				<!-- <p><b>本产品成立后，如允许持有者在交易中心平台进行转让，请设置以下信息：</b></p> -->
         				<label class="control-label x130" >转让流程期限：</label>
-        					产品成立日后第 <input type="text" name="transferAfter" value="${obj.transferAfter }" id="transferAfter" size="4" data-rule="required(#transferLimit:filled)"> 天</span>
+        					<span>产品成立日后第 <input type="text" name="transferAfter" value="${obj.transferAfter }" id="transferAfter" size="4" data-rule="required(#transferLimit:filled)"> 天</span>
    					 </td>
 
 
@@ -385,6 +386,7 @@
 				</td>
 			</tr>
 		 </table>
+		 
 	</form>
 </div>
 <script>
