@@ -26,7 +26,7 @@ public class ListingController extends ListingSupport{
 		if(listing.getProductTypeId().intValue() == ProductTypeDesc.收益权转让计划.value) {
 			return viewPath + "/syq/proinfo-index";
 		} else if(listing.getProductTypeId().intValue() == ProductTypeDesc.定向融资计划.value){
-			
+			return viewPath + "/dxrz/proinfo-index";
 		}
 		//TODO 给一个默认页
 		return "";

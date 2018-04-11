@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.telecwin.fatp.enums.project.ListingStatusDesc;
+import com.telecwin.fatp.enums.project.ProjectLimitType;
+import com.telecwin.fatp.enums.project.SettleTypeDesc;
 
 public class ListingComplex {
 	/**
@@ -418,7 +420,14 @@ public class ListingComplex {
 	private Integer transfereeUserId;
 	private Integer settleInvestMonth;
 	private List<ListingSaleagent> projectSaleagent;
-	
+	/**
+	 * 是否可以多次放款
+	 */
+	private Integer multipleRelease;
+	/**
+	 * 最多放款次数
+	 */
+	private Integer maxReleaseNum;
 	
 	public Integer getId() {
 		return id;
@@ -1218,5 +1227,31 @@ public class ListingComplex {
 	public Integer getSettleInvestMonthShow() {
 		return this.settleInvestDay == null ? null : Integer
 				.valueOf(this.settleInvestDay.intValue() / 100);
+	}
+	public String getProjectLimitTypeDesc() {
+		return ProjectLimitType.getProjectLimitType(this.getProjectLimitTypeId()).name();
+	}
+	public String settleName() {
+		if(this.settleTypeId == null)
+			return null;
+		return SettleTypeDesc.getDesc(this.settleTypeId);
+	}
+	
+	public String investSettleName() {
+		if(this.investSettleTypeId == null)
+			return null;
+		return SettleTypeDesc.getDesc(this.investSettleTypeId);
+	}	
+	public Integer getMultipleRelease() {
+		return multipleRelease;
+	}
+	public void setMultipleRelease(Integer multipleRelease) {
+		this.multipleRelease = multipleRelease;
+	}
+	public Integer getMaxReleaseNum() {
+		return maxReleaseNum;
+	}
+	public void setMaxReleaseNum(Integer maxReleaseNum) {
+		this.maxReleaseNum = maxReleaseNum;
 	}
 }

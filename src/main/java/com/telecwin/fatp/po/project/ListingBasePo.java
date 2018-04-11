@@ -184,6 +184,8 @@ public class ListingBasePo {
 	 * 审核人
 	 */
 	private Integer auditOperatorId;
+	
+	private String auditRemark;
 
 	public void setId(Integer value) {
 		this.id = value;
@@ -436,6 +438,12 @@ public class ListingBasePo {
 	}
 	public void setAuditOperatorId(Integer auditOperatorId) {
 		this.auditOperatorId = auditOperatorId;
+	}
+	public String getAuditRemark() {
+		return auditRemark;
+	}
+	public void setAuditRemark(String auditRemark) {
+		this.auditRemark = auditRemark;
 	}
 
 }

@@ -40,7 +40,7 @@
 		listing_base.AuditTime,
 		listing_base.AuditOperatorId,
 		listing_base.RaiseMoney,
-		listing_base.InvestSpareAmount  
+		listing_base.InvestSpareAmount 
 	</sql>
 	<sql id="trade_field">
 		listing_trade.InvestAmountMin,
@@ -80,7 +80,9 @@
 		listing_clearing.InvestSettleTypeId,
 		listing_clearing.InterestMode,
 		listing_clearing.InterestBaseType,
-		listing_clearing.InterestBaseDays 
+		listing_clearing.InterestBaseDays,
+		listing_clearing.MultipleRelease,
+		listing_clearing.MaxReleaseNum 
 	</sql>
 
 	<select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingComplex">
@@ -336,6 +338,22 @@
 		JOIN listing_clearing ON (listing_base.Id = listing_clearing.ProjectId)
 		LEFT JOIN uc_user u ON (LoanUserId=u.id)
 		WHERE listing_base.Id = #{id}
+		<if test="@Ognl@isNotEmpty(exchangeId)">
+			AND listing_base.ExchangeId = #{exchangeId}
+		</if>
+	</select>
+	
+	<select id="getListingDetailsByGuid" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingComplex">
+    	SELECT 
+    	<include refid="base_field"/>,
+		<include refid="trade_field"/>,
+		<include refid="clearing_field"/> ,
+		u.userName loanUserName 
+		FROM listing_base
+		JOIN listing_trade ON (listing_base.Id = listing_trade.ProjectId)
+		JOIN listing_clearing ON (listing_base.Id = listing_clearing.ProjectId)
+		LEFT JOIN uc_user u ON (LoanUserId=u.id)
+		WHERE listing_base.ProjectGuid = #{projectGuid}
 		<if test="@Ognl@isNotEmpty(exchangeId)">
 			AND listing_base.ExchangeId = #{exchangeId}
 		</if>

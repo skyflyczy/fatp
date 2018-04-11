@@ -5,7 +5,7 @@ package com.telecwin.fatp.enums.project;
  */
 public enum ValueDateType {
 
-	认购结束日(1),
+	募集结束日(1),
 	放款日(2),
 	项目录入(3),
 	起息日待定(4);

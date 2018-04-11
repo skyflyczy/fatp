@@ -1,6 +1,7 @@
 package com.telecwin.fatp.service.project;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.telecwin.fatp.controller.param.ListingCheckParam;
 import com.telecwin.fatp.convert.ListingConvertor;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.UcUser;
@@ -16,6 +18,8 @@ import com.telecwin.fatp.domain.project.ListingComplex;
 import com.telecwin.fatp.domain.project.ListingSaleagent;
 import com.telecwin.fatp.domain.project.ProjectRecordinfo;
 import com.telecwin.fatp.enums.FlowFeedTypeDesc;
+import com.telecwin.fatp.enums.project.ListingStatusDesc;
+import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.po.project.ListingBasePo;
 import com.telecwin.fatp.po.project.ListingClearingPo;
@@ -104,6 +108,64 @@ public class ListingService extends BaseService{
 		timelineDetailDataSupportService.createListingTimeLine(listingBasePo, FlowFeedTypeDesc.编辑保存, "", infoVo.getCreateOperatorName());
 	}
 	/**
+	 * 挂牌产品审核
+	 * @param param
+	 * @param listingStatus
+	 * @param exchangeId
+	 */
+	@Transactional(rollbackFor=Exception.class)
+	public void checkListing(ListingCheckParam param,ListingStatusDesc listingStatus){
+		//验证挂牌产品信息
+		ListingBasePo listing = validForCheck(param.getId());
+		//更新挂牌状态
+		listing.setProjectStatus(listingStatus.value);
+		listing.setAuditOperatorId(param.getOperatorId());
+		listing.setAuditRemark(param.getAuditRemark());
+		listing.setAuditTime(new Date());
+		listing.setValueDateChangeStyle(param.getValueDateChangeStyle());
+		listing.setExpireDateChangeStyle(param.getExpireDateChangeStyle());
+		listingDataSupportService.updateBasePoByVersion(listing);
+		
+		//更新结算信息
+		ListingClearingPo clearPo = listingDataSupportService.getClearPoByProjectId(listing.getId());
+		clearPo.setMultipleRelease(param.getMultipleRelease());
+		clearPo.setMaxReleaseNum(param.getMaxReleaseNum());
+		listingDataSupportService.updateClearPoByVersion(clearPo);
+		
+		//TODO 暂时不用设置，这个是在认购时使用的，设置默认的承销信息
+//		if(listingStatus == ListingStatusDesc.待发布 
+//				&& listing.getProductTypeId().intValue() != ProductTypeDesc.定向投资工具.value){
+//			listingBaseRootService.addDefaultSaleAgent(listingVo);
+//		}
+		//新增动态
+		FlowFeedTypeDesc flowFeed = FlowFeedTypeDesc.审核通过;
+		if(listingStatus == ListingStatusDesc.审核不通过) {
+			flowFeed = FlowFeedTypeDesc.审核不通过;
+		} else if(listingStatus == ListingStatusDesc.审核退回) {
+			flowFeed = FlowFeedTypeDesc.审核退回;
+		}
+		timelineDetailDataSupportService.createListingTimeLine(listing, flowFeed, param.getAuditRemark(), param.getOperatorName());
+	}
+	/**
+	 * 审核时验证信息
+	 * @param id
+	 * @param exchangeId
+	 * @return
+	 */
+	private ListingBasePo validForCheck(Integer id){
+		if(id == null) {
+			throw new FatpException(ErrorCode.SYSTEM_PARAMETERS_EMPTY);
+		}
+		ListingBasePo listing = listingDataSupportService.findBasePoById(id);
+		if(listing == null) {
+			throw new FatpException(ErrorCode.LISTING_NOT_EXIST);
+		}
+		if(listing.getProjectStatus().intValue() != ListingStatusDesc.待审核.value) {
+			throw new FatpException(ErrorCode.LISTING_STATUS_ERROR);
+		}
+		return listing;
+	}
+	/**
 	 * 补充承销商信息
 	 * @param infoVo
 	 */
@@ -162,6 +224,15 @@ public class ListingService extends BaseService{
 	 */
 	public ListingComplex getListingDetailsById(int id,int exchangeId) {
 		return listingDataSupportService.getListingDetailsById(id, exchangeId);
+	}
+	/**
+	 * 获取挂牌详细信息
+	 * @param guid
+	 * @param exchangeId
+	 * @return
+	 */
+	public ListingComplex getListingDetailsByGuid(String guid,int exchangeId) {
+		return listingDataSupportService.getListingDetailsByGuid(guid, exchangeId);
 	}
 	
 	/**

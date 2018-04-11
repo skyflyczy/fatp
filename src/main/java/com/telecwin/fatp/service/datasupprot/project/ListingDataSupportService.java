@@ -110,7 +110,15 @@ public class ListingDataSupportService {
 		}
 		return listingBasePo;
 	}
-	
+	public ListingBasePo findBasePoById(Integer id) {
+		return listingBaseDao.findById(id);
+	}
+	public void updateBasePoByVersion(ListingBasePo listingBasePo) {
+		int row = listingBaseDao.updateByVersion(listingBasePo);
+		if(row < 1){
+			throw new FatpException(ErrorCode.LISTING_SAVE_ERROR);
+		}
+	}
 	/**
 	 * 新增挂牌交易信息
 	 * @param listingTradePo
@@ -197,6 +205,16 @@ public class ListingDataSupportService {
 			throw new FatpException(ErrorCode.LISTING_SAVE_ERROR);
 		}
 	}
+	
+	public ListingClearingPo getClearPoByProjectId(int projectId) {
+		return listingClearingDao.findByProjectId(projectId);
+	}
+	public void updateClearPoByVersion(ListingClearingPo listingClearingPo) {
+		int row = listingClearingDao.updateByVersion(listingClearingPo);
+		if(row < 1){
+			throw new FatpException(ErrorCode.LISTING_SAVE_ERROR);
+		}
+	}
 	/**
 	 * 增加挂牌信息内容表数据
 	 * @param listingContent
@@ -230,6 +248,19 @@ public class ListingDataSupportService {
 		map.put("id", id);
 		return listingDao.getListingDetailsById(map);
 	}
+	/**
+	 * 获取详细信息
+	 * @param guid
+	 * @param exchangeId
+	 * @return
+	 */
+	public ListingComplex getListingDetailsByGuid(String guid,int exchangeId) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("exchangeId", exchangeId);
+		map.put("projectGuid", guid);
+		return listingDao.getListingDetailsByGuid(map);
+	}
+	
 	/**
 	 * 获取项目的承销列表，不包括无承销人的部分
 	 * @param projectId

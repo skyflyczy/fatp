@@ -36,7 +36,7 @@ public class SyqListingController extends ListingSupport{
 	public String list(HttpServletRequest request) {
 		Map<String, Object> map = paramToMap(request);
 		map.put("productTypeId", ProductTypeDesc.收益权转让计划.value);
-		super.getProjectNeedEditList(map);
+		getListingList(map, NEED_EDIT_STATUS);
 		return viewPath + "/prolist";
 	}
 	

@@ -11,5 +11,5 @@ public interface ListingDao {
 
 	public List<ListingComplex> pageFindByCondition(Map<String,Object> map);
 	public ListingComplex getListingDetailsById(Map<String,Object> map);
-	
+	public ListingComplex getListingDetailsByGuid(Map<String,Object> map);
 }

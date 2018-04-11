@@ -43,12 +43,12 @@ import com.telecwin.fatp.util.SortUtil;
 @Controller
 public class ListingSupport extends BaseController{
 	
-	private static final ListingStatusDesc[] NEED_EDIT_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待提交,ListingStatusDesc.审核退回,ListingStatusDesc.审核不通过};
-
+	protected static final ListingStatusDesc[] NEED_EDIT_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待提交,ListingStatusDesc.审核退回,ListingStatusDesc.审核不通过};
+	protected static final ListingStatusDesc[] LISTING_CHECKING_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待审核};
 	@Autowired
 	private ProjectRecordService projectRecordService;
 	@Autowired
-	private ListingService listingService;
+	protected ListingService listingService;
 	@Autowired
 	private UcUserService ucUserService;
 	@Autowired
@@ -69,17 +69,18 @@ public class ListingSupport extends BaseController{
 		return SortUtil.getSortColumns(orderField, orderDirection, defaultListingSortColumns);
 	}
 	/**
-	 * 获取需要编辑的挂牌项目
+	 * 获取挂牌信息列表
 	 * @param map
+	 * @param statusArray
 	 */
-	public void getProjectNeedEditList(Map<String,Object> map) {
-		//可修改的备案信息状态
-		int[] searchStatus = new int[NEED_EDIT_STATUS.length];
-		for(int i=0; i<NEED_EDIT_STATUS.length; i++) {
-			searchStatus[i] = NEED_EDIT_STATUS[i].value;
+	public void getListingList(Map<String,Object> map,ListingStatusDesc[] statusArray) {
+		int[] searchStatus = new int[statusArray.length];
+		for(int i=0; i<statusArray.length; i++) {
+			searchStatus[i] = statusArray[i].value;
 		}
 		map.put("searchStatusList", searchStatus);
 		map.put("memberId", super.getMemberId());
+		map.put("exchangeId", super.getExchangeId());
 		Object createTimeEnd = map.get("createTimeEnd");
 		if(createTimeEnd != null) {
 			map.put("createTimeEnd", createTimeEnd.toString() + " 23:59:59");
@@ -92,17 +93,25 @@ public class ListingSupport extends BaseController{
 		if(projectStatus == null || Integer.parseInt(projectStatus.toString()) == 0){
 			map.remove("projectStatus");
 		}
+		Object updateTimeEnd = map.get("updateTimeEnd");
+		if(updateTimeEnd != null) {
+			map.put("updateTimeEnd", updateTimeEnd.toString() + " 23:59:59");
+		}
 		map.put("sortColumns", handleSortColumn(ListingSortColumns.projectId));
 		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
 		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
 		PageData<ListingComplex> pageData = listingService.pageFindByCondition(map, pageNo, pageSize);
-		request().setAttribute("list", pageData.getList());
-		request().setAttribute("total", pageData.getTotalsize());
 		map.put("createTimeEnd", createTimeEnd);
 		map.put("expireDateEnd", expireDateEnd);
 		map.put("projectStatus", projectStatus);
-		map.put("projectStatusDesc", NEED_EDIT_STATUS);
+		map.put("projectStatusDesc", statusArray);
+		request().setAttribute("list", pageData.getList());
+		request().setAttribute("total", pageData.getTotalsize());
+		request().setAttribute("pageCurrent", pageNo);
+		request().setAttribute("pageSize", pageSize);
 		request().setAttribute("search", map);
+		request().setAttribute("projectLimitTypeList", ProjectLimitType.values());
+		
 	}
 	/**
 	 * 获取可挂牌备案列表
@@ -269,5 +278,4 @@ public class ListingSupport extends BaseController{
 		}
 		listingService.updateListing(listing);
 	}
-	
 }

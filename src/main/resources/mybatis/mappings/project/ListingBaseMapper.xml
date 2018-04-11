@@ -126,6 +126,7 @@
 	        UpateOperatorId = #{upateOperatorId} ,
 	        AuditTime = #{auditTime} ,
 			AuditOperatorId = #{auditOperatorId} ,
+			AuditRemark = #{auditRemark},
 			RaiseMoney = #{raiseMoney},
 			InvestSpareAmount = #{investSpareAmount},
 	        VersionNo =  VersionNo + 1
