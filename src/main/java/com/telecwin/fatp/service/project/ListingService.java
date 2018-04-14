@@ -252,8 +252,12 @@ public class ListingService extends BaseService{
 		//新建动态
 		timelineDetailDataSupportService.createListingTimeLine(listing, FlowFeedTypeDesc.开始认购, "",operatorName);
 	}
-	
-	
+	/**
+	 * 结束认购
+	 * @param guid
+	 * @param operatorId
+	 * @param operatorName
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void endBuy(String guid, Integer operatorId,String operatorName) {
 		if(StringUtils.isBlank(guid)) {

@@ -45,6 +45,7 @@ public class ListingSupport extends BaseController{
 	
 	protected static final ListingStatusDesc[] NEED_EDIT_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待提交,ListingStatusDesc.审核退回,ListingStatusDesc.审核不通过};
 	protected static final ListingStatusDesc[] LISTING_CHECKING_STATUS = new ListingStatusDesc[]{ListingStatusDesc.待审核,ListingStatusDesc.待发布,ListingStatusDesc.已发布,ListingStatusDesc.认购中};
+	
 	@Autowired
 	private ProjectRecordService projectRecordService;
 	@Autowired
@@ -68,17 +69,21 @@ public class ListingSupport extends BaseController{
 		String orderDirection = request().getParameter("orderDirection");
 		return SortUtil.getSortColumns(orderField, orderDirection, defaultListingSortColumns);
 	}
+	protected void delSearchStatus(Map<String,Object> map,ListingStatusDesc[] statusArray){
+		int[] searchStatus = new int[statusArray.length];
+		for(int i=0; i<statusArray.length; i++) {
+			searchStatus[i] = statusArray[i].value;
+		}
+		map.put("searchStatusList", searchStatus);
+	}
 	/**
 	 * 获取挂牌信息列表
 	 * @param map
 	 * @param statusArray
 	 */
 	public void getListingList(Map<String,Object> map,ListingStatusDesc[] statusArray) {
-		int[] searchStatus = new int[statusArray.length];
-		for(int i=0; i<statusArray.length; i++) {
-			searchStatus[i] = statusArray[i].value;
-		}
-		map.put("searchStatusList", searchStatus);
+		//处理查询状态
+		delSearchStatus(map, statusArray);
 		map.put("memberId", super.getMemberId());
 		map.put("exchangeId", super.getExchangeId());
 		Object createTimeEnd = map.get("createTimeEnd");
