@@ -2,6 +2,8 @@ package com.telecwin.fatp.domain.offsite;
 
 import java.math.BigDecimal;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class InvestApply {
 
 	private Integer projectId;
@@ -44,6 +46,35 @@ public class InvestApply {
     private String ApplyGuid;
     private String loanUserName;
     private Integer projectStatus;
+    
+    /**
+	 * 项目起息日
+	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private java.util.Date valueDate;
+	/**
+	 * 申购开始时间
+	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	private java.util.Date buyTimeStart;
+	/**
+	 * 申购结束时间
+	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	private java.util.Date buyTimeEnd;
+	/**
+	 * 起投份额
+	 */
+	private java.math.BigDecimal investAmountMin;
+	/**
+	 * 申购份额上限 
+	 */
+	private java.math.BigDecimal investAmountMax;
+	/**
+	 * 追加金额
+	 */
+	private java.math.BigDecimal investAmountAppend;
+    
 	public Integer getProjectId() {
 		return projectId;
 	}
@@ -122,5 +153,40 @@ public class InvestApply {
 	public void setProjectStatus(Integer projectStatus) {
 		this.projectStatus = projectStatus;
 	}
-	
+	public java.util.Date getValueDate() {
+		return valueDate;
+	}
+	public void setValueDate(java.util.Date valueDate) {
+		this.valueDate = valueDate;
+	}
+	public java.util.Date getBuyTimeStart() {
+		return buyTimeStart;
+	}
+	public void setBuyTimeStart(java.util.Date buyTimeStart) {
+		this.buyTimeStart = buyTimeStart;
+	}
+	public java.util.Date getBuyTimeEnd() {
+		return buyTimeEnd;
+	}
+	public void setBuyTimeEnd(java.util.Date buyTimeEnd) {
+		this.buyTimeEnd = buyTimeEnd;
+	}
+	public java.math.BigDecimal getInvestAmountMin() {
+		return investAmountMin;
+	}
+	public void setInvestAmountMin(java.math.BigDecimal investAmountMin) {
+		this.investAmountMin = investAmountMin;
+	}
+	public java.math.BigDecimal getInvestAmountMax() {
+		return investAmountMax;
+	}
+	public void setInvestAmountMax(java.math.BigDecimal investAmountMax) {
+		this.investAmountMax = investAmountMax;
+	}
+	public java.math.BigDecimal getInvestAmountAppend() {
+		return investAmountAppend;
+	}
+	public void setInvestAmountAppend(java.math.BigDecimal investAmountAppend) {
+		this.investAmountAppend = investAmountAppend;
+	}
 }

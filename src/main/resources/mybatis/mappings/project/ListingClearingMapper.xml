@@ -30,8 +30,7 @@
         	CreateOperatorId ,
         	UpdateTime ,
         	UpateOperatorId ,
-        	MultipleRelease,
-        	MaxReleaseNum,
+        	ReleaseNum,
         	VersionNo 
         ) VALUES (
         	#{id} ,
@@ -61,8 +60,7 @@
         	#{createOperatorId} ,
         	now() ,
         	#{upateOperatorId} ,
-        	0,
-        	0,
+        	1,
         	1 
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -95,8 +93,7 @@
 	        InterestBaseDays = #{interestBaseDays} ,
 	        UpdateTime = now() ,
 	        UpateOperatorId = #{upateOperatorId} ,
-	        MultipleRelease = #{multipleRelease},
-	        MaxReleaseNum = #{maxReleaseNum},
+	        ReleaseNum = #{releaseNum},
 	        VersionNo = VersionNo + 1
         WHERE 
 	        Id = #{id} AND VersionNo = #{versionNo} 

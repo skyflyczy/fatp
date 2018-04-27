@@ -39,11 +39,11 @@
 			<tr>
 				<td colspan="2">
 					<label class="control-label x160">分次放款：</label> 
-					<input id="multipleRelease0"<c:if test="${empty project.multipleRelease || project.multipleRelease==0}">checked</c:if> name="multipleRelease" type="radio" value="0" data-toggle="icheck" data-label="否" data-rule="checked" >
-					<input id="multipleRelease1" <c:if test="${not empty project.multipleRelease && project.multipleRelease==1}">checked</c:if> name="multipleRelease" type="radio" value="1" data-toggle="icheck" data-label="是" data-rule="checked">
-					最多可以放款 <input maxlength="10" type="text" name="maxReleaseNum" data-rule="integer[+]" <c:if test="${empty project.multipleRelease || project.multipleRelease==0}">disabled</c:if> id="maxReleaseNum" 
-					<c:if test="${empty project.multipleRelease || project.multipleRelease==0}">value="0"</c:if>
-					<c:if test="${not empty project.multipleRelease && project.multipleRelease==1}">value="${project.maxReleaseNum }"</c:if>   size="5" > 次 
+					<input id="multipleRelease0"<c:if test="${empty project.releaseNum || project.releaseNum==1}">checked</c:if> name="multipleRelease" type="radio" value="0" data-toggle="icheck" data-label="否" data-rule="checked" >
+					<input id="multipleRelease1" <c:if test="${not empty project.releaseNum && project.releaseNum>1}">checked</c:if> name="multipleRelease" type="radio" value="1" data-toggle="icheck" data-label="是" data-rule="checked">
+					最多可以放款 <input maxlength="10" type="text" name="releaseNum" data-rule="integer[+]" <c:if test="${empty project.releaseNum || project.releaseNum==1}">disabled</c:if> id="releaseNum" 
+					<c:if test="${empty project.releaseNum || project.releaseNum==1}">value="1"</c:if>
+					<c:if test="${not empty project.releaseNum && project.multipleRelease>1}">value="${project.releaseNum }"</c:if>   size="5" > 次 
 				</td>
 			</tr>
 			<tr>
@@ -83,11 +83,11 @@ $('#checkNotPassBtn').on("click", function(){
 	});
 })
 $('#multipleRelease0').on("ifChecked",function(){
-	$('#maxReleaseNum').val(0);
-	$('#maxReleaseNum').attr("disabled","disabled");
+	$('#releaseNum').val(1);
+	$('#releaseNum').attr("disabled","disabled");
 });
 $('#multipleRelease1').on("ifChecked",function(){
-	$('#maxReleaseNum').removeAttr("disabled");
+	$('#releaseNum').removeAttr("disabled");
 });
 function projectupateCallback(json) {
 	if(json.statusCode == 200) {

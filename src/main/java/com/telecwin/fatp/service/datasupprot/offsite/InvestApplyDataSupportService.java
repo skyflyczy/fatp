@@ -1,8 +1,10 @@
 package com.telecwin.fatp.service.datasupprot.offsite;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.offsite.InvestApply;
 
 @Service
-public class InvestApplyDataService {
+public class InvestApplyDataSupportService {
 
 	@Autowired
 	private InvestApplyDao investApplyDao;
@@ -29,5 +31,18 @@ public class InvestApplyDataService {
 		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
 		List<InvestApply> list = investApplyDao.getCanRegList(map);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
+	}
+	/**
+	 * 根据projectGuid查找信息
+	 * @param projectGuid
+	 * @param exchangeId
+	 * @return
+	 */
+	public InvestApply getCanRegByProjectGuid(String projectGuid,int exchangeId){
+		Map<String,Object> map = new HashMap<>();
+		map.put("projectGuid", projectGuid);
+		map.put("exchangeId", exchangeId);
+		List<InvestApply> list = investApplyDao.getCanRegList(map);
+		return CollectionUtils.isEmpty(list) ? null : list.get(0);
 	}
 }

@@ -1,5 +1,6 @@
 package com.telecwin.fatp.controller;
 
+import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.huajin.baymax.encrypt.IrreversibEncrypt;
 import com.huajin.baymax.memcache.client.MemcachedCache;
 import com.huajin.baymax.session.SessionFactory;
 import com.telecwin.fatp.exception.ErrorCode;
@@ -77,6 +81,46 @@ public class BaseController {
 		return currentResponse.get();
 	}
 	/**
+	 * request转Map
+	 * @param request
+	 * @return
+	 */
+	protected Map<String, Object> paramToMap(HttpServletRequest request) {
+		Map<String,Object> map = new HashMap<>();
+		Enumeration<String> keys = request.getParameterNames();
+		while (keys.hasMoreElements()) {
+			String key = (String) keys.nextElement();
+			String value = request.getParameter(key);
+			if (StringUtils.isNotEmpty(value)){
+				map.put(key, value);
+			}
+		}
+		if (StringUtils.isEmpty(request.getParameter(Constant._PAGEINDEX))) {
+			map.put("pageCurrent", Constant.DEFAULT_PAGEINDEX);
+		}
+		if (StringUtils.isEmpty(request.getParameter(Constant._PAGESIZE))) {
+			map.put("pageSize", Constant.DEFAULT_PAGESIZE);
+		}
+		String orderField = request.getParameter("orderField");
+		String orderDirection = request.getParameter("orderDirection");
+		if (StringUtils.isNotEmpty(orderField)) {
+			map.put("sortColumns",orderField+ " "+ ((StringUtils.isNotEmpty(orderDirection)) ? orderDirection: ""));
+		}
+		return map;
+	}
+	public JSONObject resultError(String msg) {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("statusCode", Integer.valueOf(300));
+		jsonObj.put("message", msg);
+		return jsonObj;
+	}
+	public JSONObject resultSuccess() {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("statusCode", Integer.valueOf(200));
+		jsonObj.put("message", "操作成功。");
+		return jsonObj;
+	}
+	/**
 	 * 获取登录用户
 	 * @return
 	 */
@@ -108,44 +152,37 @@ public class BaseController {
 		return operator.getExchangeId();
 	}
 	/**
-	 * request转Map
-	 * @param request
+	 * 上传文件
+	 * @param fileMap
+	 * @param filePath
 	 * @return
+	 * @throws Exception
 	 */
-	protected Map<String, Object> paramToMap(HttpServletRequest request) {
-		Map<String,Object> map = new HashMap<>();
-		Enumeration<String> keys = request.getParameterNames();
-		while (keys.hasMoreElements()) {
-			String key = (String) keys.nextElement();
-			String value = request.getParameter(key);
-			if (StringUtils.isNotEmpty(value)){
-				map.put(key, value);
-			}
+	protected String upload(Map<String, MultipartFile> fileMap, String filePath) throws Exception {
+		File file = new File(filePath);
+		if (!file.exists()) {
+			file.mkdirs();
 		}
-		if (StringUtils.isEmpty(request.getParameter(Constant._PAGEINDEX))) {
-			map.put("pageCurrent", Constant.DEFAULT_PAGEINDEX);
+		String fileName = null;
+		String originalFilename = null;
+		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
+			MultipartFile mf = entity.getValue();
+			originalFilename = mf.getOriginalFilename();
+			String name = originalFilename.substring(0, originalFilename.lastIndexOf("."));
+			String pattern = originalFilename.substring(originalFilename.lastIndexOf("."));
+			fileName = IrreversibEncrypt.MD5Encrypt(name)+pattern;
+			File uploadFile = new File(filePath + fileName);
+			for(int i=1; ; i++) {
+				if(uploadFile.exists()){
+					fileName = IrreversibEncrypt.MD5Encrypt(name+"_"+i)+pattern;
+					uploadFile = new File(filePath+fileName);
+					continue;
+				}else{
+					FileCopyUtils.copy(mf.getBytes(), uploadFile);
+					break;
+				}
+			}	
 		}
-		if (StringUtils.isEmpty(request.getParameter(Constant._PAGESIZE))) {
-			map.put("pageSize", Constant.DEFAULT_PAGESIZE);
-		}
-		String orderField = request.getParameter("orderField");
-		String orderDirection = request.getParameter("orderDirection");
-		if (StringUtils.isNotEmpty(orderField)) {
-			map.put("sortColumns",orderField+ " "+ ((StringUtils.isNotEmpty(orderDirection)) ? orderDirection: ""));
-		}
-		return map;
-	}
-	
-	public JSONObject resultError(String msg) {
-		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("statusCode", Integer.valueOf(300));
-		jsonObj.put("message", msg);
-		return jsonObj;
-	}
-	public JSONObject resultSuccess() {
-		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("statusCode", Integer.valueOf(200));
-		jsonObj.put("message", "操作成功。");
-		return jsonObj;
+		return originalFilename+":"+fileName;
 	}
 }

@@ -1,6 +1,8 @@
 package com.telecwin.fatp.enums.user;
 
 
+
+
 public enum IdTypeDesc {
 
 	身份证(1),
@@ -25,6 +27,23 @@ public enum IdTypeDesc {
 	}
 	public int getIdType() {
 		return idType;
+	}
+	
+	public static IdTypeDesc fromIdTypeName(String name) {
+		for (IdTypeDesc item : values()) {
+			if (item.name().equalsIgnoreCase(name)) {
+				return item;
+			}
+		}
+		return null;
+	}
+	public static IdTypeDesc fromIdIdType(int type) {
+		for (IdTypeDesc item : values()) {
+			if (item.idType == type) {
+				return item;
+			}
+		}
+		return null;
 	}
 	
 	public static IdTypeDesc[] getPersonalTypes(){

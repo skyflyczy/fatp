@@ -11,6 +11,13 @@
 				listing_base.ProjectMoney projectMoney,
 				listing_base.ProjectStatus projectStatus,
 				listing_base.ProjectCode projectCode,
+				listing_base.ValueDate,
+				
+				listing_trade.BuyTimeStart,
+				listing_trade.BuyTimeEnd,
+				listing_trade.InvestAmountMin,
+				listing_trade.InvestAmountMax,
+				listing_trade.InvestAmountAppend,
 				
 				listing_clearing.ReleaseNum releaseNum,
 				
@@ -24,6 +31,7 @@
 				
 			FROM listing_base
 			JOIN listing_clearing ON (listing_base.Id = listing_clearing.ProjectId) 
+			JOIN listing_trade ON(listing_base.Id = listing_trade.ProjectId) 
 			LEFT JOIN uc_user ON (listing_base.LoanUserId = UC_USER.Id) 
 			LEFT JOIN (
 				SELECT 
@@ -45,6 +53,9 @@
 		WHERE (t.ApplyStatus IS NULL OR t.ApplyStatus = 1 OR t.ReleaseNum > t.applyNum) 
 		<if test="@Ognl@isNotEmpty(projectCode)">
 			AND t.ProjectCode = #{projectCode}
+		</if>
+		<if test="@Ognl@isNotEmpty(projectGuid)">
+			AND t.ProjectGuid = #{projectGuid}
 		</if>
 		<if test="@Ognl@isNotEmpty(exchangeId)">
 			AND t.ExchangeId = #{exchangeId}

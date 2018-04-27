@@ -81,8 +81,7 @@
 		listing_clearing.InterestMode,
 		listing_clearing.InterestBaseType,
 		listing_clearing.InterestBaseDays,
-		listing_clearing.MultipleRelease,
-		listing_clearing.MaxReleaseNum 
+		listing_clearing.ReleaseNum 
 	</sql>
 
 	<select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.project.ListingComplex">

@@ -130,8 +130,7 @@ public class ListingService extends BaseService{
 		
 		//更新结算信息
 		ListingClearingPo clearPo = listingDataSupportService.getClearPoByProjectId(listing.getId());
-		clearPo.setMultipleRelease(param.getMultipleRelease());
-		clearPo.setMaxReleaseNum(param.getMaxReleaseNum());
+		clearPo.setReleaseNum(param.getReleaseNum());
 		listingDataSupportService.updateClearPoByVersion(clearPo);
 		
 		//TODO 暂时不用设置，这个是在认购时使用的，设置默认的承销信息

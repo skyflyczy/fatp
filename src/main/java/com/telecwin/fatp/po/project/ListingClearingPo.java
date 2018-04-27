@@ -124,13 +124,9 @@ public class ListingClearingPo {
 	 */
 	private Integer versionNo;
 	/**
-	 * 是否允许多次放款：0：否，1：是
-	 */
-	private Integer multipleRelease; 
-	/**
 	 * 最多放款次数
 	 */
-	private Integer maxReleaseNum;
+	private Integer releaseNum;
 
 	public void setId(Integer value) {
 		this.id = value;
@@ -300,19 +296,11 @@ public class ListingClearingPo {
 	public Integer getVersionNo() {
 		return this.versionNo;
 	}
-	public Integer getMultipleRelease() {
-		return multipleRelease;
+	public Integer getReleaseNum() {
+		return releaseNum;
 	}
-	public void setMultipleRelease(Integer multipleRelease) {
-		this.multipleRelease = multipleRelease;
+	public void setReleaseNum(Integer releaseNum) {
+		this.releaseNum = releaseNum;
 	}
-	public Integer getMaxReleaseNum() {
-		return maxReleaseNum;
-	}
-	public void setMaxReleaseNum(Integer maxReleaseNum) {
-		this.maxReleaseNum = maxReleaseNum;
-	}
-	
-	
 }
 

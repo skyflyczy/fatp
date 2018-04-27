@@ -62,10 +62,10 @@
     				</td>
     				<td>${obj.releaseNum - obj.applyNum}</td>
     				<td>
-    					<a href="/offsite/invest/apply_register_index.do?projectGuid=${obj.projectGuid}" 
+    					<a href="/offsite/invest/apply_register.do?id=${obj.projectGuid}" 
     					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
     					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">申请登记</a>
-    					<a href="/offsite/invest/apply_register_edit.do?applyGuid=${obj.projectGuid}" 
+    					<a href="/offsite/invest/apply_register_edit.do?id=${obj.projectGuid}" 
     					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
     					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">编辑</a>
     				</td>

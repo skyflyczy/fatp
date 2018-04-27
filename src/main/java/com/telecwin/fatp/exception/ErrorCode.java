@@ -48,6 +48,9 @@ public enum ErrorCode {
 	LISTING_NOT_EXIST(600003,"挂牌产品不存在。"),
 	LISTING_STATUS_ERROR(600004,"挂牌产品状态错误。"),
 	
+	FILE_NOT_EXIST(700001,"文件不存在。"),
+	FILE_READ_DATA_NULL(700002,"读取文件数据为空。"),
+	
 	SYSTEM_ERROR(90000,"系统处理异常。"),
 	SYSTEM_PARAMETERS_EMPTY(90001,"参数为空。"),
 	

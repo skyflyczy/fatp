@@ -46,4 +46,12 @@ public class SysParamService extends BaseService {
 		SysParamPo sysParam = sysParamDataSupportService.getByParamKey("Sys_Default_PWD");
 		return SymmetricEncrypt.decryptStr(sysParam.getParamValue());
 	}
+	/**
+	 * 项目文件上传地址
+	 * @return
+	 */
+	public String getProjectUploadAddress() {
+		SysParamPo sysParam = sysParamDataSupportService.getByParamKey("SYS_PROJECT_FILE_BASE");
+		return sysParam.getParamValue();
+	}
 }

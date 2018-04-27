@@ -12,13 +12,9 @@ public class ListingCheckParam {
 	 */
 	private Integer expireDateChangeStyle;
 	/**
-	 * 是否可以多次放款
-	 */
-	private Integer multipleRelease;
-	/**
 	 * 最多放款次数
 	 */
-	private Integer maxReleaseNum;
+	private Integer releaseNum;
 	
 	private Integer operatorId;
 	private String operatorName;
@@ -41,18 +37,6 @@ public class ListingCheckParam {
 	public void setExpireDateChangeStyle(Integer expireDateChangeStyle) {
 		this.expireDateChangeStyle = expireDateChangeStyle;
 	}
-	public Integer getMultipleRelease() {
-		return multipleRelease;
-	}
-	public void setMultipleRelease(Integer multipleRelease) {
-		this.multipleRelease = multipleRelease;
-	}
-	public Integer getMaxReleaseNum() {
-		return maxReleaseNum;
-	}
-	public void setMaxReleaseNum(Integer maxReleaseNum) {
-		this.maxReleaseNum = maxReleaseNum;
-	}
 	public Integer getOperatorId() {
 		return operatorId;
 	}
@@ -70,6 +54,12 @@ public class ListingCheckParam {
 	}
 	public void setAuditRemark(String auditRemark) {
 		this.auditRemark = auditRemark;
+	}
+	public Integer getReleaseNum() {
+		return releaseNum;
+	}
+	public void setReleaseNum(Integer releaseNum) {
+		this.releaseNum = releaseNum;
 	}
 	
 }

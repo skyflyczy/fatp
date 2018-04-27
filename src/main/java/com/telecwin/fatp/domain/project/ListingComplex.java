@@ -128,12 +128,12 @@ public class ListingComplex {
 	 */
 	private Integer repayTypeId;
 	/**
-	 * 项目起息日(计划迁移至发行表)
+	 * 项目起息日
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date valueDate;
 	/**
-	 * 项目到期日(计划迁移至发行表)
+	 * 项目到期日
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")  
 	private java.util.Date expireDate;
@@ -421,13 +421,9 @@ public class ListingComplex {
 	private Integer settleInvestMonth;
 	private List<ListingSaleagent> projectSaleagent;
 	/**
-	 * 是否可以多次放款
-	 */
-	private Integer multipleRelease;
-	/**
 	 * 最多放款次数
 	 */
-	private Integer maxReleaseNum;
+	private Integer releaseNum;
 	
 	public Integer getId() {
 		return id;
@@ -1250,17 +1246,12 @@ public class ListingComplex {
 		if(this.investSettleTypeId == null)
 			return null;
 		return SettleTypeDesc.getDesc(this.investSettleTypeId);
+	}
+	public Integer getReleaseNum() {
+		return releaseNum;
+	}
+	public void setReleaseNum(Integer releaseNum) {
+		this.releaseNum = releaseNum;
 	}	
-	public Integer getMultipleRelease() {
-		return multipleRelease;
-	}
-	public void setMultipleRelease(Integer multipleRelease) {
-		this.multipleRelease = multipleRelease;
-	}
-	public Integer getMaxReleaseNum() {
-		return maxReleaseNum;
-	}
-	public void setMaxReleaseNum(Integer maxReleaseNum) {
-		this.maxReleaseNum = maxReleaseNum;
-	}
+	
 }
