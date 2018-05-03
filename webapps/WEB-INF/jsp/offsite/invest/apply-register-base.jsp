@@ -6,7 +6,7 @@
 <div class="bjui-pageContent">
 <form id="projectupate" data-loadingmask="true" action="<%=request.getContextPath()%>/offsite/invest/saveapply.do" data-toggle="validate" data-reload="true" data-callback="applyCallback">
 	<input type="hidden" value="${project.projectId }" name="projectId" id="projectId"/>
-	<input type="hidden" value="${apply.applyGuid }" name="applyGuid"/>
+	<input type="hidden" value="${project.applyGuid }" name="applyGuid"/>
 	<input type="hidden" id="submit" name="submit" value="0">
 	 <table class="table table-condensed table-noborder table-hover">
 	 	<thead></thead>
@@ -102,11 +102,11 @@
 	 		<tr>
 				<td>
 					<label class="control-label x140">募集总金额：</label> 
-					<span id="totalMoneyShow"><c:choose><c:when test="${empty apply.bizimportFileSummaryVo }">--</c:when><c:otherwise><fmt:formatNumber value="${apply.bizimportFileSummaryVo.totalMoney }" pattern="#,#00.00"/> 元</c:otherwise></c:choose></span>
+					<span id="totalMoneyShow"><c:choose><c:when test="${empty summary }">--</c:when><c:otherwise><fmt:formatNumber value="${summary.totalMoney }" pattern="#,#00.00"/> 元</c:otherwise></c:choose></span>
 				</td>
 				<td>
 					<label class="control-label x140">登记数据条数：</label> 
-					<span id="totalNumShow"><c:choose><c:when test="${empty apply.bizimportFileSummaryVo }">--</c:when><c:otherwise>${apply.bizimportFileSummaryVo.totalNum } 条</c:otherwise></c:choose></span>
+					<span id="totalNumShow"><c:choose><c:when test="${empty summary }">--</c:when><c:otherwise>${summary.totalNum } 条</c:otherwise></c:choose></span>
 				</td>
 				<td>
 				</td>
@@ -114,21 +114,21 @@
 			<tr>
 				<td colspan="3">
 					<label class="control-label x140">登记投资总人数：</label> 
-					<span id="buyNumShow"><c:choose><c:when test="${empty apply.bizimportFileSummaryVo }">--</c:when><c:otherwise>${apply.bizimportFileSummaryVo.buyerNum } 人</c:otherwise></c:choose></span>
-					<c:if test="${apply.bizimportFileSummaryVo.totalMoney>project.projectMoney }">
-					&nbsp;&nbsp;&nbsp;&nbsp;<span id='warntip' class='red'>预计将出现<fmt:formatNumber value="${apply.bizimportFileSummaryVo.totalMoney-project.projectMoney }" pattern="#,#00.00"/> 元的超募，系统按交易时间先后顺序进行确权，超募部分不会确权。</span>
+					<span id="buyNumShow"><c:choose><c:when test="${empty summary }">--</c:when><c:otherwise>${summary.buyerNum } 人</c:otherwise></c:choose></span>
+					<c:if test="${summary.totalMoney>project.projectMoney }">
+					&nbsp;&nbsp;&nbsp;&nbsp;<span id='warntip' class='red'>预计将出现<fmt:formatNumber value="${summary.totalMoney-project.projectMoney }" pattern="#,#00.00"/> 元的超募，系统按交易时间先后顺序进行确权，超募部分不会确权。</span>
 					</c:if>
 				</td>
 			</tr>
-			<tr id="errortip" <c:if test="${empty apply.bizimportFileSummaryVo||tradeImportResult.overBuyTime==0&&tradeImportResult.overInvestLimit==0&&tradeImportResult.lessBuy==0 && tradeImportResult.notEqAppend==0}">style="display:none"</c:if>>
+			<tr id="errortip" <c:if test="${empty summary || investRecordsResult.overBuyTime == 0 && investRecordsResult.overInvestLimit==0 && investRecordsResult.lessBuy==0 && investRecordsResult.notEqAppend==0}">style="display:none"</c:if>>
 				<td colspan="3">
 				<i class="fa fa-exclamation-triangle text-danger"></i>以下信息与挂牌信息不符，可能会导致登记失败，请再次确认
 				</td>
 			</tr>
-			<tr id="duplicateTr" <c:if test="${tradeImportResult.getDuplicateMapSize()==0}">style="display:none"</c:if>>
+			<tr id="duplicateTr" <c:if test="${investRecordsResult.getDuplicateMapSize()==0}">style="display:none"</c:if>>
 				<td colspan="3">
 				<label class="control-label x140">重复数据：</label>
-				<c:forEach items="${tradeImportResult.duplicateMap}" var="m">
+				<c:forEach items="${investRecordsResult.duplicateMap}" var="m">
 				<span id="overBuyTime">第${m.value}条数据重复</span>
 				</c:forEach>
 				</td>

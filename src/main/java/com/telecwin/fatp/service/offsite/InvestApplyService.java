@@ -1,6 +1,7 @@
 package com.telecwin.fatp.service.offsite;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,6 @@ import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.offsite.BizimportTradeDetail;
 import com.telecwin.fatp.domain.offsite.InvestApply;
 import com.telecwin.fatp.domain.offsite.InvestRecordsResult;
-import com.telecwin.fatp.domain.project.ListingComplex;
 import com.telecwin.fatp.enums.project.ListingStatusDesc;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
@@ -50,11 +50,16 @@ public class InvestApplyService {
 	}
 	/**
 	 * 组装上传的投资明细
-	 * @param listing
+	 * @param buyTimeStart
+	 * @param buyTimeEnd
+	 * @param investAmountMax
+	 * @param investAmountMin
+	 * @param investAmountAppend
 	 * @param list
 	 * @return
 	 */
-	public InvestRecordsResult assumInvestRecords(ListingComplex listing,List<BizimportTradeDetail> list){
+	public InvestRecordsResult assumInvestRecords(Date buyTimeStart,Date buyTimeEnd,BigDecimal investAmountMax,
+			BigDecimal investAmountMin, BigDecimal investAmountAppend,List<BizimportTradeDetail> list){
 		BigDecimal totalMoney = BigDecimal.ZERO;
 		Set<String> idNumberSet = new HashSet<String>();
 		Map<String, Integer> duplicateMap = new HashMap<String, Integer>();
@@ -63,16 +68,16 @@ public class InvestApplyService {
 			BizimportTradeDetail detail = list.get(i);
 			totalMoney = totalMoney.add(detail.getTradeMoney());
 			idNumberSet.add(detail.getIdNumber() + "_" + detail.getIdTypeId());
-			if(detail.getTradeTime().before(listing.getBuyTimeStart()) || detail.getTradeTime().after(listing.getBuyTimeEnd())) {
+			if(detail.getTradeTime().before(buyTimeStart) || detail.getTradeTime().after(buyTimeEnd)) {
 				result.setOverBuyTime(result.getOverBuyTime()+1);
 			}
-			if(detail.getTradeMoney().compareTo(listing.getInvestAmountMax()) > 0) {
+			if(detail.getTradeMoney().compareTo(investAmountMax) > 0) {
 				result.setOverInvestLimit(result.getOverInvestLimit()+1);
 			}
-			if(detail.getTradeMoney().compareTo(listing.getInvestAmountMin()) < 0) {
+			if(detail.getTradeMoney().compareTo(investAmountMin) < 0) {
 				result.setLessBuy(result.getLessBuy()+1);
 			}
-			if(detail.getTradeMoney().subtract(listing.getInvestAmountMin()).divideAndRemainder(listing.getInvestAmountAppend())[1].compareTo(BigDecimal.ZERO) !=0){
+			if(detail.getTradeMoney().subtract(investAmountMin).divideAndRemainder(investAmountAppend)[1].compareTo(BigDecimal.ZERO) !=0){
 				result.setNotEqAppend(result.getNotEqAppend() + 1);
 			}
 			String key = getJudgeSameInvestRecordsKey(detail);

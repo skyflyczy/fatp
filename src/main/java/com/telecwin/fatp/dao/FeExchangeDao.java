@@ -7,10 +7,7 @@ import com.huajin.baymax.db.annotation.MyBatisDao;
 import com.telecwin.fatp.domain.FeExchange;
 
 /**
- * 
  * FeExchange
- * @author auto-generator
- * 2015-10-09 23:09:05
  */
 @MyBatisDao
 public interface FeExchangeDao {

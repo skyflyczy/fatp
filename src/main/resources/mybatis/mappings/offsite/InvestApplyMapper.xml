@@ -8,6 +8,7 @@
 	    		listing_base.ProjectGuid projectGuid,
 	    		listing_base.ExchangeId exchangeId,
 				listing_base.ProjectFullName projectFullName,
+				listing_base.ProjectName projectName,
 				listing_base.ProjectMoney projectMoney,
 				listing_base.ProjectStatus projectStatus,
 				listing_base.ProjectCode projectCode,
@@ -25,7 +26,7 @@
 				IFNULL(bizimport_summary.submitApplyNum,0) applyNum ,
 				
 				bizimport_apply.ApplyStatus applyStatus,
-				bizimport_apply.ApplyStatus ApplyGuid,
+				bizimport_apply.ApplyStatus applyGuid,
 				
 				uc_user.userName loanUserName 
 				

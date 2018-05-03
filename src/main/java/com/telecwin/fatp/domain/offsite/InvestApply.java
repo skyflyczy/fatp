@@ -23,6 +23,7 @@ public class InvestApply {
      * 项目全称
      */
     private String projectFullName;
+    private String projectName;
     private BigDecimal projectMoney;
     /**
      * 放款次数
@@ -43,7 +44,7 @@ public class InvestApply {
     /**
      * 申请Guid
      */
-    private String ApplyGuid;
+    private String applyGuid;
     private String loanUserName;
     private Integer projectStatus;
     
@@ -124,10 +125,10 @@ public class InvestApply {
 		this.applyStatus = applyStatus;
 	}
 	public String getApplyGuid() {
-		return ApplyGuid;
+		return applyGuid;
 	}
 	public void setApplyGuid(String applyGuid) {
-		ApplyGuid = applyGuid;
+		this.applyGuid = applyGuid;
 	}
 	public String getLoanUserName() {
 		return loanUserName;
@@ -189,4 +190,11 @@ public class InvestApply {
 	public void setInvestAmountAppend(java.math.BigDecimal investAmountAppend) {
 		this.investAmountAppend = investAmountAppend;
 	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	
 }

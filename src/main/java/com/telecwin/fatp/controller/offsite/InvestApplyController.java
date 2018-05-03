@@ -28,8 +28,12 @@ import com.telecwin.fatp.enums.project.ListingStatusDesc;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.interceptor.FlashUpload;
+import com.telecwin.fatp.po.GlobalFilePo;
+import com.telecwin.fatp.po.offsite.BizimportSummaryPo;
+import com.telecwin.fatp.service.GlobalFileService;
 import com.telecwin.fatp.service.ImportFileService;
 import com.telecwin.fatp.service.offsite.InvestApplyService;
+import com.telecwin.fatp.service.offsite.BizimportSummaryService;
 import com.telecwin.fatp.service.project.ListingService;
 import com.telecwin.fatp.util.Constant;
 import com.telecwin.fatp.util.SessionUtil;
@@ -51,6 +55,10 @@ public class InvestApplyController extends BaseController{
 	private ListingService listingService;
 	@Autowired
 	private ImportFileService importFileService;
+	@Autowired
+	private BizimportSummaryService bizimportSummaryService;
+	@Autowired
+	private GlobalFileService globalFileService;
 	/**
 	 * 可登记列表
 	 * @return
@@ -90,6 +98,22 @@ public class InvestApplyController extends BaseController{
 		if(!canApply) {
 			return resultError("此挂牌产品状态不正确，不能进行投资明细登记。");
 		}
+		try {
+			//如果有申请登记没有提交审核，则拿到次申请登记进行编辑
+			if(StringUtils.isNotBlank(apply.getApplyGuid())) {
+				BizimportSummaryPo summary = bizimportSummaryService.getSummaryByApplyGuid(apply.getApplyGuid());
+				if(summary != null) {
+					request().setAttribute("summary", summary);
+					GlobalFilePo golbalFile = globalFileService.getGlobalFileById(summary.getGlobalFileId());
+					request().setAttribute("golbalFile", golbalFile);
+					List<BizimportTradeDetail> list = importFileService.readInvestRecordsForFile(golbalFile.getFilePath(), apply.getProjectName(), apply.getProjectCode(), super.getMemberId(), super.getExchangeId());
+					InvestRecordsResult result = investApplyService.assumInvestRecords(apply.getBuyTimeStart(),apply.getBuyTimeEnd(),apply.getInvestAmountMax(),apply.getInvestAmountMin(),apply.getInvestAmountAppend(), list);
+					request().setAttribute("investRecordsResult", result);
+				}
+			}
+		} catch (Exception e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "apply_register", e));
+		}
 		request().setAttribute("jsessionid", SessionUtil.getEncryptSessionId(request(), response()));
 		request().setAttribute("project", apply);
 		request().setAttribute("valueDate", apply.getValueDate());
@@ -128,12 +152,13 @@ public class InvestApplyController extends BaseController{
 			String fileName = fileNameArray[1];
 			//解析投资记录
 			List<BizimportTradeDetail> list = importFileService.readInvestRecordsForFile(importRecordsPath + File.separator + fileName, listing.getProjectName(), listing.getProjectCode(), super.getMemberId(), super.getExchangeId());
-			InvestRecordsResult result = investApplyService.assumInvestRecords(listing, list);
+			InvestRecordsResult result = investApplyService.assumInvestRecords(listing.getBuyTimeStart(),listing.getBuyTimeEnd(),listing.getInvestAmountMax(),listing.getInvestAmountMin(),listing.getInvestAmountAppend(),list);
 			JSONObject retJson = resultSuccess();
 			retJson.put("originalFilename", originalFilename);
 			retJson.put("fileName", fileName);
 			//TODO 访问地址需要
 			retJson.put("accessPath", "");
+			retJson.put("filePath", importRecordsPath);
 			retJson.put("totalNum", result.getTotalNum());
 			retJson.put("totalMoney", result.getTotalMoney());
 			retJson.put("totalInvesters", result.getTotalInvesters());
@@ -142,7 +167,7 @@ public class InvestApplyController extends BaseController{
 			retJson.put("lessBuy", result.getLessBuy());
 			retJson.put("notEqAppend", result.getNotEqAppend());
 			retJson.put("duplicate", result.getDuplicateMap().values());
-			return retJson;
+			return retJson.toJSONString();
 		} catch (FatpException e) {
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "uploadInvestRecords", e));
 			return resultError(StringUtils.isBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
@@ -150,6 +175,18 @@ public class InvestApplyController extends BaseController{
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "uploadInvestRecords", e));
 			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
+	}
+	
+	public Object editBizimportApply(String applyGuid, int projectId,String excelDataFile,String excelFilePath,int submit,String valueDate) {
+		try {
+			if(StringUtils.isBlank(excelDataFile)) {
+				return resultError("请上传投资明细文件");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 	
 	private void delSearchStatus(Map<String,Object> map,ListingStatusDesc[] statusArray){
