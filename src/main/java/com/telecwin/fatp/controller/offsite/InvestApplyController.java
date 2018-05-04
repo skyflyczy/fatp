@@ -19,21 +19,24 @@ import com.alibaba.fastjson.JSONObject;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
 import com.telecwin.fatp.controller.BaseController;
+import com.telecwin.fatp.controller.param.InvestRecordsParam;
+import com.telecwin.fatp.domain.GlobalFile;
 import com.telecwin.fatp.domain.PageData;
 import com.telecwin.fatp.domain.offsite.BizimportTradeDetail;
 import com.telecwin.fatp.domain.offsite.InvestApply;
 import com.telecwin.fatp.domain.offsite.InvestRecordsResult;
 import com.telecwin.fatp.domain.project.ListingComplex;
+import com.telecwin.fatp.enums.offsite.ApplyStatus;
 import com.telecwin.fatp.enums.project.ListingStatusDesc;
 import com.telecwin.fatp.exception.ErrorCode;
 import com.telecwin.fatp.exception.FatpException;
 import com.telecwin.fatp.interceptor.FlashUpload;
-import com.telecwin.fatp.po.GlobalFilePo;
 import com.telecwin.fatp.po.offsite.BizimportSummaryPo;
+import com.telecwin.fatp.po.user.MemberOperatorPo;
 import com.telecwin.fatp.service.GlobalFileService;
 import com.telecwin.fatp.service.ImportFileService;
-import com.telecwin.fatp.service.offsite.InvestApplyService;
 import com.telecwin.fatp.service.offsite.BizimportSummaryService;
+import com.telecwin.fatp.service.offsite.InvestApplyService;
 import com.telecwin.fatp.service.project.ListingService;
 import com.telecwin.fatp.util.Constant;
 import com.telecwin.fatp.util.SessionUtil;
@@ -104,8 +107,8 @@ public class InvestApplyController extends BaseController{
 				BizimportSummaryPo summary = bizimportSummaryService.getSummaryByApplyGuid(apply.getApplyGuid());
 				if(summary != null) {
 					request().setAttribute("summary", summary);
-					GlobalFilePo golbalFile = globalFileService.getGlobalFileById(summary.getGlobalFileId());
-					request().setAttribute("golbalFile", golbalFile);
+					GlobalFile golbalFile = globalFileService.getGlobalFileById(summary.getGlobalFileId());
+					request().setAttribute("globalFile", golbalFile);
 					List<BizimportTradeDetail> list = importFileService.readInvestRecordsForFile(golbalFile.getFilePath(), apply.getProjectName(), apply.getProjectCode(), super.getMemberId(), super.getExchangeId());
 					InvestRecordsResult result = investApplyService.assumInvestRecords(apply.getBuyTimeStart(),apply.getBuyTimeEnd(),apply.getInvestAmountMax(),apply.getInvestAmountMin(),apply.getInvestAmountAppend(), list);
 					request().setAttribute("investRecordsResult", result);
@@ -149,16 +152,16 @@ public class InvestApplyController extends BaseController{
 			String fileNames = upload(fileMap, importRecordsPath);
 			String[] fileNameArray = fileNames.split(":");
 			String originalFilename = fileNameArray[0];
-			String fileName = fileNameArray[1];
+			String linkFileName = fileNameArray[1];
 			//解析投资记录
-			List<BizimportTradeDetail> list = importFileService.readInvestRecordsForFile(importRecordsPath + File.separator + fileName, listing.getProjectName(), listing.getProjectCode(), super.getMemberId(), super.getExchangeId());
+			List<BizimportTradeDetail> list = importFileService.readInvestRecordsForFile(importRecordsPath + File.separator + linkFileName, listing.getProjectName(), listing.getProjectCode(), super.getMemberId(), super.getExchangeId());
 			InvestRecordsResult result = investApplyService.assumInvestRecords(listing.getBuyTimeStart(),listing.getBuyTimeEnd(),listing.getInvestAmountMax(),listing.getInvestAmountMin(),listing.getInvestAmountAppend(),list);
 			JSONObject retJson = resultSuccess();
 			retJson.put("originalFilename", originalFilename);
-			retJson.put("fileName", fileName);
-			//TODO 访问地址需要
+			retJson.put("linkFileName", linkFileName);
+			//TODO 需要访问地址
 			retJson.put("accessPath", "");
-			retJson.put("filePath", importRecordsPath);
+			retJson.put("excelFilePath", importRecordsPath);
 			retJson.put("totalNum", result.getTotalNum());
 			retJson.put("totalMoney", result.getTotalMoney());
 			retJson.put("totalInvesters", result.getTotalInvesters());
@@ -177,16 +180,28 @@ public class InvestApplyController extends BaseController{
 		}
 	}
 	
-	public Object editBizimportApply(String applyGuid, int projectId,String excelDataFile,String excelFilePath,int submit,String valueDate) {
+	public Object editBizimportApply(InvestRecordsParam param) {
 		try {
-			if(StringUtils.isBlank(excelDataFile)) {
+			if(StringUtils.isBlank(param.getExcelFileName()) || StringUtils.isBlank(param.getExcelFilePath()) ) {
 				return resultError("请上传投资明细文件");
 			}
-			
+			MemberOperatorPo operator = super.getMemberOperator();
+			ApplyStatus status = param.getSubmit() == 0 ? ApplyStatus.待提交 : ApplyStatus.登记中;
+			if(StringUtils.isNotBlank(param.getApplyGuid())) {
+				//更新
+				investApplyService.updateInvestRecords(param, operator.getMemberId(), operator.getExchangeId(), operator.getId(), operator.getRealName(), status);
+			} else {
+				//新增
+				investApplyService.addInvestRecords(param, operator.getMemberId(), operator.getExchangeId(), operator.getId(), operator.getRealName(),status);
+			}
+			return resultSuccess();
+		} catch (FatpException e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "editBizimportApply", e));
+			return resultError(StringUtils.isBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
 		} catch (Exception e) {
-			// TODO: handle exception
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "editBizimportApply", e));
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
-		return null;
 	}
 	
 	private void delSearchStatus(Map<String,Object> map,ListingStatusDesc[] statusArray){

@@ -8,6 +8,8 @@
 	<input type="hidden" value="${project.projectId }" name="projectId" id="projectId"/>
 	<input type="hidden" value="${project.applyGuid }" name="applyGuid"/>
 	<input type="hidden" id="submit" name="submit" value="0">
+	<input type="hidden" id="excelFileName" name="excelFileName" <c:if test="${not empty globalFile }">value="${globalFile.originalFileName }:${globalFile.linkFileName }"</c:if>>
+	<input type="hidden" id="excelFilePath" name="excelFilePath" <c:if test="${not empty globalFile }">value="${globalFile.excelFilePath }"</c:if>>
 	 <table class="table table-condensed table-noborder table-hover">
 	 	<thead></thead>
 	 	<tbody>
@@ -72,8 +74,8 @@
 			                    <td><span class="red">*</span>投资明细文件</td>
 			                    <td style="text-align:left;">同一产品的投资明细数据合并在一个文件中上传，支持excel文件格式(xlsx/xls)，大小控制在10MB以内。<a href="<%=request.getContextPath()%>/offsite/invest/downinvesttemplate.do?fileType=9">下载：投资明细模板</a></td>
 			                    <td style="text-align:left;" id="div_1">
-				                 	<c:if test="${not empty excelDataFile }">
-				                 		<a target="_blank" class="label-tag" style="position:relative;display:block;" href="${accessPath}f${excelDataFile.fileGuid},${excelDataFile.linkFileName}">${excelDataFile.originalFileName}<button data-url="/offsite/invest/delfile.do" data-data="did=div_1&fileName=${excelDataFile.linkFileName}&id=${excelDataFile.fileGuid}&projectId=${project.projectId}" data-toggle="doajax" class="close" data-confirm-msg="确定删除该文件吗？" data-callback="afterDelFile">×</button></a>
+				                 	<c:if test="${not empty globalFile }">
+				                 		<a target="_blank" class="label-tag" style="position:relative;display:block;" href="${accessPath}f${globalFile.fileGuid},${globalFile.linkFileName}">${globalFile.originalFileName}<button data-url="/offsite/invest/delfile.do" data-data="did=div_1&fileName=${globalFile.linkFileName}&id=${globalFile.fileGuid}&projectId=${project.projectId}" data-toggle="doajax" class="close" data-confirm-msg="确定删除该文件吗？" data-callback="afterDelFile">×</button></a>
 				                 	</c:if>
 			                     </td>
 			                    <td>
@@ -87,7 +89,7 @@
 				                           data-button-text="上传"
 				                           data-width="50">
 				                           </div>
-				                    <input type="hidden" name="excelDataFile" id="excelDataFile" class="pic-name" <c:if test="${not empty excelDataFile }">value="${excelDataFile.originalFileName }:${excelDataFile.linkFileName }"</c:if>>
+				                    <input type="hidden" name="excelDataFile" id="excelDataFile" class="pic-name" <c:if test="${not empty globalFile }">value="${globalFile.originalFileName }:${globalFile.linkFileName }"</c:if>>
 			                    </td>
 			                </tr>
 			            </tbody>
@@ -175,12 +177,9 @@ function uploadSuccess(file, data, $upload) {
 	var json = $.parseJSON(data);
     if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
     	var showFileName = json.originalFilename;
-    	var linkFileName = json.fileName;
-    	var obj = $upload.next();
-    	if (!window.FileReader && $.hasFlash.v >= 9){
-    		obj =  $('#'+$upload.attr('id')).parent().next();	
-		}
-    	obj.val(json.fileName);
+    	var linkFileName = json.linkFileName;
+    	$("#excelFileName").val(showFileName+":"+linkFileName);
+    	$("#excelFilePath").val(json.excelFilePath);
     	$("#div_1").html('<a target="_blank" class="label-tag" style="position:relative;display:block;" href="'+json.accessPath+linkFileName+'">'+showFileName+'<button data-url="/offsite/invest/delfile.do" data-data="projectId='+${project.projectId}+'&did=div_1&fileName='+linkFileName+'" data-callback="afterDelFile" data-toggle="doajax" class="close" data-confirm-msg="确定删除该文件吗？" data-callback="afterDelFile">×</button></a>');
     	showStaticValue(json);
     }else {

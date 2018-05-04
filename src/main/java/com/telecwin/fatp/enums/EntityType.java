@@ -6,7 +6,7 @@ public enum EntityType {
 	挂牌(2),
 	发行人(3),
 	投资者(4),
-	场外回传申请(5);
+	投资明细登记(5);
 
 	public int value;
 

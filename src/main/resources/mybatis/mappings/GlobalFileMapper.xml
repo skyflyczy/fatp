@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.telecwin.fatp.dao.GlobalFileDao">
-	<select id="getGlobalFileById" parameterType="java.lang.Integer" resultType="com.telecwin.fatp.po.GlobalFilePo">
+	<select id="getGlobalFileById" parameterType="java.lang.Integer" resultType="com.telecwin.fatp.domain.GlobalFile">
 		select * from global_file where id = #{id} 
-    </select>	
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO global_file (
+        	Id ,
+        	FileGUID ,
+        	ContentType ,
+        	FilePath ,
+        	OriginalFileName ,
+        	DisplayName ,
+        	CreateOperatorId ,
+        	CreateUserId ,
+        	CreateTime ,
+        	UpdateTime 
+        ) VALUES (
+        	#{id} ,
+        	#{fileGuid} ,
+        	#{contentType} ,
+        	#{filePath} ,
+        	#{originalFileName} ,
+        	#{displayName} ,
+        	#{createOperatorId} ,
+        	#{createUserId} ,
+        	now() ,
+        	now() 
+        )
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	<delete id="deleteFileById" parameterType="java.lang.Integer">
+        DELETE FROM global_file WHERE Id = #{id} 
+    </delete>	
 </mapper>
 

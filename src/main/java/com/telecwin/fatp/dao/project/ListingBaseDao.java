@@ -41,5 +41,7 @@ public interface ListingBaseDao {
 	
 	ListingBasePo findById(Integer id);
 	
+	ListingBasePo findByIdForUpdate(Integer id);
+	
 	ListingBasePo findByGuid(String projectGuid);
 }

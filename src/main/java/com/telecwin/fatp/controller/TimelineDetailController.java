@@ -40,4 +40,10 @@ public class TimelineDetailController extends BaseController{
 		request().setAttribute("list", list);
 		return viewPath;
 	}
+	@RequestMapping("/investrecords")
+	public String getInvestRecords(Integer entityId) {
+		List<TimelineDetailPo> list = timelineDetailService.getListByEntityType(EntityType.投资明细登记.value,entityId);
+		request().setAttribute("list", list);
+		return viewPath;
+	}
 }

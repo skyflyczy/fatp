@@ -113,6 +113,9 @@ public class ListingDataSupportService {
 	public ListingBasePo findBasePoById(Integer id) {
 		return listingBaseDao.findById(id);
 	}
+	public ListingBasePo findBaseByIdForUpdate(Integer id) {
+		return listingBaseDao.findById(id);
+	}
 	public ListingBasePo findBasePoByGuid(String projectGuid) {
 		return listingBaseDao.findByGuid(projectGuid);
 	}

@@ -298,6 +298,12 @@
         WHERE 
 	        Id = #{id} 
 	</select>
+	<select id="findByIdForUpdate" parameterType="java.lang.Integer" resultType="com.telecwin.fatp.po.project.ListingBasePo">
+    	SELECT *
+	    FROM listing_base 
+        WHERE 
+	        Id = #{id} for update 
+	</select>
 	<select id="findByGuid" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.project.ListingBasePo">
     	SELECT *
 	    FROM listing_base 

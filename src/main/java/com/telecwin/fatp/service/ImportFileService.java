@@ -65,21 +65,19 @@ public class ImportFileService {
 			BizimportTradeDetail detail = new BizimportTradeDetail();
 			detail.setApplyMemberId(memberId);
 			detail.setTradeTime(DateUtil.autoParseDate(strArray[0]));
-			detail.setPeriodName(strArray[1]);
-			detail.setPeriodCode(strArray[2]);
-			detail.setTradeMoney(BigDecimalUtil.convertDefaultZero(strArray[3]));
-			detail.setUserRealName(strArray[4]);
-			IdTypeDesc idType = getIdTypeDesc(strArray[5]);
+			detail.setTradeMoney(BigDecimalUtil.convertDefaultZero(strArray[1]));
+			detail.setUserRealName(strArray[2]);
+			IdTypeDesc idType = getIdTypeDesc(strArray[3]);
 			detail.setIdTypeId(idType == null ? null : idType.getIdType());
-			detail.setIdNumber(strArray[6]);
-			detail.setPhoneNumber(strArray[7]);
-			detail.setPartnerTradeSeq(StringUtils.isBlank(strArray[8])? null : strArray[8]);
-			if(strArray.length >= 10) {
-				detail.setProjectCode(strArray[9]);
-				detail.setProjectName(strArray[10]);
+			detail.setIdNumber(strArray[4]);
+			detail.setPhoneNumber(strArray[5]);
+			detail.setPartnerTradeSeq(StringUtils.isBlank(strArray[6])? null : strArray[6]);
+			if(strArray.length >= 8) {
+				detail.setProjectCode(strArray[7]);
+				detail.setProjectName(strArray[8]);
 			}
-			if(strArray.length == 12) {
-				detail.setUserName(StringUtils.isBlank(strArray[11])?null:strArray[11]);
+			if(strArray.length == 10) {
+				detail.setUserName(StringUtils.isBlank(strArray[9])?null:strArray[9]);
 			}
 			detail.setExchangeId(exchangeId);
 			if(detail.getIdTypeId() == null 

@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.telecwin.fatp.dao.offsite.BizimportTradeDetailDao">
+	<insert id="insertBatch">
+        INSERT INTO bizimport_trade_detail (
+        	BizImportApplyId ,
+        	BizImportFileSummaryId ,
+        	PartnerTradeSeq ,
+        	ProjectId ,
+        	ApplyMemberId ,
+        	TradeTime ,
+        	TradeMoney ,
+        	UserId ,
+        	IsNewUser ,
+        	UserCode ,
+        	PhoneNumber ,
+        	RegisterTime ,
+        	IdTypeId ,
+        	IdNumber ,
+        	UserRealName ,
+        	OrderApplyId ,
+        	ExchangeId ,
+        	CreateTime ,
+        	UpdateTime ,
+        	UserName 
+        ) VALUES
+        <foreach collection="list" item="obj" separator=",">
+	        (
+	        	#{obj.bizImportApplyId} ,
+	        	#{obj.bizImportFileSummaryId} ,
+	        	#{obj.partnerTradeSeq} ,
+	        	#{obj.projectId} ,
+	        	#{obj.applyMemberId} ,
+	        	#{obj.tradeTime} ,
+	        	#{obj.tradeMoney} ,
+	        	#{obj.userId} ,
+	        	#{obj.isNewUser} ,
+	        	#{obj.userCode} ,
+	        	#{obj.phoneNumber} ,
+	        	#{obj.registerTime} ,
+	        	#{obj.idTypeId} ,
+	        	#{obj.idNumber} ,
+	        	#{obj.userRealName} ,
+	        	#{obj.orderApplyId} ,
+	        	#{obj.exchangeId} ,
+	        	now() ,
+	        	now() ,
+	        	#{obj.userName} 
+	        )
+        </foreach>
+	</insert>
+	<delete id="deleteByApplyId" parameterType="java.lang.Integer">
+		DELETE FROM bizimport_trade_detail WHERE BizImportApplyId = #{applyId}
+	</delete>
 </mapper>
 

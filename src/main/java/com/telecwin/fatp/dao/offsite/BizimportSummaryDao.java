@@ -13,5 +13,7 @@ public interface BizimportSummaryDao {
 	 */
 	public BizimportSummaryPo getSummaryByApplyGuid(String applyGuid);
 	
+	public int insert(BizimportSummaryPo po);
 	
+	public void deleteById(int id);
 }

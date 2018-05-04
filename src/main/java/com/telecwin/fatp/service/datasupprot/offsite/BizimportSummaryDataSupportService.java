@@ -15,4 +15,8 @@ public class BizimportSummaryDataSupportService {
 	public BizimportSummaryPo getSummaryByApplyGuid(String applyGuid){
 		return bizimportSummaryDao.getSummaryByApplyGuid(applyGuid);
 	}
+	
+	public void deleteById(int id) {
+		bizimportSummaryDao.deleteById(id);
+	}
 }

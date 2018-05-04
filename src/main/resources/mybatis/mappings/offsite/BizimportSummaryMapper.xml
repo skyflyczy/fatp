@@ -2,10 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.telecwin.fatp.dao.offsite.BizimportSummaryDao">
     <select id="getSummaryByApplyGuid" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.offsite.BizimportSummaryPo">
-    	SELECT bizimport_file_summary.*
-	    FROM bizimport_file_summary 
-	    JOIN bizimport_apply on (bizimport_apply.id = bizimport_file_summary.BizImportApplyId)
+    	SELECT bizimport_summary.*
+	    FROM bizimport_summary 
+	    JOIN bizimport_apply on (bizimport_apply.id = bizimport_summary.BizImportApplyId)
 		WHERE bizimport_apply.ApplyGuid = #{applyGuid}
     </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bizimport_summary (
+        	Id ,
+        	GlobalFileId ,
+        	BizImportApplyId ,
+        	StartDate ,
+        	EndDate ,
+        	TotalMoney ,
+        	SellerNum ,
+        	BuyerNum ,
+        	TotalNum ,
+        	CreateTime ,
+        	UpdateTime,
+        	TotalPrincipal,
+        	TotalPerson,
+        	PeriodNumber
+        ) VALUES (
+        	#{id} ,
+        	#{globalFileId} ,
+        	#{bizImportApplyId} ,
+        	#{startDate} ,
+        	#{endDate} ,
+        	#{totalMoney} ,
+        	#{sellerNum} ,
+        	#{buyerNum} ,
+        	#{totalNum} ,
+        	now() ,
+        	now() ,
+        	#{totalPrincipal} ,
+        	#{totalPerson} ,
+        	#{periodNumber}
+        )
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM bizimport_summary WHERE Id = #{id} 
+    </delete>
 </mapper>
 

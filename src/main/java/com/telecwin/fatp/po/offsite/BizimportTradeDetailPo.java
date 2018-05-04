@@ -37,21 +37,6 @@ public class BizimportTradeDetailPo {
 	 */
 	private java.util.Date tradeTime;
 	/**
-	 * 渠道项目分期名称
-	 */
-	private String periodName;
-
-	/**
-	 * 渠道分期代码
-	 */
-	private String periodCode;
-
-	/**
-	 * 项目分期id（对应于本系统）
-	 */
-	private Integer projectPeriodId;
-
-	/**
 	 * 交易金额
 	 */
 	private java.math.BigDecimal tradeMoney;
@@ -157,24 +142,6 @@ public class BizimportTradeDetailPo {
 	}
 	public void setTradeTime(java.util.Date tradeTime) {
 		this.tradeTime = tradeTime;
-	}
-	public String getPeriodName() {
-		return periodName;
-	}
-	public void setPeriodName(String periodName) {
-		this.periodName = periodName;
-	}
-	public String getPeriodCode() {
-		return periodCode;
-	}
-	public void setPeriodCode(String periodCode) {
-		this.periodCode = periodCode;
-	}
-	public Integer getProjectPeriodId() {
-		return projectPeriodId;
-	}
-	public void setProjectPeriodId(Integer projectPeriodId) {
-		this.projectPeriodId = projectPeriodId;
 	}
 	public java.math.BigDecimal getTradeMoney() {
 		return tradeMoney;
