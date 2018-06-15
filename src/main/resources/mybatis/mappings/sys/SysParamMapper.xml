@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysParamDao">
-    <select id="getByParamKey" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.sys.SysParamPo">
+<mapper namespace="com.fatp.dao.sys.SysParamDao">
+    <select id="getByParamKey" parameterType="java.lang.String" resultType="com.fatp.po.sys.SysParamPo">
     	SELECT *
 	    FROM sys_param 
 		WHERE
@@ -34,7 +34,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysParamPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysParamPo">
     	SELECT *
 	    FROM sys_param 
 		<include refid="where"/>

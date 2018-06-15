@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SystypeProjectDao">
+<mapper namespace="com.fatp.dao.sys.SystypeProjectDao">
 	<sql id="where">
 		<where>	      				
 	       <if test="@Ognl@isNotEmpty(id)">
@@ -27,7 +27,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SystypeProjectPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SystypeProjectPo">
     	SELECT *
 	    FROM systype_project 
 		<include refid="where"/>

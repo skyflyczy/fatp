@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysMenuDao">
+<mapper namespace="com.fatp.dao.sys.SysMenuDao">
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO sys_menu (
@@ -89,7 +89,7 @@
 		</foreach>
 	</delete>
     
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+    <select id="getById" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysMenuPo">
     <![CDATA[
     	SELECT *
 	    FROM sys_menu 
@@ -169,14 +169,14 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysMenuPo">
     	SELECT *
 	    FROM sys_menu 
 		<include refid="where"/>
 		order by ParentId ASC , ShowIndex ASC,Id ASC
     </select>
     
-    <select id="getUserMenus" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMenuPo">
+    <select id="getUserMenus" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysMenuPo">
    		SELECT DISTINCT sys_menu.* FROM sys_menu 
 		JOIN sys_member_rolemenu ON(sys_menu.Id=sys_member_rolemenu.MemberMenuId)
 		JOIN sys_member_operator_role ON(sys_member_rolemenu.MemberRoleId=sys_member_operator_role.MemberRoleId)

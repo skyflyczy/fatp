@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysBankDao">
+<mapper namespace="com.fatp.dao.sys.SysBankDao">
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO sys_bank (
@@ -41,7 +41,7 @@
 	        Id = #{id} 
     ]]>
 	</update>
-    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysBankPo">
+    <select id="getById" parameterType="int" resultType="com.fatp.po.sys.SysBankPo">
     	SELECT *
 	    FROM sys_bank 
         WHERE 
@@ -80,7 +80,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysBankPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysBankPo">
     	SELECT *
 	    FROM sys_bank 
 		<include refid="where"/>

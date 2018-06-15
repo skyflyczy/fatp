@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SystypeIndustryDao">
-    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SystypeIndustryPo">
+<mapper namespace="com.fatp.dao.sys.SystypeIndustryDao">
+    <select id="getById" parameterType="int" resultType="com.fatp.po.sys.SystypeIndustryPo">
     <![CDATA[
     	SELECT *
 	    FROM systype_industry 
@@ -27,7 +27,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SystypeIndustryPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SystypeIndustryPo">
     	SELECT *
 	    FROM systype_industry 
 		<include refid="where"/>

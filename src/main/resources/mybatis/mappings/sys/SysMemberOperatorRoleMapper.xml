@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysMemberOperatorRoleDao">
+<mapper namespace="com.fatp.dao.sys.SysMemberOperatorRoleDao">
     <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
     	INSERT INTO sys_member_operator_role (
         	Id ,
@@ -66,7 +66,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysMemberOperatorRolePo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysMemberOperatorRolePo">
     	SELECT *
 	    FROM sys_member_operator_role 
 		<include refid="where"/>

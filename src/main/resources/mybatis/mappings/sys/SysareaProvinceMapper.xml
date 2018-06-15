@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysareaProvinceDao">
-    <select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.sys.SysareaProvincePo">
+<mapper namespace="com.fatp.dao.sys.SysareaProvinceDao">
+    <select id="getById" parameterType="int" resultType="com.fatp.po.sys.SysareaProvincePo">
     <![CDATA[
     	SELECT *
 	    FROM sysarea_province 
@@ -33,7 +33,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SysareaProvincePo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysareaProvincePo">
     	SELECT * FROM sysarea_province 
 		<include refid="where"/>
 		

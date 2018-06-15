@@ -10,12 +10,12 @@ spring:
 mybatis: 
   mapperLocations:
   - classpath:mybatis/mappings/**/*.xml
-  typeAliasesPackage: com.telecwin.fatp
+  typeAliasesPackage: com.fatp
   configLocation: classpath:/mybatis/mybatis-config.xml 
     
 logging: 
   level: 
     root: info
     org.springframework.jndi: info
-    com.telecwin.fatp.interceptor: debug
+    com.fatp.interceptor: debug
   file: /data/Logs/fatp/springboot.log

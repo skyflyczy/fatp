@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.user.MemberOperateorLoginDao">
+<mapper namespace="com.fatp.dao.user.MemberOperateorLoginDao">
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO member_operateor_login (
@@ -145,7 +145,7 @@
 		</where>
 	</sql>
 
-    <select id="getLoginRecord" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperateorLoginPo">
+    <select id="getLoginRecord" parameterType="java.util.Map" resultType="com.fatp.po.user.MemberOperateorLoginPo">
     	SELECT *
 	    FROM member_operateor_login 
 		<include refid="where"/>

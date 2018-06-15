@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.TimelineDetailDao">
+<mapper namespace="com.fatp.dao.TimelineDetailDao">
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO timeline_detail (
             Id ,
@@ -32,7 +32,7 @@
         </selectKey>
     </insert>
     
-    <select id="getListByEntityType" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.TimelineDetailPo">
+    <select id="getListByEntityType" parameterType="java.util.Map" resultType="com.fatp.po.TimelineDetailPo">
     	SELECT *
 	    FROM timeline_detail where entityType = #{entityType} AND entityId = #{entityId} order by id ASC
     </select>

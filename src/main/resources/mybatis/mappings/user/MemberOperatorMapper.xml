@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.user.MemberOperatorDao">
+<mapper namespace="com.fatp.dao.user.MemberOperatorDao">
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO member_operator (
@@ -129,7 +129,7 @@
 		member_operator.gender
 	</sql>
 
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    <select id="getById" parameterType="java.util.Map" resultType="com.fatp.po.user.MemberOperatorPo">
     	SELECT
     	<include refid="field"/>
 	    FROM member_operator 
@@ -235,7 +235,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.user.MemberOperatorPo">
     	SELECT 
     	<include refid="field"/>
 	    FROM member_operator 
@@ -245,7 +245,7 @@
 			ORDER BY ${orderField} ${orderDirection}
 		</if>
     </select>
-    <select id="getSuperAdmin" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.MemberOperatorPo">
+    <select id="getSuperAdmin" parameterType="java.util.Map" resultType="com.fatp.po.user.MemberOperatorPo">
     	SELECT 
     	<include refid="field"/>
 	    FROM member_operator 

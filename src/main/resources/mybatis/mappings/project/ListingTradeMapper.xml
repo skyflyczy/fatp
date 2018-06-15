@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.project.ListingTradeDao">
+<mapper namespace="com.fatp.dao.project.ListingTradeDao">
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO listing_trade (
         	Id ,
-        	ProjectId ,
-        	InvestAmountMin ,
-        	InvestAmountMax ,
-        	InvestAmountAppend ,
+        	ListingInfoId ,
+        	MinInvestMoney ,
+        	MaxInvestMoney ,
         	InvestProfit ,
-        	PublishTime ,
-        	BuyTimeStart ,
-        	BuyTimeEnd ,
-        	GuaranteeMoney ,
-        	GuaranteeValueType ,
-        	PaySettleDay ,
-        	TransferType ,
-        	TradeType ,
-        	CanTransfer ,
-        	TransferAfter ,
-        	TransferLimit ,
         	CreateTime ,
         	CreateOperatorId ,
         	UpdateTime ,
@@ -27,169 +15,49 @@
         	VersionNo 
         ) VALUES (
         	#{id} ,
-        	#{projectId} ,
-        	#{investAmountMin} ,
-        	#{investAmountMax} ,
-        	#{investAmountAppend} ,
+        	#{listingInfoId} ,
+        	#{minInvestMoney} ,
+        	#{maxInvestMoney} ,
         	#{investProfit} ,
-        	#{publishTime} ,
-        	#{buyTimeStart} ,
-        	#{buyTimeEnd} ,
-        	#{guaranteeMoney} ,
-        	#{guaranteeValueType} ,
-        	#{paySettleDay} ,
-        	#{transferType} ,
-        	#{tradeType} ,
-        	#{canTransfer} ,
-        	#{transferAfter} ,
-        	#{transferLimit} ,
         	now() ,
         	#{createOperatorId} ,
         	now() ,
         	#{upateOperatorId} ,
-        	1 
+        	1  
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
             select LAST_INSERT_ID() as id
         </selectKey>
 	</insert>
-    
-	<update id="updateByVersion">
+	
+	<update id="update">
         UPDATE listing_trade SET
-	        InvestAmountMin = #{investAmountMin} ,
-	        InvestAmountMax = #{investAmountMax} ,
-	        InvestAmountAppend = #{investAmountAppend} ,
+	        MinInvestMoney = #{minInvestMoney} ,
+	        MaxInvestMoney = #{maxInvestMoney} ,
 	        InvestProfit = #{investProfit} ,
-	        PublishTime = #{publishTime} ,
-	        BuyTimeStart = #{buyTimeStart} ,
-	        BuyTimeEnd = #{buyTimeEnd} ,
-	        GuaranteeMoney = #{guaranteeMoney} ,
-	        GuaranteeValueType = #{guaranteeValueType} ,
-	        PaySettleDay = #{paySettleDay} ,
-	        TransferType = #{transferType} ,
-	        TradeType = #{tradeType} ,
-	        CanTransfer = #{canTransfer} ,
-	        TransferAfter = #{transferAfter} ,
-	        TransferLimit = #{transferLimit} ,
-	        UpdateTime = now() ,
+	        UpdateTime = #{updateTime} ,
 	        UpateOperatorId = #{upateOperatorId} ,
-	        VersionNo = VersionNo + 1 
+	        VersionNo = VersionNo + 1  
         WHERE 
-	        Id = #{id} AND VersionNo = #{versionNo} 
+	        Id = #{id} AND ListingInfoId = #{listingInfoId} 
 	</update>
 
-    <delete id="deleteByVersion" parameterType="java.util.Map">
-        DELETE FROM listing_trade WHERE
-        Id = #{id} AND VersionNo = #{versionNo}
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM listing_trade WHERE Id = #{id} 
     </delete>
     
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingTradePo">
-    	SELECT *
-	    FROM listing_trade 
-        WHERE 
-	        Id = #{id} 
-	</select>
-	
-	<sql id="where">
-		<where>	      				
-	       <if test="@Ognl@isNotEmpty(id)">
-				AND Id = #{id}
-			</if>
-	       <if test="@Ognl@isNotEmpty(projectId)">
-				AND ProjectId = #{projectId}
-			</if>
-	       <if test="@Ognl@isNotEmpty(investAmountMin)">
-				AND InvestAmountMin = #{investAmountMin}
-			</if>
-	       <if test="@Ognl@isNotEmpty(investAmountMax)">
-				AND InvestAmountMax = #{investAmountMax}
-			</if>
-	       <if test="@Ognl@isNotEmpty(investAmountAppend)">
-				AND InvestAmountAppend = #{investAmountAppend}
-			</if>
-	       <if test="@Ognl@isNotEmpty(investProfit)">
-				AND InvestProfit = #{investProfit}
-			</if>
-	       <if test="@Ognl@isNotEmpty(publishTimeBegin)">
-				AND PublishTime >= #{publishTimeBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(publishTimeEnd)">
-				AND PublishTime &lt;= #{publishTimeEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(buyTimeStartBegin)">
-				AND BuyTimeStart >= #{buyTimeStartBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(buyTimeStartEnd)">
-				AND BuyTimeStart &lt;= #{buyTimeStartEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(buyTimeEndBegin)">
-				AND BuyTimeEnd >= #{buyTimeEndBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(buyTimeEndEnd)">
-				AND BuyTimeEnd &lt;= #{buyTimeEndEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(guaranteeMoney)">
-				AND GuaranteeMoney = #{guaranteeMoney}
-			</if>
-	       <if test="@Ognl@isNotEmpty(guaranteeValueType)">
-				AND GuaranteeValueType = #{guaranteeValueType}
-			</if>
-	       <if test="@Ognl@isNotEmpty(paySettleDay)">
-				AND PaySettleDay = #{paySettleDay}
-			</if>
-	       <if test="@Ognl@isNotEmpty(transferType)">
-				AND TransferType = #{transferType}
-			</if>
-	       <if test="@Ognl@isNotEmpty(tradeType)">
-				AND TradeType = #{tradeType}
-			</if>
-	       <if test="@Ognl@isNotEmpty(canTransfer)">
-				AND CanTransfer = #{canTransfer}
-			</if>
-	       <if test="@Ognl@isNotEmpty(transferAfter)">
-				AND TransferAfter = #{transferAfter}
-			</if>
-	       <if test="@Ognl@isNotEmpty(transferLimit)">
-				AND TransferLimit = #{transferLimit}
-			</if>
-	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
-				AND CreateTime >= #{createTimeBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
-				AND CreateTime &lt;= #{createTimeEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(createOperatorId)">
-				AND CreateOperatorId = #{createOperatorId}
-			</if>
-	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
-				AND UpdateTime >= #{updateTimeBegin}
-		   </if>
-		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
-				AND UpdateTime &lt;= #{updateTimeEnd}
-		   </if>
-	       <if test="@Ognl@isNotEmpty(upateOperatorId)">
-				AND UpateOperatorId = #{upateOperatorId}
-			</if>
-	       <if test="@Ognl@isNotEmpty(versionNo)">
-				AND VersionNo = #{versionNo}
-			</if>
-		</where>
-	</sql>
+    <delete id="deleteByListingInfoId" parameterType="java.lang.Integer">
+        DELETE FROM listing_trade WHERE ListingInfoId = #{listingInfoId} 
+    </delete>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingTradePo">
+    <select id="getTradeByListingInfoId" parameterType="java.lang.Integer" resultType="com.fatp.vo.ListingTradeVo">
     	SELECT *
-	    FROM listing_trade 
-		<include refid="where"/>
-		
-		<if test="@Ognl@isNotEmpty(sortColumns)">
-			ORDER BY ${sortColumns}
-		</if>
+	    FROM listing_trade WHERE ListingInfoId = #{listingInfoId} ORDER BY ID ASC 
     </select>
-    <select id="findByProjectId" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.project.ListingTradePo">
+    
+    <select id="getPoByListingInfoId" parameterType="java.lang.Integer" resultType="com.fatp.po.project.ListingTradePo">
     	SELECT *
-	    FROM listing_trade 
-        WHERE 
-	        ProjectId = #{projectId}
-	</select>
+	    FROM listing_trade WHERE ListingInfoId = #{listingInfoId} ORDER BY ID ASC 
+    </select>
 </mapper>
 

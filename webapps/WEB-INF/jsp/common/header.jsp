@@ -4,7 +4,7 @@
 <![endif]-->
 <header id="bjui-header" class="navbar navbar-default navbar-static-top">
     <div class="bjui-navbar-header clearfix">
-    	<a href="javascript:;" class="navbar-brand"><b>${exchange.ptomsSysName }——${exchange.simpleName }</b></a>
+    	<a href="javascript:;" class="navbar-brand"><b>${exchange.ptomsSysName }</b></a>
 	    <nav id="bjui-navbar-collapse" class="pull-right">
 	        <ul class="bjui-navbar-right nav navbar-nav pull-right">
 	            <li class="datetime"><div><span id="bjui-date"></span> <span id="bjui-clock"></span></div></li>

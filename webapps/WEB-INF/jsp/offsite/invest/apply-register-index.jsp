@@ -4,7 +4,7 @@
      <!-- Tabs -->
      <ul class="nav nav-tabs" role="tablist">
          <li class="active"><a href="#baseinfo" role="tab" data-toggle="tab">申请登记</a></li>
- 		<li><a href="<%=request.getContextPath()%>/timeline/investrecords.do?entityId=${obj.id}" 
+ 		<li><a href="<%=request.getContextPath()%>/timeline/investrecords.do?entityId=${listingInfo.id}" 
              	role="tab" data-toggle="ajaxtab" data-target="#feedlist" data-reload="false">动态</a></li>
      </ul>
      <!-- Tab panes -->

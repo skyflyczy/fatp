@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.user.UcUserBankcardDao">
+<mapper namespace="com.fatp.dao.user.UcUserBankcardDao">
 <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO uc_user_bankcard (
@@ -117,7 +117,7 @@
 	        UserId = #{userId} 
 	</update>
 	
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    <select id="getById" parameterType="java.util.Map" resultType="com.fatp.domain.UcUserBankcard">
     	SELECT b.*
     	,sb.BankName channelName
     	,uu.OrgTypeId
@@ -135,7 +135,7 @@
 				AND b.UserCardGuid = #{userCardGuid}
 			</if>
 	</select>
-	 <select id="getByCardId" parameterType="int" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+	 <select id="getByCardId" parameterType="int" resultType="com.fatp.domain.UcUserBankcard">
     	SELECT ub.*
     	,sb.BankName channelName
     	,sys_bank_serialno.SubBankNo 
@@ -211,7 +211,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.UcUserBankcard">
     	SELECT b.*
     	,sb.BankName channelName
     	,sb.BankNo bankNo 
@@ -226,7 +226,7 @@
 		</if>
     </select>
     
-    <select id="getDefaultCard" parameterType="int" resultType="com.telecwin.fatp.domain.UcUserBankcard">
+    <select id="getDefaultCard" parameterType="int" resultType="com.fatp.domain.UcUserBankcard">
     	select b.* 
     	,sb.BankName channelName
     	from uc_user_bankcard b 

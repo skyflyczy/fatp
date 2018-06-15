@@ -1,73 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.offsite.BizimportApplyDao">
+<mapper namespace="com.fatp.dao.offsite.BizimportApplyDao">
 	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bizimport_apply (
         	Id ,
         	ApplyGuid ,
-        	ProjectId ,
-        	MemberId ,
+        	ListingInfoId ,
         	ApplyType ,
         	ApplyStatus ,
-        	AuditRemark ,
         	ApplyOperatorId ,
         	ApplyMemberId ,
-        	AuditTime ,
-        	AuditOperatorId ,
-        	ApplySource ,
-        	SubmitTime ,
         	CreateTime ,
         	UpdateTime ,
-        	valueDate
+        	valueDate 
         ) VALUES (
         	#{id} ,
         	#{applyGuid} ,
-        	#{projectId} ,
-        	#{memberId} ,
+        	#{listingInfoId} ,
         	#{applyType} ,
         	#{applyStatus} ,
-        	#{auditRemark} ,
         	#{applyOperatorId} ,
         	#{applyMemberId} ,
-        	#{auditTime} ,
-        	#{auditOperatorId} ,
-        	#{applySource} ,
-        	#{submitTime} ,
         	now() ,
         	now() ,
-        	#{valueDate}
+        	#{valueDate} 
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
             select LAST_INSERT_ID() as id
         </selectKey>
 	</insert>
-	
-	<update id="update">
-        UPDATE bizimport_apply SET
-	        ApplyGuid = #{applyGuid} ,
-	        ApplyStatus = #{applyStatus} ,
-	        AuditRemark = #{auditRemark} ,
-	        ApplyOperatorId = #{applyOperatorId} ,
-	        AuditTime = #{auditTime} ,
-	        AuditOperatorId = #{auditOperatorId} ,
-	        ApplySource = #{applySource} ,
-	        SubmitTime = #{submitTime} ,
-	        UpdateTime = #{updateTime} ,
-	        ValueDate = #{valueDate} 
-        WHERE 
-	        Id = #{id}
-	</update>
-	
-	<select id="getApplyByGuid" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.offsite.BizimportApplyPo">
-    	SELECT * FROM bizimport_apply WHERE ApplyGuid = #{applyGuid} 
-	</select>
-	
-	<select id="getApplyByGuidForUpdate" parameterType="java.lang.String" resultType="com.telecwin.fatp.po.offsite.BizimportApplyPo">
-    	SELECT * FROM bizimport_apply WHERE ApplyGuid = #{applyGuid} for update 
-	</select>
-	
-	<select id="getUnSubmitInvestApplyByProject" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.offsite.BizimportApplyPo">
-    	SELECT * FROM bizimport_apply WHERE ProjectId = #{projectId} and ApplyStatus = #{applyStatus} and ApplyType = #{applyType} 
-	</select>
 </mapper>
 

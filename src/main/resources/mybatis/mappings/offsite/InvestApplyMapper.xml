@@ -1,77 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.offsite.InvestApplyDao">
-	<select id="getCanRegList" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.offsite.InvestApply">
+<mapper namespace="com.fatp.dao.offsite.InvestApplyDao">
+	<select id="getCanApplyListingList" parameterType="java.util.Map" resultType="com.fatp.vo.InvestApplyVo">
     	SELECT * FROM (
 	    	SELECT 
-	    		listing_base.Id projectId,
-	    		listing_base.ProjectGuid projectGuid,
-	    		listing_base.ExchangeId exchangeId,
-				listing_base.ProjectFullName projectFullName,
-				listing_base.ProjectName projectName,
-				listing_base.ProjectMoney projectMoney,
-				listing_base.ProjectStatus projectStatus,
-				listing_base.ProjectCode projectCode,
-				listing_base.ValueDate,
+				listing_info.listingGuid,
+				listing_info.listingCode,
+				listing_info.ListingFullName,
+				listing_info.Issuer,
+				listing_info.ListingMoney,
+				listing_info.ExchangeId,
+				listing_info.listingStatus,
 				
-				listing_trade.BuyTimeStart,
-				listing_trade.BuyTimeEnd,
-				listing_trade.InvestAmountMin,
-				listing_trade.InvestAmountMax,
-				listing_trade.InvestAmountAppend,
-				
-				listing_clearing.ReleaseNum releaseNum,
-				
-				IFNULL(bizimport_summary.submitApplyMoney,0) applyMoney,
-				IFNULL(bizimport_summary.submitApplyNum,0) applyNum ,
-				
-				bizimport_apply.ApplyStatus applyStatus,
-				bizimport_apply.ApplyStatus applyGuid,
-				
-				uc_user.userName loanUserName 
-				
-			FROM listing_base
-			JOIN listing_clearing ON (listing_base.Id = listing_clearing.ProjectId) 
-			JOIN listing_trade ON(listing_base.Id = listing_trade.ProjectId) 
-			LEFT JOIN uc_user ON (listing_base.LoanUserId = UC_USER.Id) 
-			LEFT JOIN (
-				SELECT 
-					projectId ,
-					bizimport_apply.ApplyStatus ApplyStatus,
-					bizimport_apply.ApplyGuid ApplyGuid 
-		 		FROM  bizimport_apply WHERE bizimport_apply.ApplyStatus = 1 GROUP BY projectId 
-			) bizimport_apply ON (listing_base.Id = bizimport_apply.ProjectId)   
-			LEFT JOIN (
-				SELECT 
-					bizimport_apply.ProjectId,
-					SUM(bizimport_summary.TotalMoney) submitApplyMoney,
-					COUNT(bizimport_apply.Id) submitApplyNum  
-				FROM bizimport_apply 
-				LEFT JOIN bizimport_summary ON (bizimport_summary.BizImportApplyId = bizimport_apply.Id) 
-				WHERE bizimport_apply.applystatus NOT IN(1,4) GROUP BY bizimport_apply.ProjectId
-			) bizimport_summary ON(bizimport_summary.ProjectId = listing_base.Id) 
+				IFNULL(bizimport_summary.applyMoney,0) applyMoney,
+				IFNULL(bizimport_summary.applyNum,0) applyNum  
+			FROM listing_info 
+			LEFT JOIN (SELECT 
+						bizimport_apply.ListingInfoId, 
+						SUM(bizimport_summary.TotalMoney) applyMoney,
+						COUNT(bizimport_apply.Id) applyNum 
+						FROM bizimport_apply 
+						LEFT JOIN bizimport_summary ON (bizimport_apply.Id = bizimport_summary.BizImportApplyId) 
+						GROUP BY bizimport_apply.ListingInfoId 
+					  ) bizimport_summary ON (bizimport_summary.ListingInfoId = listing_info.Id)
 		) t
-		WHERE (t.ApplyStatus IS NULL OR t.ApplyStatus = 1 OR t.ReleaseNum > t.applyNum) 
-		<if test="@Ognl@isNotEmpty(projectCode)">
-			AND t.ProjectCode = #{projectCode}
-		</if>
-		<if test="@Ognl@isNotEmpty(projectGuid)">
-			AND t.ProjectGuid = #{projectGuid}
+		WHERE t.listingStatus = 1 
+		<if test="@Ognl@isNotEmpty(listingCode)">
+			AND t.ListingCode = #{listingCode}
 		</if>
 		<if test="@Ognl@isNotEmpty(exchangeId)">
 			AND t.ExchangeId = #{exchangeId}
 		</if>
-		<if test="@Ognl@isNotEmpty(searchStatusList)">
-			AND t.ProjectStatus in
-			<foreach collection="searchStatusList" item="item" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-		<if test="@Ognl@isNotEmpty(projectStatus)">
-			AND t.ProjectStatus = #{projectStatus}
-		</if>
-		<if test="@Ognl@isNotEmpty(projectFullName)">
-			AND t.ProjectFullName like "%"#{projectFullName}"%"
+		<if test="@Ognl@isNotEmpty(listingFullName)">
+			AND t.listingFullName like "%"#{listingFullName}"%"
 		</if>
 	</select>
 </mapper>

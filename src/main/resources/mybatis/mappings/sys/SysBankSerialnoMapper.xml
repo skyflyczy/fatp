@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SysBankSerialnoDao">
+<mapper namespace="com.fatp.dao.sys.SysBankSerialnoDao">
 	<insert id="insert">
 	INSERT INTO sys_bank_serialno 
 		( 
@@ -46,7 +46,7 @@
 	        Id = #{id} 
     ]]>
 	</update>
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.SysBankSerialno">
+    <select id="getById" parameterType="java.util.Map" resultType="com.fatp.domain.SysBankSerialno">
     <![CDATA[
     	SELECT *
 	    FROM sys_bank_serialno 
@@ -105,7 +105,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.SysBankSerialno">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.SysBankSerialno">
     	SELECT sys_bank_serialno.*,sys_bank.BankName BankName
 	    FROM sys_bank_serialno left join sys_bank on(sys_bank_serialno.BankId = sys_bank.Id)
 		<include refid="where"/>

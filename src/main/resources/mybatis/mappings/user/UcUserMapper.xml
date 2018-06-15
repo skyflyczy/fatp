@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.user.UcUserDao">
+<mapper namespace="com.fatp.dao.user.UcUserDao">
 <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO uc_user (
@@ -153,7 +153,7 @@
 			u.registerSource,
 			u.isSendSms
 	</sql>
-    <select id="getAllById" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
+    <select id="getAllById" parameterType="java.util.Map" resultType="com.fatp.domain.UcUser">
     	SELECT 
     	<include refid="user_field"/>,
     	<include refid="userpub_field"/>
@@ -168,7 +168,7 @@
 				AND u.OwnerUserId = #{ownerUserId}
 			</if>
 	</select>
-	<select id="getUserExtById" parameterType="int" resultType="com.telecwin.fatp.domain.UcUser">
+	<select id="getUserExtById" parameterType="int" resultType="com.fatp.domain.UcUser">
     	SELECT 
     	ue.Id,
 		<include refid="userext_field"/>
@@ -366,7 +366,7 @@
 		   </if>
 		</where>
 	</sql>
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.domain.UcUser">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.UcUser">
     	SELECT 
 		<include refid="user_field"/>,
     	<include refid="userpub_field"/>,

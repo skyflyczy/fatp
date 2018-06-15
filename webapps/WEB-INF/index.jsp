@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
-    <title>${exchange.ptomsSysName }—${exchange.simpleName }</title>
+    <title>${exchange.ptomsSysName }</title>
 	<meta name="description" content="${exchange.description }">
     <meta name="Keywords" content="${exchange.exchangeName },${exchange.ptomsSysName }"/>
     <%@ include file="jsp/common/intoHead.jsp" %>

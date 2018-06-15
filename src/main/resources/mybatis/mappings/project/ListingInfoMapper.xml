@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fatp.dao.project.ListingInfoDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO listing_info (
+        	Id ,
+        	ExchangeId ,
+        	Issuer ,
+        	ListingManager ,
+        	InvestManager ,
+        	ListingCode ,
+        	ListingGuid ,
+        	PartnerBizCode ,
+        	PartnerBiz ,
+        	ListingName ,
+        	ListingFullName ,
+        	ListingMoney ,
+        	ListingLimit ,
+        	ListingLimitType ,
+        	InvestProfitType ,
+        	ExpireDateStyle ,
+        	ValueDate ,
+        	ExpireDate ,
+        	PayInterestType ,
+        	InterestType ,
+        	InterestRate ,
+        	InterestBase ,
+        	InterestBaseDays ,
+        	ExpireDateInterest ,
+        	ListingStatus ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpateOperatorId ,
+        	VersionNo 
+        ) VALUES (
+        	#{id} ,
+        	#{exchangeId} ,
+        	#{issuer} ,
+        	#{listingManager} ,
+        	#{investManager} ,
+        	#{listingCode} ,
+        	#{listingGuid} ,
+        	#{partnerBizCode} ,
+        	#{partnerBiz} ,
+        	#{listingName} ,
+        	#{listingFullName} ,
+        	#{listingMoney} ,
+        	#{listingLimit} ,
+        	#{listingLimitType} ,
+        	#{investProfitType} ,
+        	#{expireDateStyle} ,
+        	#{valueDate} ,
+        	#{expireDate} ,
+        	#{payInterestType} ,
+        	#{interestType} ,
+        	#{interestRate} ,
+        	#{interestBase} ,
+        	#{interestBaseDays} ,
+        	#{expireDateInterest} ,
+        	#{listingStatus} ,
+        	now() ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{upateOperatorId} ,
+        	1  
+        )
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+    
+	<update id="updateByVersion">
+        UPDATE listing_info SET
+	        Issuer = #{issuer} ,
+	        ListingManager = #{listingManager} ,
+	        InvestManager = #{investManager} ,
+	        PartnerBizCode = #{partnerBizCode} ,
+	        PartnerBiz = #{partnerBiz} ,
+	        ListingName = #{listingName} ,
+	        ListingFullName = #{listingFullName} ,
+	        ListingMoney = #{listingMoney} ,
+	        ListingLimit = #{listingLimit} ,
+	        ListingLimitType = #{listingLimitType} ,
+	        InvestProfitType = #{investProfitType} ,
+	        ExpireDateStyle = #{expireDateStyle} ,
+	        ValueDate = #{valueDate} ,
+	        ExpireDate = #{expireDate} ,
+	        PayInterestType = #{payInterestType} ,
+	        InterestType = #{interestType} ,
+	        InterestRate = #{interestRate} ,
+	        InterestBase = #{interestBase} ,
+	        InterestBaseDays = #{interestBaseDays} ,
+	        ExpireDateInterest = #{expireDateInterest} ,
+	        UpdateTime = now() ,
+	        UpateOperatorId = #{upateOperatorId} ,
+	        VersionNo = VersionNo + 1  
+        WHERE 
+	        Id = #{id} AND VersionNo = #{versionNo} 
+	</update>
+
+    <delete id="delete" parameterType="java.util.Map">
+    	update listing_info set ListingStatus = #{listingStatus} where id = #{id} AND VersionNo = #{versionNo} 
+    </delete>
+    
+    <select id="getByListingGuid" parameterType="java.util.Map" resultType="com.fatp.vo.ListingInfoVo">
+    	SELECT *
+	    FROM listing_info 
+        WHERE 
+	        ListingGuid = #{listingGuid} 
+	</select>
+	
+	<select id="getPoById" parameterType="java.lang.Integer" resultType="com.fatp.po.project.ListingInfoPo">
+    	SELECT *
+	    FROM listing_info 
+        WHERE 
+	        Id = #{id}
+	</select>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exchangeId)">
+				AND ExchangeId = #{exchangeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(issuer)">
+				AND Issuer like "%"#{issuer}"%"
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingManager)">
+				AND ListingManager = #{listingManager}
+			</if>
+	       <if test="@Ognl@isNotEmpty(investManager)">
+				AND InvestManager = #{investManager}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingCode)">
+				AND ListingCode = #{listingCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingGuid)">
+				AND ListingGuid = #{listingGuid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(partnerBizCode)">
+				AND PartnerBizCode = #{partnerBizCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(partnerBiz)">
+				AND PartnerBiz = #{partnerBiz}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingName)">
+				AND ListingName = #{listingName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingFullName)">
+				AND ListingFullName like "%"#{listingFullName}"%"
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingTypeId)">
+				AND ListingTypeId = #{listingTypeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingMoney)">
+				AND ListingMoney = #{listingMoney}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingLimit)">
+				AND ListingLimit = #{listingLimit}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingLimitType)">
+				AND ListingLimitType = #{listingLimitType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(investProfitType)">
+				AND InvestProfitType = #{investProfitType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(expireDateStyle)">
+				AND ExpireDateStyle = #{expireDateStyle}
+			</if>
+	       <if test="@Ognl@isNotEmpty(valueDateBegin)">
+				AND ValueDate >= #{valueDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(valueDateEnd)">
+				AND ValueDate &lt;= #{valueDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(expireDateBegin)">
+				AND ExpireDate >= #{expireDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(expireDateEnd)">
+				AND ExpireDate &lt;= #{expireDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(payInterestType)">
+				AND PayInterestType = #{payInterestType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestType)">
+				AND InterestType = #{interestType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestRate)">
+				AND InterestRate = #{interestRate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestBase)">
+				AND InterestBase = #{interestBase}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestBaseDays)">
+				AND InterestBaseDays = #{interestBaseDays}
+			</if>
+	       <if test="@Ognl@isNotEmpty(expireDateInterest)">
+				AND ExpireDateInterest = #{expireDateInterest}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(upateOperatorId)">
+				AND UpateOperatorId = #{upateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(versionNo)">
+				AND VersionNo = #{versionNo}
+			</if>
+			<if test="@Ognl@isNotEmpty(listingStatus)">
+				AND ListingStatus = #{listingStatus} 
+			</if>
+		</where>
+	</sql>
+
+    <select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.fatp.vo.ListingInfoVo">
+    	SELECT *
+	    FROM listing_info 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

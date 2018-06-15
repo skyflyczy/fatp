@@ -7,16 +7,9 @@
         <input type="hidden" name="pageSize" value="${pageSize}">
         <div class="bjui-searchBar">
            <label class="control-label">挂牌代码：</label>
-           <input type="text" name="projectCode" value="<c:out value='${search.projectCode}'/>" class="form-control" size="10"/>
+           <input type="text" name="listingCode" value="<c:out value='${search.listingCode}'/>" class="form-control" size="10"/>
            <label class="control-label">挂牌名称：</label>
-           <input type="text" name="projectFullName" value="<c:out value='${search.projectFullName}'/>" class="form-control" size="10"/>
-            <label class="control-label">产品状态：</label>
-        	<select name="projectStatus" id="select2" data-toggle="selectpicker" class="show-tick">
-				<option value="" >-全部-</option>
-				<c:forEach var="item" items="${projectStatusDesc }">
-					<option value="${item.value }" <c:if test="${search.projectStatus == item.value}">selected</c:if>>${item }</option>
-				</c:forEach>
-			</select>
+           <input type="text" name="listingFullName" value="<c:out value='${search.listingFullName}'/>" class="form-control" size="10"/>
 			<button type="submit" class="btn-default" data-icon="search" data-clear-query="false">查询</button>
             <a class="btn btn-default" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">重置查询</a>
         </div>
@@ -30,41 +23,40 @@
 	    		<th align="center" width="6%">挂牌代码</th>
 	    		<th align="center" width="12%">挂牌名称</th>
     			<th align="center" width="12%">发行人</th>
-    			<th align="center" width="12%">产品状态</th>
 	    		<th align="right" width="12%">挂牌金额(元)</th>
-	    		<th align="right" width="12%">剩余登记金额(元)</th>
-	    		<th align="center" width="12%">剩余登记次数</th>
+	    		<th align="right" width="12%">已登记金额(元)</th>
+	    		<th align="right" width="12%">已登记数量</th>
 	    		<th align="center" width="14%">操作</th>
 	    	</tr>
     	</thead>
     	<tbody>
     		<c:forEach items="${list}" var="obj" varStatus="status">
     			<tr align="center">
-    				<td align="center">${obj.projectCode}</td>
+    				<td align="center">${obj.listingCode}</td>
     				<td align="center"><a 
-	    				href="<%=request.getContextPath()%>/project/listing/view.do?id=${obj.projectId}"
+	    				href="<%=request.getContextPath()%>/project/listinginfo/view.do?id=${obj.listingGuid}"
     					data-toggle="dialog" data-width="1000"  
-    					data-height="600" data-id="dialog-mask" data-mask="true" class="text-omit pull-left">${obj.projectFullName}</a>
+    					data-height="600" data-id="dialog-mask" data-mask="true" class="text-omit pull-left">${obj.listingFullName}</a>
     				</td>
-    				<td align="center">${obj.loanUserName}</td>
-    				<td>
-    				<c:forEach items="${projectStatusDesc}" var="item">
-    						<c:if test="${item.value == obj.projectStatus }">
-    							${item}
-    						</c:if>
-    					</c:forEach>
+    				<td align="center">${obj.issuer}</td>
+    				<td align="right">
+    					<fmt:formatNumber value="${obj.listingMoney}" pattern="#,##0.00"/>
     				</td>
     				<td align="right">
-    					<fmt:formatNumber value="${obj.projectMoney}" pattern="#,##0.00"/>
+    					<fmt:formatNumber value="${obj.applyMoney}" pattern="#,##0.00"/>
     				</td>
     				<td align="right">
-    					<fmt:formatNumber value="${obj.projectMoney-obj.applyMoney}" pattern="#,##0.00"/>
+    					${obj.applyNum } 个
     				</td>
-    				<td>${obj.releaseNum - obj.applyNum}</td>
     				<td>
-    					<a href="/offsite/invest/apply_register.do?id=${obj.projectGuid}" 
+    					<a href="/offsite/invest/to_apply_register.do?id=${obj.listingGuid}" 
     					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
     					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">申请登记</a>
+    					<c:if test="${obj.applyMoney > 0 }">
+	    					<a href="/offsite/invest/tradeapplylist.do?id=${obj.listingGuid}" 
+	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
+	    					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">已登记列表</a>
+    					</c:if>
     				</td>
     			</tr>
     		</c:forEach>

@@ -18,7 +18,7 @@ function re(){
 }
 </script>
 <div class="bjui-pageHeader">
-	<h4 class="pull-left">欢迎进入${exchange.simpleName }—${exchange.ptomsSysName }</h4><h4 class="pull-right"><!-- <button type="button" class="btn btn-green pull-right" data-icon="refresh" onclick="$(this).navtab('refresh')">刷新</button> -->累计交易量：<fmt:formatNumber value="${summoney }" currencySymbol="" type="currency" maxFractionDigits="2" minFractionDigits="2"/> 元</h4>	
+	<h4 class="pull-left">欢迎进入${exchange.ptomsSysName }</h4><h4 class="pull-right"><!-- <button type="button" class="btn btn-green pull-right" data-icon="refresh" onclick="$(this).navtab('refresh')">刷新</button> -->累计交易量：<fmt:formatNumber value="${summoney }" currencySymbol="" type="currency" maxFractionDigits="2" minFractionDigits="2"/> 元</h4>	
 </div>
 <div class="bjui-pageContent" id="pageCont">
 	<div class="container-fluid">

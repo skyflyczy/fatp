@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.sys.SystypeRepayDao">
-    <select id="getById" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SystypeRepayPo">
+<mapper namespace="com.fatp.dao.sys.SystypeRepayDao">
+    <select id="getById" parameterType="java.util.Map" resultType="com.fatp.po.sys.SystypeRepayPo">
     <![CDATA[
     	SELECT *
 	    FROM systype_repay 
@@ -27,7 +27,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.sys.SystypeRepayPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SystypeRepayPo">
     	SELECT *
 	    FROM systype_repay 
 		<include refid="where"/>

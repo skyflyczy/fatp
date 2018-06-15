@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.telecwin.fatp.dao.user.UcUserPubinfoDao">
+<mapper namespace="com.fatp.dao.user.UcUserPubinfoDao">
 	<sql id="userpub_field">
 		Id,
 		BirthDate, 
@@ -38,7 +38,7 @@
 		UpdateTime
 	</sql>
 
-    <select id="getByCompanyOrgCode" parameterType="string" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    <select id="getByCompanyOrgCode" parameterType="string" resultType="com.fatp.po.user.UcUserPubinfoPo">
     	SELECT 
     	<include refid="userpub_field"/>
 	    FROM uc_user_pubinfo 
@@ -46,7 +46,7 @@
 	        companyOrgCode = #{companyOrgCode} 
 	</select>
 	
-	 <select id="getByCompanyNameEqual" parameterType="string" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+	 <select id="getByCompanyNameEqual" parameterType="string" resultType="com.fatp.po.user.UcUserPubinfoPo">
     	SELECT 
     	<include refid="userpub_field"/>
 	    FROM uc_user_pubinfo 
@@ -54,7 +54,7 @@
 	         AES_DECRYPT(CompanyName,'fatp.com') = #{companyNameEqual}
 	</select>
 	
-	<select id="getById" parameterType="int" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+	<select id="getById" parameterType="int" resultType="com.fatp.po.user.UcUserPubinfoPo">
     	SELECT 
     	<include refid="userpub_field"/>
 	    FROM uc_user_pubinfo 
@@ -175,7 +175,7 @@
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.telecwin.fatp.po.user.UcUserPubinfoPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.user.UcUserPubinfoPo">
     	SELECT 
     	<include refid="userpub_field"/>
 	    FROM uc_user_pubinfo 
