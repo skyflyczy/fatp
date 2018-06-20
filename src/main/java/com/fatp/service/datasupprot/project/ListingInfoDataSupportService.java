@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fatp.dao.project.ListingInfoDao;
 import com.fatp.dao.project.ListingTradeDao;
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.ListingInfo;
+import com.fatp.domain.listing.ListingTrade;
 import com.fatp.enums.project.ListingStatus;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.po.project.ListingTradePo;
 import com.fatp.util.UUIDUtil;
-import com.fatp.vo.ListingInfoVo;
-import com.fatp.vo.ListingTradeVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -46,9 +46,9 @@ public class ListingInfoDataSupportService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageData<ListingInfoVo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize){
+	public PageData<ListingInfo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize){
 		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
-		List<ListingInfoVo> list = listingInfoDao.pageFindByCondition(map);
+		List<ListingInfo> list = listingInfoDao.pageFindByCondition(map);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
 	}
 	/**
@@ -56,7 +56,7 @@ public class ListingInfoDataSupportService {
 	 * @param listingGuid
 	 * @return
 	 */
-	public ListingInfoVo getByListingGuid(String listingGuid) {
+	public ListingInfo getByListingGuid(String listingGuid) {
 		return listingInfoDao.getByListingGuid(listingGuid);
 	}
 	/**
@@ -64,7 +64,7 @@ public class ListingInfoDataSupportService {
 	 * @param listingInfoId
 	 * @return
 	 */
-	public List<ListingTradeVo> getTradeByListingInfoId(Integer listingInfoId) {
+	public List<ListingTrade> getTradeByListingInfoId(Integer listingInfoId) {
 		return listingTradeDao.getTradeByListingInfoId(listingInfoId);
 	}
 	/**
@@ -73,7 +73,7 @@ public class ListingInfoDataSupportService {
 	 * @return
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public ListingInfoPo addListingInfo(ListingInfoVo listingInfoVo){
+	public ListingInfoPo addListingInfo(ListingInfo listingInfoVo){
 		ListingInfoPo listingInfoPo = new ListingInfoPo();
 		BeanUtils.copyProperties(listingInfoVo, listingInfoPo);
 		listingInfoPo.setListingGuid(UUIDUtil.getUUID());
@@ -87,7 +87,7 @@ public class ListingInfoDataSupportService {
 	 * @param listingInfoVo
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public ListingInfoPo updateListingInfo(ListingInfoVo listingInfoVo) {
+	public ListingInfoPo updateListingInfo(ListingInfo listingInfoVo) {
 		ListingInfoPo listingInfoPo = listingInfoDao.getPoById(listingInfoVo.getId());
 		if(listingInfoPo == null) {
 			//挂牌信息不存在
@@ -112,8 +112,8 @@ public class ListingInfoDataSupportService {
 	 * @param listingInfoVo
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public void updateListingTrade(ListingInfoVo listingInfoVo) {
-		List<ListingTradeVo> tradeList = listingInfoVo.getListingTradeList();
+	public void updateListingTrade(ListingInfo listingInfoVo) {
+		List<ListingTrade> tradeList = listingInfoVo.getListingTradeList();
 		if(CollectionUtils.isEmpty(tradeList)) {
 			listingTradeDao.deleteByListingInfoId(listingInfoVo.getId());
 			return;

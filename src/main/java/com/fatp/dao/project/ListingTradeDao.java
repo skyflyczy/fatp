@@ -2,8 +2,8 @@ package com.fatp.dao.project;
 
 import java.util.List;
 
+import com.fatp.domain.listing.ListingTrade;
 import com.fatp.po.project.ListingTradePo;
-import com.fatp.vo.ListingTradeVo;
 import com.huajin.baymax.db.annotation.MyBatisDao;
 
 /**
@@ -21,7 +21,7 @@ public interface ListingTradeDao {
 	public void deleteById(Integer id);
 	public void deleteByListingInfoId(Integer listingInfoId);
 	
-	public List<ListingTradeVo> getTradeByListingInfoId(Integer listingInfoId);
+	public List<ListingTrade> getTradeByListingInfoId(Integer listingInfoId);
 	
 	public List<ListingTradePo> getPoByListingInfoId(Integer listingInfoId);
 }

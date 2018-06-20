@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fatp.controller.BaseController;
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.ListingInfo;
+import com.fatp.domain.listing.ListingTrade;
 import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
@@ -28,8 +30,6 @@ import com.fatp.po.user.MemberOperatorPo;
 import com.fatp.service.project.ListingInfoService;
 import com.fatp.util.Constant;
 import com.fatp.util.StringUtil;
-import com.fatp.vo.ListingInfoVo;
-import com.fatp.vo.ListingTradeVo;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
 import com.huajin.baymax.util.DateUtils;
@@ -55,7 +55,7 @@ public class ListingInfoController extends BaseController{
 		map.put("sortColumns", " CreateTime desc ");
 		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
 		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
-		PageData<ListingInfoVo> pageData = listingInfoService.pageFindByCondition(map, pageNo, pageSize);
+		PageData<ListingInfo> pageData = listingInfoService.pageFindByCondition(map, pageNo, pageSize);
 		request().setAttribute("list", pageData.getList());
 		request().setAttribute("total", pageData.getTotalsize());
 		request().setAttribute("pageCurrent", pageNo);
@@ -72,9 +72,9 @@ public class ListingInfoController extends BaseController{
 	@RequestMapping("edit")
 	public String edit(String id) {
 		if(StringUtil.isNotBlank(id)) {
-			ListingInfoVo listingInfoVo = listingInfoService.getByListingGuid(id);
+			ListingInfo listingInfoVo = listingInfoService.getByListingGuid(id);
 			if(listingInfoVo != null) {
-				List<ListingTradeVo> tradeVoList = listingInfoService.getTradeByListingInfoId(listingInfoVo.getId());
+				List<ListingTrade> tradeVoList = listingInfoService.getTradeByListingInfoId(listingInfoVo.getId());
 				request().setAttribute("listingTradeList", tradeVoList);
 			}
 			request().setAttribute("obj", listingInfoVo);
@@ -96,7 +96,7 @@ public class ListingInfoController extends BaseController{
 	 */
 	@RequestMapping("update")
 	@ResponseBody
-	public Object update(@ModelAttribute ListingInfoVo listingInfoVo) {
+	public Object update(@ModelAttribute ListingInfo listingInfoVo) {
 		try {
 			setOperatorData(listingInfoVo);
 			listingInfoService.updateListingInfo(listingInfoVo);
@@ -134,7 +134,7 @@ public class ListingInfoController extends BaseController{
 	}
 	
 	
-	private void setOperatorData(ListingInfoVo listingInfoVo) {
+	private void setOperatorData(ListingInfo listingInfoVo) {
 		MemberOperatorPo operator = super.getMemberOperator();
 		listingInfoVo.setExchangeId(operator.getExchangeId());
 		listingInfoVo.setCreateOperatorId(operator.getId());

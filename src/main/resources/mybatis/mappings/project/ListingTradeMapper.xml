@@ -50,7 +50,7 @@
         DELETE FROM listing_trade WHERE ListingInfoId = #{listingInfoId} 
     </delete>
 
-    <select id="getTradeByListingInfoId" parameterType="java.lang.Integer" resultType="com.fatp.vo.ListingTradeVo">
+    <select id="getTradeByListingInfoId" parameterType="java.lang.Integer" resultType="com.fatp.domain.listing.ListingTrade">
     	SELECT *
 	    FROM listing_trade WHERE ListingInfoId = #{listingInfoId} ORDER BY ID ASC 
     </select>

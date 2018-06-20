@@ -1,8 +1,8 @@
-package com.fatp.vo;
+package com.fatp.domain.listing;
 
 import com.fatp.po.project.ListingTradePo;
 
-public class ListingTradeVo extends ListingTradePo{
+public class ListingTrade extends ListingTradePo{
 
 	/**
 	 * 

@@ -103,7 +103,7 @@
     	update listing_info set ListingStatus = #{listingStatus} where id = #{id} AND VersionNo = #{versionNo} 
     </delete>
     
-    <select id="getByListingGuid" parameterType="java.util.Map" resultType="com.fatp.vo.ListingInfoVo">
+    <select id="getByListingGuid" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
     	SELECT *
 	    FROM listing_info 
         WHERE 
@@ -227,7 +227,7 @@
 		</where>
 	</sql>
 
-    <select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.fatp.vo.ListingInfoVo">
+    <select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
     	SELECT *
 	    FROM listing_info 
 		<include refid="where"/>

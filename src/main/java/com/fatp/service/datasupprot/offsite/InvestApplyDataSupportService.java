@@ -17,6 +17,7 @@ import com.fatp.dao.offsite.BizimportSummaryDao;
 import com.fatp.dao.offsite.BizimportTradeDetailDao;
 import com.fatp.dao.offsite.InvestApplyDao;
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.InvestApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.enums.offsite.ApplyType;
@@ -26,7 +27,6 @@ import com.fatp.po.offsite.BizimportApplyPo;
 import com.fatp.po.offsite.BizimportSummaryPo;
 import com.fatp.util.DateUtil;
 import com.fatp.util.UUIDUtil;
-import com.fatp.vo.InvestApplyVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.huajin.baymax.logger.XMsgError;
@@ -51,9 +51,9 @@ public class InvestApplyDataSupportService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageData<InvestApplyVo> getCanApplyListingList(Map<String,Object> map, int pageNo, int pageSize) {
+	public PageData<InvestApply> getCanApplyListingList(Map<String,Object> map, int pageNo, int pageSize) {
 		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
-		List<InvestApplyVo> list = investApplyDao.getCanApplyListingList(map);
+		List<InvestApply> list = investApplyDao.getCanApplyListingList(map);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
 	}
 	/**

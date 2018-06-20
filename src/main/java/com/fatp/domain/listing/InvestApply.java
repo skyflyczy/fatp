@@ -1,9 +1,9 @@
-package com.fatp.vo;
+package com.fatp.domain.listing;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class InvestApplyVo implements Serializable{
+public class InvestApply implements Serializable{
 
 	private static final long serialVersionUID = 9106520338426849539L;
 	

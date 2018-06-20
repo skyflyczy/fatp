@@ -19,6 +19,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.fatp.controller.BaseController;
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.InvestApply;
+import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.exception.ErrorCode;
@@ -31,8 +33,6 @@ import com.fatp.service.project.ListingInfoService;
 import com.fatp.util.Constant;
 import com.fatp.util.FileUtil;
 import com.fatp.util.SessionUtil;
-import com.fatp.vo.InvestApplyVo;
-import com.fatp.vo.ListingInfoVo;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
 import com.huajin.baymax.util.DateUtils;
@@ -64,7 +64,7 @@ public class InvestApplyController extends BaseController{
 		//后台调查询list
 		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
 		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
-		PageData<InvestApplyVo> pageData = investApplyService.getCanApplyListingList(map, pageNo, pageSize);
+		PageData<InvestApply> pageData = investApplyService.getCanApplyListingList(map, pageNo, pageSize);
 		request().setAttribute("list", pageData.getList());
 		request().setAttribute("total", pageData.getTotalsize());
 		request().setAttribute("pageCurrent", pageNo);
@@ -83,7 +83,7 @@ public class InvestApplyController extends BaseController{
 		if(StringUtils.isBlank(listingGuid)) {
 			return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
 		}
-		ListingInfoVo listingVo = listingInfoService.getByListingGuid(listingGuid);
+		ListingInfo listingVo = listingInfoService.getByListingGuid(listingGuid);
 		if(listingVo == null) {
 			return resultError(ErrorCode.LISTING_NOT_EXIST.getMessage());
 		}
@@ -108,7 +108,7 @@ public class InvestApplyController extends BaseController{
 			if(StringUtils.isBlank(listingGuid)) {
 				return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
 			}
-			ListingInfoVo listingVo = listingInfoService.getByListingGuid(listingGuid);
+			ListingInfo listingVo = listingInfoService.getByListingGuid(listingGuid);
 			if(listingVo == null) {
 				return resultError(ErrorCode.LISTING_NOT_EXIST.getMessage());
 			}
@@ -193,10 +193,11 @@ public class InvestApplyController extends BaseController{
 		if(StringUtils.isBlank(listingGuid)) {
 			return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
 		}
-		ListingInfoVo listingVo = listingInfoService.getByListingGuid(listingGuid);
+		ListingInfo listingVo = listingInfoService.getByListingGuid(listingGuid);
 		if(listingVo == null) {
 			return resultError(ErrorCode.LISTING_NOT_EXIST.getMessage());
 		}
+		
 		request().setAttribute("listingInfo",listingVo);
 		return new ModelAndView(viewPath + "/trade-apply-list");
 	}

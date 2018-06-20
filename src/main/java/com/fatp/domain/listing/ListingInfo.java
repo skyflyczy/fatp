@@ -1,4 +1,4 @@
-package com.fatp.vo;
+package com.fatp.domain.listing;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import com.fatp.po.project.ListingInfoPo;
  * @author zhiya.chai
  * @date 2018年6月12日 下午3:42:11
  */
-public class ListingInfoVo extends ListingInfoPo{
+public class ListingInfo extends ListingInfoPo{
 	
 	private static final long serialVersionUID = 1366406720340777769L;
 	
 	private String createOperatorName;
 	
-	private List<ListingTradeVo> listingTradeList;
+	private List<ListingTrade> listingTradeList;
 
 	/**
 	 * 获取投资期限类型
@@ -41,10 +41,10 @@ public class ListingInfoVo extends ListingInfoPo{
 	public void setCreateOperatorName(String createOperatorName) {
 		this.createOperatorName = createOperatorName;
 	}
-	public List<ListingTradeVo> getListingTradeList() {
+	public List<ListingTrade> getListingTradeList() {
 		return listingTradeList;
 	}
-	public void setListingTradeList(List<ListingTradeVo> listingTradeList) {
+	public void setListingTradeList(List<ListingTrade> listingTradeList) {
 		this.listingTradeList = listingTradeList;
 	}
 	

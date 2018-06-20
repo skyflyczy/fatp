@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.InvestApply;
+import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.enums.FlowFeedTypeDesc;
@@ -29,8 +31,6 @@ import com.fatp.service.ImportFileService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
-import com.fatp.vo.InvestApplyVo;
-import com.fatp.vo.ListingInfoVo;
 import com.huajin.baymax.util.DateUtils;
 
 @Service
@@ -54,7 +54,7 @@ public class InvestApplyService {
 	 * @param pageSize
 	 * @return
 	 */
-	public PageData<InvestApplyVo> getCanApplyListingList(Map<String,Object> map,int pageNo, int pageSize) {
+	public PageData<InvestApply> getCanApplyListingList(Map<String,Object> map,int pageNo, int pageSize) {
 		return investApplyDataSupportService.getCanApplyListingList(map, pageNo, pageSize);
 	}
 	/**
@@ -101,7 +101,7 @@ public class InvestApplyService {
 	@Transactional(rollbackFor = Exception.class)
 	public void addInvestRecords(InvestRecordsParam param,int memberId,int exchangeId,int operatorId,String operatorName) throws IOException{
 		//1、查找项目
-		ListingInfoVo listingVo = listingInfoDataSupportService.getByListingGuid(param.getListingGuid());
+		ListingInfo listingVo = listingInfoDataSupportService.getByListingGuid(param.getListingGuid());
 		if(listingVo == null) {
 			throw new FatpException(ErrorCode.LISTING_NOT_EXIST);
 		}

@@ -15,21 +15,15 @@
                     <label class="control-label x120">挂牌规模：</label>
                     <span><fmt:formatNumber value="${listingInfo.listingMoney}" pattern="0.00" maxFractionDigits="2"/> 元</span>
                 </td>
-                <td>
-                </td>
             </tr>
             <tr>
                 <td>
-                    <label class="control-label x120">投资资金：</label>
-                    <span><fmt:formatNumber value="${payoffline.investMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
+                    <label class="control-label x120">已登记总额：</label>
+                    <span><fmt:formatNumber value="${listingInfo.listingMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
                 </td>
                 <td>
-                    <label class="control-label x120">待确认金额：</label>
-                    <span><fmt:formatNumber value="${payoffline.investMoney - payoffline.confirmedMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
-                </td>
-                <td>
-                    <label class="control-label x120">已确认金额：</label>
-                    <span><fmt:formatNumber value="${payoffline.confirmedMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
+                    <label class="control-label x120">已登记数量：</label>
+                    <span></span>
                 </td>
             </tr>
    	</tbody>
@@ -39,11 +33,11 @@
  <table data-toggle="tablefixed" data-width="100%" data-height="300">
     	<thead>
     	<tr>
-    		<th align="center" width="15%">付款银行</th>
-    		<th align="center" width="20%">银行交易流水号</th>
-    		<th align="center" width="20%">付款账户</th>
-    		<th align="center" width="15%">到账金额</th>
-    		<th align="center" width="20%">到账时间</th>
+    		<th align="center" width="15%">序号</th>
+    		<th align="center" width="20%">登记总额</th>
+    		<th align="center" width="20%">登记数量</th>
+    		<th align="center" width="15%">登记人数</th>
+    		<th align="center" width="15%">操作</th>
     	</tr>
     	</thead>
     	<tbody>

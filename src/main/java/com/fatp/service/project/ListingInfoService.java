@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.domain.PageData;
+import com.fatp.domain.listing.ListingInfo;
+import com.fatp.domain.listing.ListingTrade;
 import com.fatp.enums.FlowFeedTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
@@ -17,8 +19,6 @@ import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
 import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.StringUtil;
-import com.fatp.vo.ListingInfoVo;
-import com.fatp.vo.ListingTradeVo;
 
 @Service
 public class ListingInfoService extends BaseService{
@@ -36,7 +36,7 @@ public class ListingInfoService extends BaseService{
 	 * @param pageSize
 	 * @return
 	 */
-	public PageData<ListingInfoVo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize) {
+	public PageData<ListingInfo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize) {
 		return listingInfoDataSupportService.pageFindByCondition(map, pageNo, pageSize);
 	}
 	/**
@@ -44,7 +44,7 @@ public class ListingInfoService extends BaseService{
 	 * @param listingGuid
 	 * @return
 	 */
-	public ListingInfoVo getByListingGuid(String listingGuid) {
+	public ListingInfo getByListingGuid(String listingGuid) {
 		return listingInfoDataSupportService.getByListingGuid(listingGuid);
 	}
 	/**
@@ -52,7 +52,7 @@ public class ListingInfoService extends BaseService{
 	 * @param listingInfoId
 	 * @return
 	 */
-	public List<ListingTradeVo> getTradeByListingInfoId(Integer listingInfoId) {
+	public List<ListingTrade> getTradeByListingInfoId(Integer listingInfoId) {
 		return listingInfoDataSupportService.getTradeByListingInfoId(listingInfoId);
 	}
 	/**
@@ -60,7 +60,7 @@ public class ListingInfoService extends BaseService{
 	 * @param listingInfoVo
 	 */
 	@Transactional(rollbackFor=Exception.class)
-	public void updateListingInfo(ListingInfoVo listingInfoVo) {
+	public void updateListingInfo(ListingInfo listingInfoVo) {
 		FlowFeedTypeDesc flowFeedType = FlowFeedTypeDesc.创建;
 		ListingInfoPo listingInfoPo = null;
 		if(listingInfoVo.getId() == null) {
@@ -86,7 +86,7 @@ public class ListingInfoService extends BaseService{
 		if(StringUtil.isBlank(listingGuid)) {
 			throw new FatpException(ErrorCode.SYSTEM_PARAMETERS_EMPTY);
 		}
-		ListingInfoVo listingVo = listingInfoDataSupportService.getByListingGuid(listingGuid);
+		ListingInfo listingVo = listingInfoDataSupportService.getByListingGuid(listingGuid);
 		if(listingVo == null) {
 			throw new FatpException(ErrorCode.LISTING_NOT_EXIST);
 		}
