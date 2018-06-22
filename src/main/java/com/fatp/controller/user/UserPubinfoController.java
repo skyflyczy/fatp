@@ -1,4 +1,4 @@
-package com.fatp.controller.project.user;
+package com.fatp.controller.user;
 
 import java.util.HashMap;
 import java.util.Map;

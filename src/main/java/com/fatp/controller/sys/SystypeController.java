@@ -1,5 +1,5 @@
 
-package com.fatp.controller.project.sys;
+package com.fatp.controller.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.fatp.controller.project.user;
+package com.fatp.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

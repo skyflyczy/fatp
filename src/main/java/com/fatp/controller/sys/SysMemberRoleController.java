@@ -1,4 +1,4 @@
-package com.fatp.controller.project.sys;
+package com.fatp.controller.sys;
 
 import java.util.ArrayList;
 import java.util.Collections;

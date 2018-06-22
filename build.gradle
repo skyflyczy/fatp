@@ -5,7 +5,7 @@ buildscript {
 		springBootVersion = '1.5.2.RELEASE'
 	}
 	repositories {
-		maven { url "http://162.198.1.107:8081/nexus/content/groups/public/" }
+		maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -16,7 +16,7 @@ repositories {
 	flatDir name: 'libs', dirs: "$rootProject.rootDir/libs"
 	
 	maven {
-		url "http://162.198.1.107:8081/nexus/content/groups/public/"
+		url "http://maven.aliyun.com/nexus/content/groups/public/"
 	}
 }
 
