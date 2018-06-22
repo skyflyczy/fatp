@@ -1,11 +1,13 @@
 package com.fatp.controller.offsite;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +21,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.fatp.controller.BaseController;
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
-import com.fatp.domain.listing.InvestApply;
 import com.fatp.domain.listing.ListingInfo;
+import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.domain.offsite.InvestApply;
 import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
@@ -186,9 +189,9 @@ public class InvestApplyController extends BaseController{
 	 * 挂牌产品交易申请列表
 	 * @return
 	 */
-	@RequestMapping("tradeapplylist")
+	@RequestMapping("listingapplylist")
 	@ResponseBody
-	public Object tradeApplyList(){
+	public Object listingApplyList(){
 		String listingGuid = request().getParameter("id");
 		if(StringUtils.isBlank(listingGuid)) {
 			return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
@@ -197,9 +200,42 @@ public class InvestApplyController extends BaseController{
 		if(listingVo == null) {
 			return resultError(ErrorCode.LISTING_NOT_EXIST.getMessage());
 		}
-		
+		List<BizImportApply> applyList = investApplyService.getListingApplyList(listingVo.getId());
+		BigDecimal applySumMoney = BigDecimal.ZERO;
+		int applySumNum = 0;
+		if(CollectionUtils.isNotEmpty(applyList)) {
+			for(BizImportApply apply : applyList) {
+				applySumMoney = applySumMoney.add(apply.getTotalMoney());
+				applySumNum = applySumNum + apply.getTotalNum();
+			}
+		}
+		request().setAttribute("applySumMoney", applySumMoney);
+		request().setAttribute("applySumNum", applySumNum);
+		request().setAttribute("applyList", applyList);
 		request().setAttribute("listingInfo",listingVo);
-		return new ModelAndView(viewPath + "/trade-apply-list");
+		return new ModelAndView(viewPath + "/listing-apply-list");
+	}
+	/**
+	 * 挂牌产品申请列表交易明细
+	 * @return
+	 */
+	@RequestMapping("applytradedetails")
+	@ResponseBody
+	public Object applyTradeDetails() {
+		Map<String,Object> map = paramToMap(request());
+		if(map.get("id") == null) {
+			return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
+		}
+		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
+		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
+		String applyGuid = map.get("id").toString();
+		PageData<BizimportTradeDetail> pageData = investApplyService.pageFindTradeDetailByApply(applyGuid, pageNo, pageSize);
+		request().setAttribute("list", pageData.getList());
+		request().setAttribute("total", pageData.getTotalsize());
+		request().setAttribute("pageCurrent", pageNo);
+		request().setAttribute("pageSize", pageSize);
+		request().setAttribute("search", map);
+		return new ModelAndView(viewPath + "/apply-trade-details");
 	}
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fatp.dao.offsite.InvestApplyDao">
-	<select id="getCanApplyListingList" parameterType="java.util.Map" resultType="com.fatp.domain.listing.InvestApply">
+	<select id="getCanApplyListingList" parameterType="java.util.Map" resultType="com.fatp.domain.offsite.InvestApply">
     	SELECT * FROM (
 	    	SELECT 
 				listing_info.listingGuid,
@@ -21,6 +21,7 @@
 						COUNT(bizimport_apply.Id) applyNum 
 						FROM bizimport_apply 
 						LEFT JOIN bizimport_summary ON (bizimport_apply.Id = bizimport_summary.BizImportApplyId) 
+						WHERE bizimport_apply.ApplyStatus = 3 AND bizimport_apply.ApplyType = 1 
 						GROUP BY bizimport_apply.ListingInfoId 
 					  ) bizimport_summary ON (bizimport_summary.ListingInfoId = listing_info.Id)
 		) t
@@ -34,6 +35,16 @@
 		<if test="@Ognl@isNotEmpty(listingFullName)">
 			AND t.listingFullName like "%"#{listingFullName}"%"
 		</if>
+	</select>
+	<select id="getListingApplyList" parameterType="int" resultType="com.fatp.domain.offsite.BizImportApply">
+    	SELECT 
+			bizimport_apply.*,
+			IFNULL(bizimport_summary.TotalMoney,0) totalMoney,
+			IFNULL(bizimport_summary.TotalNum,0) totalNum,
+			IFNULL(bizimport_summary.BuyerNum,0) totalPeopleNum  
+		FROM bizimport_apply 
+		LEFT JOIN bizimport_summary ON (bizimport_summary.BizImportApplyId = bizimport_apply.Id) 
+		WHERE bizimport_apply.ApplyStatus = 3 AND ApplyType = 1 AND bizimport_apply.ListingInfoId = #{listingInfoId} 
 	</select>
 </mapper>
 

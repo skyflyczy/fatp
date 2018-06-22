@@ -17,8 +17,9 @@ import com.fatp.dao.offsite.BizimportSummaryDao;
 import com.fatp.dao.offsite.BizimportTradeDetailDao;
 import com.fatp.dao.offsite.InvestApplyDao;
 import com.fatp.domain.PageData;
-import com.fatp.domain.listing.InvestApply;
+import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.domain.offsite.InvestApply;
 import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.enums.offsite.ApplyType;
 import com.fatp.exception.ErrorCode;
@@ -26,9 +27,11 @@ import com.fatp.exception.FatpException;
 import com.fatp.po.offsite.BizimportApplyPo;
 import com.fatp.po.offsite.BizimportSummaryPo;
 import com.fatp.util.DateUtil;
+import com.fatp.util.StringUtil;
 import com.fatp.util.UUIDUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.huajin.baymax.encrypt.SymmetricEncrypt;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
 
@@ -139,6 +142,10 @@ public class InvestApplyDataSupportService {
 			detail.setBizImportApplyId(apply.getId());
 			detail.setBizImportSummaryId(summary.getId());
 			detail.setListingInfoId(apply.getListingInfoId());
+			//敏感数据加密
+			detail.setPhoneNumber(StringUtil.isBlank(detail.getPhoneNumber()) ? "" : SymmetricEncrypt.encryptStr(detail.getPhoneNumber()));
+			detail.setIdNumber(StringUtil.isBlank(detail.getIdNumber()) ? "" : SymmetricEncrypt.encryptStr(detail.getIdNumber()));
+			detail.setCardAccount(StringUtil.isBlank(detail.getCardAccount()) ? "" : SymmetricEncrypt.encryptStr(detail.getCardAccount()));
 		}
 		try {
 			bizimportTradeDetailDao.insertBatch(detailList);
@@ -147,5 +154,57 @@ public class InvestApplyDataSupportService {
 			throw new FatpException("投资明细中流水号重复。");
 		}
 	}
-	
+	/**
+	 * 获取挂牌产品登记成功的列表
+	 * @param listingInfoId
+	 * @return
+	 */
+	public List<BizImportApply> getListingApplyList(int listingInfoId) {
+		return investApplyDao.getListingApplyList(listingInfoId);
+	}
+	/**
+	 * 分页查找交易明细
+	 * @param map
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<BizimportTradeDetail> pageFindTradeDetail(Map<String,Object> map, int pageNo, int pageSize) {
+		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
+		List<BizimportTradeDetail> list = bizimportTradeDetailDao.pageFindTradeDetail(map);
+		decryptStr(list);
+		return new PageData<>(page.getTotal(), page.getPages(), list);
+	}
+	/**
+	 * 根据申请Id查找相应的交易明细
+	 * @param bizImportApplyId
+	 * @return
+	 */
+	public List<BizimportTradeDetail> findTradeDetailByApplyId(int bizImportApplyId) {
+		List<BizimportTradeDetail> list = bizimportTradeDetailDao.findTradeDetailByApplyId(bizImportApplyId);
+		decryptStr(list);
+		return list;
+	}
+	/**
+	 * 根据Id获取项目申请登记信息
+	 * @param applyId
+	 * @return
+	 */
+	public BizImportApply getApplyById(int applyId) {
+		return bizimportApplyDao.getApplyById(applyId);
+	}
+	/**
+	 * 解密
+	 * @param list
+	 */
+	private void decryptStr(List<BizimportTradeDetail> list){
+		if(CollectionUtils.isNotEmpty(list)) {
+			//解密
+			list.stream().forEach(detail ->{
+				detail.setPhoneNumber(StringUtil.isBlank(detail.getPhoneNumber()) ? "" : SymmetricEncrypt.decryptStr(detail.getPhoneNumber()));
+				detail.setIdNumber(StringUtil.isBlank(detail.getIdNumber()) ? "" : SymmetricEncrypt.decryptStr(detail.getIdNumber()));
+				detail.setCardAccount(StringUtil.isBlank(detail.getCardAccount()) ? "" : SymmetricEncrypt.decryptStr(detail.getCardAccount()));
+			});
+		}
+	}
 }

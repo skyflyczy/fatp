@@ -45,5 +45,23 @@
         )
     	</foreach>
 	</insert>
+	
+	<select id="pageFindTradeDetail" parameterType="java.util.Map" resultType="com.fatp.domain.offsite.BizimportTradeDetail">
+    	SELECT 
+    		bizimport_trade_detail.* 
+    	FROM bizimport_trade_detail 
+		LEFT JOIN bizimport_apply ON (bizimport_apply.Id = bizimport_trade_detail.BizImportApplyId) 
+		WHERE 1 = 1 
+		<if test="@Ognl@isNotEmpty(applyGuid)">
+			AND bizimport_apply.ApplyGuid = #{applyGuid}
+		</if>
+	</select>
+	
+	<select id="findTradeDetailByApplyId" parameterType="int" resultType="com.fatp.domain.offsite.BizimportTradeDetail">
+    	SELECT 
+    		* 
+    	FROM bizimport_trade_detail 
+		WHERE BizImportApplyId = #{bizImportApplyId} 
+	</select>
 </mapper>
 

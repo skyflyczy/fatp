@@ -1,4 +1,4 @@
-package com.fatp.domain.listing;
+package com.fatp.domain.offsite;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

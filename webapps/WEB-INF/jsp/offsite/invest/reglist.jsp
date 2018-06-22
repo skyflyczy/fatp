@@ -53,7 +53,7 @@
     					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
     					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">申请登记</a>
     					<c:if test="${obj.applyMoney > 0 }">
-	    					<a href="/offsite/invest/tradeapplylist.do?id=${obj.listingGuid}" 
+	    					<a href="/offsite/invest/listingapplylist.do?id=${obj.listingGuid}" 
 	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
 	    					data-height="600" data-id="dialog-mask" data-mask="true" data-confirm-msg="确定要关闭吗？">已登记列表</a>
     					</c:if>

@@ -15,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
-import com.fatp.domain.listing.InvestApply;
 import com.fatp.domain.listing.ListingInfo;
+import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.domain.offsite.InvestApply;
 import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.enums.FlowFeedTypeDesc;
 import com.fatp.enums.offsite.ApplyStatus;
@@ -120,6 +121,27 @@ public class InvestApplyService {
 		timelineDetailDataSupportService.createInvestRecordsTimeLine(apply, FlowFeedTypeDesc.保存投资明细申请, "", operatorName);
 		//TODO 异步执行生成还款兑付计划
 	}
+	/**
+	 * 获取挂牌产品登记成功的列表
+	 * @param listingInfoId
+	 * @return
+	 */
+	public List<BizImportApply> getListingApplyList(int listingInfoId) {
+		return investApplyDataSupportService.getListingApplyList(listingInfoId);
+	}
+	/**
+	 * 根据投资明细申请查找交易明细
+	 * @param applyGuid
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<BizimportTradeDetail> pageFindTradeDetailByApply(String applyGuid,int pageNo, int pageSize) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("applyGuid", applyGuid);
+		return investApplyDataSupportService.pageFindTradeDetail(map, pageNo, pageSize);
+	}
+	
 	/**
 	 * 更新投资明细申请信息
 	 * @param param

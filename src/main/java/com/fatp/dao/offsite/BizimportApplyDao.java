@@ -1,5 +1,6 @@
 package com.fatp.dao.offsite;
 
+import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.po.offsite.BizimportApplyPo;
 import com.huajin.baymax.db.annotation.MyBatisDao;
 
@@ -11,5 +12,12 @@ import com.huajin.baymax.db.annotation.MyBatisDao;
  */
 @MyBatisDao
 public interface BizimportApplyDao {
+	
 	public int insert(BizimportApplyPo o);
+	/**
+	 * 根据Id获取项目申请登记信息
+	 * @param id
+	 * @return
+	 */
+	BizImportApply getApplyById(int id);
 }

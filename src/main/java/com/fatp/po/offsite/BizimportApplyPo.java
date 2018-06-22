@@ -1,5 +1,7 @@
 package com.fatp.po.offsite;
 
+import java.io.Serializable;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -8,7 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author zhiya.chai
  * 2018-06-14 23:16:21
  */
-public class BizimportApplyPo {
+public class BizimportApplyPo implements Serializable{
+	
+	private static final long serialVersionUID = 7712523012310315495L;
 	/**
 	 * 主键
 	 */

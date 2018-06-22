@@ -60,6 +60,14 @@ public class ListingInfoDataSupportService {
 		return listingInfoDao.getByListingGuid(listingGuid);
 	}
 	/**
+	 * 根据Id获取挂牌信息
+	 * @param id
+	 * @return
+	 */
+	public ListingInfoPo getLisingInfoPoById(Integer id) {
+		return listingInfoDao.getPoById(id);
+	}
+	/**
 	 * 根据挂牌Id查找挂牌交易信息
 	 * @param listingInfoId
 	 * @return

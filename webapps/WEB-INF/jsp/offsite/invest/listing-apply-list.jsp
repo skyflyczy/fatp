@@ -19,11 +19,11 @@
             <tr>
                 <td>
                     <label class="control-label x120">已登记总额：</label>
-                    <span><fmt:formatNumber value="${listingInfo.listingMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
+                    <span><fmt:formatNumber value="${applySumMoney}" pattern="0.00" maxFractionDigits="2"/>元</span>
                 </td>
                 <td>
-                    <label class="control-label x120">已登记数量：</label>
-                    <span></span>
+                    <label class="control-label x120">已登记总数量：</label>
+                    <span>${applySumNum } 个</span>
                 </td>
             </tr>
    	</tbody>
@@ -41,15 +41,17 @@
     	</tr>
     	</thead>
     	<tbody>
-    	  <c:if test="${not empty list}">
-    	  	<c:forEach items="${list}" var="obj" varStatus="status">
+    	  <c:if test="${not empty applyList}">
+    	  	<c:forEach items="${applyList}" var="obj" varStatus="status">
     		<tr>
-    			<td>${obj.transferBankName}</td>
-    			<td>${obj.paymentSeq}</td>
-    			<td>${obj.transferAccount}</td>
-    			<td>${obj.confirmMoney}元</td>
+    			<td align="center">${status.count}</td>
+    			<td align="center"><fmt:formatNumber value="${obj.totalMoney}" pattern="0.00" maxFractionDigits="2"/> 元</td>
+    			<td align="center">${obj.totalNum}</td>
+    			<td align="center">${obj.totalPeopleNum}</td>
     			<td align="center">
-    				<fmt:formatDate value="${obj.confirmTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+	    			<a href="/offsite/invest/applytradedetails.do?id=${obj.applyGuid}" 
+	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
+	    					data-height="500" data-id="dialog-trade-details" data-mask="true" >查看详情</a>
 				</td>
     		</tr>
     		</c:forEach>

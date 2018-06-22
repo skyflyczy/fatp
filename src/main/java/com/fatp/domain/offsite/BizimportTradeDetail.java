@@ -1,5 +1,6 @@
 package com.fatp.domain.offsite;
 
+import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.po.offsite.BizimportTradeDetailPo;
 
 public class BizimportTradeDetail extends BizimportTradeDetailPo{
@@ -19,5 +20,12 @@ public class BizimportTradeDetail extends BizimportTradeDetailPo{
 	}
 	public void setListingFullName(String listingFullName) {
 		this.listingFullName = listingFullName;
+	}
+	
+	public String getIdTypeDesc(){
+		if(super.getIdTypeId() == null) {
+			return IdTypeDesc.其他.name();
+		}
+		return IdTypeDesc.fromIdIdType(super.getIdTypeId()).name();
 	}
 }

@@ -29,5 +29,12 @@
             select LAST_INSERT_ID() as id
         </selectKey>
 	</insert>
+	
+	<select id="getApplyById" parameterType="int" resultType="com.fatp.domain.offsite.BizImportApply">
+    	SELECT 
+			* 
+		FROM bizimport_apply 
+		WHERE Id = #{id}
+	</select>
 </mapper>
 
