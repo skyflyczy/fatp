@@ -8,6 +8,9 @@
             <button type="submit" class="btn-default" data-icon="search" data-clear-query="false">查询</button>
             <a class="btn btn-default" href="javascript:;" data-toggle="reloadsearch" data-clear-query="true" data-icon="undo">重置查询</a>
             <div class="pull-right">
+	            <a href="<%=request.getContextPath()%>/project/listinginfo/import.do"
+	               		class="btn btn-blue" data-id="dialog-addProject" data-toggle="dialog" data-width="1000"  
+		   				data-height="600" data-id="dialog-mask" data-mask="true" data-on-close="function(){$(this).navtab('refresh');}"><i class="fa fa-plus" aria-hidden="true"></i> 导入产品信息</a>
 	            <a href="<%=request.getContextPath()%>/project/listinginfo/edit.do"
 	               		class="btn btn-blue" data-id="dialog-addProject" data-toggle="dialog" data-width="1000"  
 		   				data-height="600" data-id="dialog-mask" data-mask="true" data-on-close="function(){$(this).navtab('refresh');}"><i class="fa fa-plus" aria-hidden="true"></i> 新增</a>

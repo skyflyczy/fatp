@@ -3,7 +3,10 @@ package com.fatp.dao.project;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.po.project.ListingPo;
 import com.fatp.vo.ListingInfoVo;
 import com.huajin.baymax.db.annotation.MyBatisDao;
 
@@ -26,4 +29,9 @@ public interface ListingInfoDao {
 	public ListingInfoPo getPoById(Integer id);
 	
 	public List<ListingInfoVo> pageFindByCondition(Map<String, Object> map);
+	
+	public int listInfoImport(String fileInfo);
+
+	public int importListing(List<ListingPo> listing);
+
 }

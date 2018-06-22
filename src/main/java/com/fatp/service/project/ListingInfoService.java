@@ -1,17 +1,26 @@
 package com.fatp.service.project;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.domain.PageData;
+import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.enums.FlowFeedTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.po.project.ListingPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
@@ -23,6 +32,7 @@ import com.fatp.vo.ListingTradeVo;
 @Service
 public class ListingInfoService extends BaseService{
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private ListingInfoDataSupportService listingInfoDataSupportService;
 	@Autowired
@@ -92,5 +102,14 @@ public class ListingInfoService extends BaseService{
 		}
 		listingInfoDataSupportService.deleteListingInfo(listingVo.getId(), listingVo.getVersionNo());
 	}
-	
+	/***
+	 * 挂牌产品交易导入
+	 * @param fileInfo
+	 */
+	public int listingRecords(List<ListingInfoPo> listing) {
+
+		//导入挂牌产品信息
+		int numbers =listingInfoDataSupportService.listingRecords(listing);
+		return numbers;
+	}	
 }

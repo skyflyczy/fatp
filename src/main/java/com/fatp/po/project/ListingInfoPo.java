@@ -319,6 +319,9 @@ public class ListingInfoPo implements Serializable{
 		this.listingStatus = listingStatus;
 	}
 	
-
+	public String toString()
+	{
+	return "{ListingInfoPo [id="+id+"][exchangeId="+exchangeId+"][issuer="+issuer+"][listingManager="+listingManager+"][investManager="+investManager+"][listingCode="+listingCode+"][listingGuid="+listingGuid+"][partnerBizCode="+partnerBizCode+"][partnerBiz="+partnerBiz+"][listingName="+listingName+"][listingFullName="+listingFullName+"][listingMoney="+listingMoney+"][listingLimit="+listingLimit+"][listingLimitType="+listingLimitType+"][investProfitType="+investProfitType+"][expireDateStyle="+expireDateStyle+"][valueDate="+valueDate+"][expireDate="+expireDate+"][payInterestType="+payInterestType+"][interestType="+interestType+"][interestRate="+interestRate+"][interestBase="+interestBase+"][interestBaseDays="+interestBaseDays+"][expireDateInterest="+expireDateInterest+"][listingStatus="+listingStatus+"][createTime="+createTime+"][createOperatorId="+createOperatorId+"][updateTime="+updateTime+"][upateOperatorId="+upateOperatorId+"][versionNo="+versionNo+"]}";
+	}
 }
 
