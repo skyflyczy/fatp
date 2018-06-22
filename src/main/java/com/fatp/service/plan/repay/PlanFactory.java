@@ -7,19 +7,19 @@ import com.fatp.enums.project.PayInterestType;
  * @author zhiya.chai
  * @date 2018年6月22日 上午9:46:30
  */
-public class RepayPlanFactory {
+public class PlanFactory {
 
-	private static final RepayPlanFactory factory = new RepayPlanFactory();
+	private static final PlanFactory factory = new PlanFactory();
 	
-	private RepayPlanFactory(){};
+	private PlanFactory(){};
 	
-	public static final RepayPlanFactory getInstance(){
+	public static final PlanFactory getInstance(){
 		return factory;
 	}
 	
-	public RepayPlanGenStragey chooseStrategy(int payInterestType){
+	public PlanGenStragey chooseStrategy(int payInterestType){
 		if(payInterestType == PayInterestType.一次性到期还本付息.type) {
-			return (RepayPlanGenStragey)FatpContext.getContext().getBean("oneTimeRepayStragey");
+			return (PlanGenStragey)FatpContext.getContext().getBean("oneTimeStragey");
 		} else if(payInterestType == PayInterestType.按半年息到期还本.type) {
 			
 		}

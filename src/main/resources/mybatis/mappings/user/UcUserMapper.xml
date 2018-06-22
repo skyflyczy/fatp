@@ -352,9 +352,6 @@
 			<if test="@Ognl@isNotEmpty(ownerUserCode)">
 				AND u1.UserCode = #{ownerUserCode}
 			</if>
-			<if test="@Ognl@isNotEmpty(userTypeId)">
-		 		AND uc_user_biztype.UserProductTypeId = #{userTypeId}
-			</if>
 			<if test="@Ognl@isNotEmpty(isPTAddList)">
 			 	AND member_operator.MemberId = 0
 			</if>

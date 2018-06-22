@@ -13,6 +13,8 @@ import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
+import com.fatp.service.plan.repay.PlanFactory;
+import com.fatp.service.plan.repay.PlanGenStragey;
 
 /**
  * 生成还款兑付计划入口
@@ -53,7 +55,11 @@ public class PlanService extends BaseService{
 			logger.error("生成还款兑付计划，获取客户交易信息为空：applyId：" + applyId);
 			return;
 		}
-		
+		PlanGenStragey planGenStagey = PlanFactory.getInstance().chooseStrategy(listingInfoPo.getPayInterestType().intValue());
+		if(planGenStagey == null) {
+			logger.error("获取计划生成策略为空，不能生成还款计划，listingInfoId：" + listingInfoPo.getId());
+			return;
+		}
 	}
 
 }

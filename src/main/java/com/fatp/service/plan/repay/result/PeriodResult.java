@@ -3,12 +3,12 @@ package com.fatp.service.plan.repay.result;
 import java.util.Date;
 
 /**
- * 还款分期结果
+ * 分期结果
  * 
  * @author zhiya.chai
  * @date 2018年6月22日 上午10:22:16
  */
-public class RepayStageyResult {
+public class PeriodResult {
 
 	private int period;//第几期
 	
@@ -22,15 +22,15 @@ public class RepayStageyResult {
 	
 	private int interestType;//计息方式 
 	
-	public static RepayStageyResult build(){
-		return new RepayStageyResult();
+	public static PeriodResult build(){
+		return new PeriodResult();
 	}
 
 	public int getPeriod() {
 		return period;
 	}
 
-	public RepayStageyResult setPeriod(int period) {
+	public PeriodResult setPeriod(int period) {
 		this.period = period;
 		return this;
 	}
@@ -39,7 +39,7 @@ public class RepayStageyResult {
 		return interestStartDate;
 	}
 
-	public RepayStageyResult setInterestStartDate(Date interestStartDate) {
+	public PeriodResult setInterestStartDate(Date interestStartDate) {
 		this.interestStartDate = interestStartDate;
 		return this;
 	}
@@ -48,7 +48,7 @@ public class RepayStageyResult {
 		return interestEndDate;
 	}
 
-	public RepayStageyResult setInterestEndDate(Date interestEndDate) {
+	public PeriodResult setInterestEndDate(Date interestEndDate) {
 		this.interestEndDate = interestEndDate;
 		return this;
 	}
@@ -57,7 +57,7 @@ public class RepayStageyResult {
 		return repayDate;
 	}
 
-	public RepayStageyResult setRepayDate(Date repayDate) {
+	public PeriodResult setRepayDate(Date repayDate) {
 		this.repayDate = repayDate;
 		return this;
 	}
@@ -66,7 +66,7 @@ public class RepayStageyResult {
 		return investDate;
 	}
 
-	public RepayStageyResult setInvestDate(Date investDate) {
+	public PeriodResult setInvestDate(Date investDate) {
 		this.investDate = investDate;
 		return this;
 	}
@@ -75,7 +75,7 @@ public class RepayStageyResult {
 		return interestType;
 	}
 
-	public RepayStageyResult setInterestType(int interestType) {
+	public PeriodResult setInterestType(int interestType) {
 		this.interestType = interestType;
 		return this;
 	}
