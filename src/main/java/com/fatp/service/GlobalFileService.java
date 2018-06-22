@@ -32,8 +32,7 @@ public class GlobalFileService {
 	@Transactional(rollbackFor = Exception.class)
 	public GlobalFilePo insertGlobalFile(String filePath,String originalFileName,int memberId,int operatorId) {
 		GlobalFilePo file = new GlobalFilePo();
-		file.setContentType(FileUtil.contentType(originalFileName));
-		file.setContentType(FileUtil.contentType(originalFileName));
+		file.setContentType(FileUtil.contentType(originalFileName));		
 		file.setCreateOperatorId(operatorId);
 		file.setCreateUserId(memberId);
 		file.setDisplayName(originalFileName);

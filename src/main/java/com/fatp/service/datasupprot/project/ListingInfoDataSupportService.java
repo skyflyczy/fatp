@@ -170,5 +170,16 @@ public class ListingInfoDataSupportService {
 			throw new FatpException(ErrorCode.LISTING_DELELT_ERROR);
 		}
 	}
+	public int listingRecords(List<ListingInfoPo> listing) {
+		int result =0;
+		ListingInfoPo po = null;
+		for(int i=0;i<listing.size();i++)
+		{
+			po = listing.get(i);
+			result += listingInfoDao.insert(po);
+		}
+		// TODO Auto-generated method stub
+		return result;
+	}
 	
 }

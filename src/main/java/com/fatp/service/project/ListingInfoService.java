@@ -92,5 +92,14 @@ public class ListingInfoService extends BaseService{
 		}
 		listingInfoDataSupportService.deleteListingInfo(listingVo.getId(), listingVo.getVersionNo());
 	}
-	
+	/***
+	 * 挂牌产品交易导入
+	 * @param fileInfo
+	 */
+	public int listingRecords(List<ListingInfoPo> listing) {
+
+		//导入挂牌产品信息
+		int numbers =listingInfoDataSupportService.listingRecords(listing);
+		return numbers;
+	}	
 }
