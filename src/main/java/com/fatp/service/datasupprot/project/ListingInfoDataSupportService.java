@@ -20,7 +20,6 @@ import com.fatp.enums.project.ListingStatus;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.po.project.ListingPo;
 import com.fatp.po.project.ListingTradePo;
 import com.fatp.util.UUIDUtil;
 import com.fatp.vo.ListingInfoVo;

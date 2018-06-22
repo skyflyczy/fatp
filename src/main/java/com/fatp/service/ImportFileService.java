@@ -20,7 +20,6 @@ import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.po.project.ListingPo;
 import com.fatp.service.sys.SysParamService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;

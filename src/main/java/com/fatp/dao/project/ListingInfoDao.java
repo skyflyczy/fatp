@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.po.project.ListingPo;
 import com.fatp.vo.ListingInfoVo;
 import com.huajin.baymax.db.annotation.MyBatisDao;
 
@@ -32,6 +31,6 @@ public interface ListingInfoDao {
 	
 	public int listInfoImport(String fileInfo);
 
-	public int importListing(List<ListingPo> listing);
+	public int importListing(List<ListingInfoPo> listing);
 
 }

@@ -44,7 +44,6 @@ import com.fatp.exception.FatpException;
 import com.fatp.interceptor.FlashUpload;
 import com.fatp.po.GlobalFilePo;
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.po.project.ListingPo;
 import com.fatp.po.user.MemberOperatorPo;
 import com.fatp.service.GlobalFileService;
 import com.fatp.service.ImportFileService;

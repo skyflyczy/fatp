@@ -20,7 +20,6 @@ import com.fatp.enums.FlowFeedTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.po.project.ListingPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
