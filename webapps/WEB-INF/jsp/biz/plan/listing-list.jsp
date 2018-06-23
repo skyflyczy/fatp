@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="bjui-pageHeader">
-    <form id="pagerForm" data-toggle="ajaxsearch" action="<%=request.getContextPath()%>/project/listinginfo/infolist.do">
+    <form id="pagerForm" data-toggle="ajaxsearch" action="<%=request.getContextPath()%>/biz/plan/listinglist.do">
         <div class="bjui-searchBar">
             <%@ include file="/WEB-INF/jsp/project/listing/search_itembase.jsp" %>
             <button type="submit" class="btn-default" data-icon="search" data-clear-query="false">查询</button>
@@ -38,9 +38,9 @@
 	    		<td align="center">${list.listingLimit} ${list.getListingLimitTypeDesc()}</td>
 	    		<td align="center"><fmt:formatDate value="${list.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	    		<td align="center">
-	    			<a href="<%=request.getContextPath()%>/project/listinginfo/edit.do?id=${list.listingGuid}" 
+	    			<a href="<%=request.getContextPath()%>/biz/plan/repay_plan_list.do?id=${list.listingGuid}" 
 	    				class="btn btn-blue" data-toggle="dialog" data-width="1000"  
-	    				data-height="600" data-id="dialog-edit" data-mask="true" >还款计划</a>
+	    				data-height="600" data-id="dialog-repay-plan" data-mask="true" >还款计划</a>
 	    		</td>
 	    	</tr>
 	    	</c:forEach>

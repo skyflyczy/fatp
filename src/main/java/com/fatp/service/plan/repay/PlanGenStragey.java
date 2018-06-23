@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.enums.biz.PayinvestStatus;
 import com.fatp.enums.project.InterestRate;
 import com.fatp.po.biz.BizplanPayinvestPo;
-import com.fatp.po.biz.BizplanRepayPo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.plan.repay.param.CalInterestParam;
 import com.fatp.service.plan.repay.param.InvestProfitParam;
@@ -47,6 +47,7 @@ public abstract class PlanGenStragey {
 		payinvest.setPayinvestPlanGuid(UUIDUtil.getUUID());
 		payinvest.setSubBankName(tradeDetail.getSubBankName());
 		payinvest.setUpdateOperatorId(operatorId);
+		payinvest.setPayinvestStatus(PayinvestStatus.未兑付.status);
 		return payinvest;
 	}
 	/**
