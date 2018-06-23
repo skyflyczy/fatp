@@ -4,64 +4,53 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 
- * BizplanRepay
+ * BizplanPayinvest
  * @author zhiya.chai
- * 2018-06-22 13:19:29
+ * 2018-06-23 39:14:44
  */
-public class BizplanRepayPo {
+public class BizplanPayinvestPo {
 	/**
 	 * 唯一id，自增主键
 	 */
 	private Integer id;
 	/**
-	 * 还款计划唯一id，用于web表现
+	 * 兑付计划唯一id，用于web表现
 	 */
-	private String repayPlanGuid;
+	private String payinvestPlanGuid;
+	/**
+	 * 还款计划id bizplan_repay.id(
+	 */
+	private Integer repayPlanId;
 	/**
 	 * 挂牌产品Id
 	 */
 	private Integer listingInfoId;
 	/**
-	 * 借款方（融资方）
+	 * 投资方/兑付用户id
 	 */
-	private Integer loanUserId;
+	private Integer investUserId;
 	/**
-	 * 还款期次
+	 * 兑付账号
+	 */
+	private String cardAccount;
+	/**
+	 * 支行名称
+	 */
+	private String subBankName;
+	/**
+	 * 兑付期次
 	 */
 	private Integer periodNumber;
 	/**
-	 * 正常计息天数
-	 */
-	private Integer interestDay;
-	/**
-	 * 本期正常计息开始时间
-	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date interestStartDate;
-	/**
-	 * 本期正常计息结束时间
-	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date interestEndDate;
-	/**
-	 * 本期计息本金（元）
-	 */
-	private java.math.BigDecimal interestPrincipal;
-	/**
-	 * 计划应还日期
-	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	private java.util.Date planRepayDate;
-	/**
-	 * 本期应还本金（元）
+	 * 本期应兑付本金(元)
 	 */
 	private java.math.BigDecimal principal;
 	/**
-	 * 本期应还利息（元）
+	 * 本期应兑付利息(元)
 	 */
 	private java.math.BigDecimal interest;
 	/**
-	 * 累计逾期利息
+	 * 累计逾期利息(元)
 	 */
 	private java.math.BigDecimal overInterest;
 	/**
@@ -97,11 +86,17 @@ public class BizplanRepayPo {
 	public Integer getId() {
 		return this.id;
 	}
-	public void setRepayPlanGuid(String value) {
-		this.repayPlanGuid = value;
+	public void setPayinvestPlanGuid(String value) {
+		this.payinvestPlanGuid = value;
 	}
-	public String getRepayPlanGuid() {
-		return this.repayPlanGuid;
+	public String getPayinvestPlanGuid() {
+		return this.payinvestPlanGuid;
+	}
+	public void setRepayPlanId(Integer value) {
+		this.repayPlanId = value;
+	}
+	public Integer getRepayPlanId() {
+		return this.repayPlanId;
 	}
 	public void setListingInfoId(Integer value) {
 		this.listingInfoId = value;
@@ -109,47 +104,29 @@ public class BizplanRepayPo {
 	public Integer getListingInfoId() {
 		return this.listingInfoId;
 	}
-	public void setLoanUserId(Integer value) {
-		this.loanUserId = value;
+	public void setInvestUserId(Integer value) {
+		this.investUserId = value;
 	}
-	public Integer getLoanUserId() {
-		return this.loanUserId;
+	public Integer getInvestUserId() {
+		return this.investUserId;
+	}
+	public void setCardAccount(String value) {
+		this.cardAccount = value;
+	}
+	public String getCardAccount() {
+		return this.cardAccount;
+	}
+	public void setSubBankName(String value) {
+		this.subBankName = value;
+	}
+	public String getSubBankName() {
+		return this.subBankName;
 	}
 	public void setPeriodNumber(Integer value) {
 		this.periodNumber = value;
 	}
 	public Integer getPeriodNumber() {
 		return this.periodNumber;
-	}
-	public void setInterestDay(Integer value) {
-		this.interestDay = value;
-	}
-	public Integer getInterestDay() {
-		return this.interestDay;
-	}
-	public void setInterestStartDate(java.util.Date value) {
-		this.interestStartDate = value;
-	}
-	public java.util.Date getInterestStartDate() {
-		return this.interestStartDate;
-	}
-	public void setInterestEndDate(java.util.Date value) {
-		this.interestEndDate = value;
-	}
-	public java.util.Date getInterestEndDate() {
-		return this.interestEndDate;
-	}
-	public void setInterestPrincipal(java.math.BigDecimal value) {
-		this.interestPrincipal = value;
-	}
-	public java.math.BigDecimal getInterestPrincipal() {
-		return this.interestPrincipal;
-	}
-	public void setPlanRepayDate(java.util.Date value) {
-		this.planRepayDate = value;
-	}
-	public java.util.Date getPlanRepayDate() {
-		return this.planRepayDate;
 	}
 	public void setPrincipal(java.math.BigDecimal value) {
 		this.principal = value;

@@ -30,7 +30,7 @@ public class BizimportApplyPo implements Serializable{
 	 */
 	private Integer applyType;
 	/**
-	 * 申请状态。待提交(1), 登记中(2), 登记成功(3), 登记失败(4),已核保(5);
+	 * 申请状态。待提交(1), 登记中(2), 登记成功(3), 登记失败(4);
 	 */
 	private Integer applyStatus;
 	/**

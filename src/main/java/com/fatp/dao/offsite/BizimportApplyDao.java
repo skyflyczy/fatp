@@ -20,4 +20,10 @@ public interface BizimportApplyDao {
 	 * @return
 	 */
 	BizImportApply getApplyById(int id);
+	/**
+	 * 更新登记状态
+	 * @param po
+	 * @return
+	 */
+	public int updateApplyStatus(BizimportApplyPo po);
 }

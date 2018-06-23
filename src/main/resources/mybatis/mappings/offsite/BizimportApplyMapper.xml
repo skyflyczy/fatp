@@ -36,5 +36,13 @@
 		FROM bizimport_apply 
 		WHERE Id = #{id}
 	</select>
+	
+	<update id="updateApplyStatus">
+        UPDATE bizimport_apply SET 
+	        ApplyStatus = #{applyStatus} ,
+	        UpdateTime = now() 
+        WHERE 
+	        Id = #{id} 
+	</update>
 </mapper>
 

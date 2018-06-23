@@ -88,7 +88,7 @@ public class InvestApplyDataSupportService {
 		BizimportApplyPo po = new BizimportApplyPo();
 		po.setApplyMemberId(applyMemberId);
 		po.setApplyOperatorId(operatorId);
-		po.setApplyStatus(ApplyStatus.登记成功.status);
+		po.setApplyStatus(ApplyStatus.登记中.status);
 		po.setApplyType(ApplyType.投资登记申请.type);
 		po.setListingInfoId(listingInfoId);
 		po.setCreateTime(new Date());
@@ -172,6 +172,7 @@ public class InvestApplyDataSupportService {
 	 */
 	private void handleTradeDetailUser(BizimportTradeDetail detail){
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("exchangeId", detail.getExchangeId());
 		UcUser user = null;
 		if(detail.getIdTypeId().intValue() == IdTypeDesc.统一社会信用代码.getIdType()) {
 			//机构
@@ -278,6 +279,14 @@ public class InvestApplyDataSupportService {
 	 */
 	public BizImportApply getApplyById(int applyId) {
 		return bizimportApplyDao.getApplyById(applyId);
+	}
+	/**
+	 * 更新登记状态
+	 * @param po
+	 * @return
+	 */
+	public int updateApplyStatus(BizimportApplyPo po) {
+		return bizimportApplyDao.updateApplyStatus(po);
 	}
 	/**
 	 * 解密

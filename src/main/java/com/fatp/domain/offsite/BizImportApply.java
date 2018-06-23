@@ -2,6 +2,7 @@ package com.fatp.domain.offsite;
 
 import java.math.BigDecimal;
 
+import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.po.offsite.BizimportApplyPo;
 
 public class BizImportApply extends BizimportApplyPo{
@@ -36,5 +37,20 @@ public class BizImportApply extends BizimportApplyPo{
 
 	public void setTotalPeopleNum(int totalPeopleNum) {
 		this.totalPeopleNum = totalPeopleNum;
+	}
+	/**
+	 * 得到登记状态
+	 * @return
+	 */
+	public String getApplyStatusDesc() {
+		if(super.getApplyStatus() == null) {
+			return "";
+		}
+		for(ApplyStatus status : ApplyStatus.values()) {
+			if(status.status == super.getApplyStatus().intValue()) {
+				return status.name();
+			}
+		}
+		return "";
 	}
 }

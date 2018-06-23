@@ -20,4 +20,13 @@ public enum InterestBase {
 		return value;
 	}
 	
+	public static InterestBase getInterestBaseByValue(int value){
+		for(InterestBase base : InterestBase.values()) {
+			if(base.value == value) {
+				return base;
+			}
+		}
+		return null;
+	}
+	
 }

@@ -1,13 +1,18 @@
 package com.fatp.service.plan.repay;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.enums.project.InterestRate;
+import com.fatp.po.biz.BizplanPayinvestPo;
 import com.fatp.po.biz.BizplanRepayPo;
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.service.plan.repay.param.CalInterestParam;
+import com.fatp.service.plan.repay.param.InvestProfitParam;
 import com.fatp.util.UUIDUtil;
 
 
@@ -27,18 +32,77 @@ public abstract class PlanGenStragey {
 	 * @param tradeDetailList
 	 */
 	public abstract void genRepayAndPayInvesetPlan(ListingInfoPo listingInfoPo,List<ListingTrade> listingTradeList,BizImportApply apply,List<BizimportTradeDetail> tradeDetailList,int operatorId);
-	
-	protected BizplanRepayPo genBaseRepay(int operatorId,ListingInfoPo listingInfoPo) {
-		BizplanRepayPo repay = new BizplanRepayPo();
-		repay.setCreateOperatorId(operatorId);
-		repay.setCreateTime(new Date());
-		repay.setListingInfoId(listingInfoPo.getId());
-		repay.setUpdateOperatorId(operatorId);
-		repay.setUpdateTime(new Date());
-		repay.setRepayPlanGuid(UUIDUtil.getUUID());
-		//TODO 暂时为空 repay.setLoanUserId(project.getLoanUserId());
-		repay.setVersionNo(1);
-		return repay;
+	/**
+	 * 生成基础的兑付信息
+	 * @param operatorId
+	 * @param tradeDetail
+	 * @return
+	 */
+	protected BizplanPayinvestPo genBasePayinvest(int operatorId,BizimportTradeDetail tradeDetail) {
+		BizplanPayinvestPo payinvest = new BizplanPayinvestPo();
+		payinvest.setCardAccount(tradeDetail.getCardAccount());
+		payinvest.setCreateOperatorId(operatorId);
+		payinvest.setInvestUserId(tradeDetail.getUserId());
+		payinvest.setListingInfoId(tradeDetail.getListingInfoId());
+		payinvest.setPayinvestPlanGuid(UUIDUtil.getUUID());
+		payinvest.setSubBankName(tradeDetail.getSubBankName());
+		payinvest.setUpdateOperatorId(operatorId);
+		return payinvest;
 	}
-	
+	/**
+	 * 计算收益
+	 * @param param
+	 */
+	protected BigDecimal calProfit(CalInterestParam param){
+		return calProfit(param, 2, BigDecimal.ROUND_DOWN);
+	}
+	/**
+	 * 计算收益
+	 * @param param
+	 * @param zeroplace
+	 * @param paramInt
+	 * @return
+	 */
+	public static BigDecimal calProfit(CalInterestParam param, int zeroplace, int paramInt){
+		BigDecimal interest = BigDecimal.ZERO;//利息
+		InterestRate interestRate = param.getInterestRate();//计息方式
+		switch (interestRate) {
+		case 按日计息:
+			interest = CalInterestUtil.calDaysProfit(param, zeroplace, paramInt);
+			break;
+		case 按月计息:
+			interest = CalInterestUtil.calMonthProfit(param, zeroplace, paramInt);
+			break;
+		case 按年计息:
+			interest = CalInterestUtil.calYearProfit(param, zeroplace, paramInt);
+			break;
+		case 按季计息:
+			//TODO
+		case 按半年计息:
+			//TODO
+		default:
+			break;
+		}
+		return interest;
+	} 
+	/**
+	 * 生成阶梯利息参数
+	 * @param listingTradeList
+	 * @param addInvestProfit  加息
+	 * @return
+	 */
+	protected List<InvestProfitParam> genInvestProfitParamList(List<ListingTrade> listingTradeList,BigDecimal addInvestProfit) {
+		List<InvestProfitParam> list = listingTradeList.stream().map(listingTrade -> {
+			InvestProfitParam param = new InvestProfitParam();
+			param.setMinInvestMoney(listingTrade.getMinInvestMoney());
+			param.setMaxInvestMoney(listingTrade.getMaxInvestMoney());
+			if(addInvestProfit != null) {
+				param.setInvestProfit(listingTrade.getInvestProfit().add(addInvestProfit));
+			} else {
+				param.setInvestProfit(listingTrade.getInvestProfit());
+			}
+			return param;
+		}).collect(Collectors.toList());
+		return list;
+	}
 }

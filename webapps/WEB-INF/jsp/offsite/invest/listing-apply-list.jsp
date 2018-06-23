@@ -37,6 +37,7 @@
     		<th align="center" width="20%">登记总额</th>
     		<th align="center" width="20%">登记数量</th>
     		<th align="center" width="15%">登记人数</th>
+    		<th align="center" width="15%">登记状态</th>
     		<th align="center" width="15%">操作</th>
     	</tr>
     	</thead>
@@ -48,6 +49,7 @@
     			<td align="center"><fmt:formatNumber value="${obj.totalMoney}" pattern="0.00" maxFractionDigits="2"/> 元</td>
     			<td align="center">${obj.totalNum}</td>
     			<td align="center">${obj.totalPeopleNum}</td>
+    			<td align="center">${obj.getApplyStatusDesc()}</td>
     			<td align="center">
 	    			<a href="/offsite/invest/applytradedetails.do?id=${obj.applyGuid}" 
 	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  

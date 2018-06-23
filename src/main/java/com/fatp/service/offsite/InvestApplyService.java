@@ -32,6 +32,7 @@ import com.fatp.service.ImportFileService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
+import com.fatp.service.plan.PlanService;
 import com.huajin.baymax.util.DateUtils;
 
 @Service
@@ -47,6 +48,8 @@ public class InvestApplyService {
 	private GlobalFileService globalFileService;
 	@Autowired
 	private TimelineDetailDataSupportService timelineDetailDataSupportService;
+	@Autowired
+	private PlanService planService;
 	
 	/**
 	 * 分页查找可进行登记的挂牌产品列表
@@ -120,6 +123,7 @@ public class InvestApplyService {
 		//7、写入动态
 		timelineDetailDataSupportService.createInvestRecordsTimeLine(apply, FlowFeedTypeDesc.保存投资明细申请, "", operatorName);
 		//TODO 异步执行生成还款兑付计划
+		planService.asynGenPlan(listingVo.getId(), apply.getId(), operatorId);
 	}
 	/**
 	 * 获取挂牌产品登记成功的列表

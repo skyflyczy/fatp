@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fatp.dao.biz.BizplanRepayDao">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bizplan_repay (
+        	Id ,
+        	RepayPlanGuid ,
+        	ListingInfoId ,
+        	LoanUserId ,
+        	PeriodNumber ,
+        	InterestDay ,
+        	InterestStartDate ,
+        	InterestEndDate ,
+        	InterestPrincipal ,
+        	PlanRepayDate ,
+        	Principal ,
+        	Interest ,
+        	OverInterest ,
+        	OverDay ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId ,
+        	VersionNo 
+        ) VALUES (
+        	#{id} ,
+        	#{repayPlanGuid} ,
+        	#{listingInfoId} ,
+        	#{loanUserId} ,
+        	#{periodNumber} ,
+        	#{interestDay} ,
+        	#{interestStartDate} ,
+        	#{interestEndDate} ,
+        	#{interestPrincipal} ,
+        	#{planRepayDate} ,
+        	#{principal} ,
+        	#{interest} ,
+        	#{overInterest} ,
+        	#{overDay} ,
+        	now() ,
+        	#{createOperatorId} ,
+        	now() ,
+        	#{updateOperatorId} ,
+        	1 
+        )
+    	<selectKey resultType="java.lang.Integer" keyProperty="id">
+            select LAST_INSERT_ID() as id
+        </selectKey>
+	</insert>
+	
+	<update id="updateByVersion">
+        UPDATE bizplan_repay SET
+	        InterestPrincipal = #{interestPrincipal} ,
+	        Principal = #{principal} ,
+	        Interest = #{interest} ,
+	        OverInterest = #{overInterest} ,
+	        OverDay = #{overDay} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        VersionNo =  VersionNo + 1 
+        WHERE 
+	        Id = #{id} AND VersionNo = #{versionNo} 
+	</update>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(repayPlanGuid)">
+				AND RepayPlanGuid = #{repayPlanGuid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingInfoId)">
+				AND ListingInfoId = #{listingInfoId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loanUserId)">
+				AND LoanUserId = #{loanUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(periodNumber)">
+				AND PeriodNumber = #{periodNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestDay)">
+				AND InterestDay = #{interestDay}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interestStartDateBegin)">
+				AND InterestStartDate >= #{interestStartDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(interestStartDateEnd)">
+				AND InterestStartDate &lt;= #{interestStartDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(interestEndDateBegin)">
+				AND InterestEndDate >= #{interestEndDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(interestEndDateEnd)">
+				AND InterestEndDate &lt;= #{interestEndDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(interestPrincipal)">
+				AND InterestPrincipal = #{interestPrincipal}
+			</if>
+	       <if test="@Ognl@isNotEmpty(planRepayDateBegin)">
+				AND PlanRepayDate >= #{planRepayDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(planRepayDateEnd)">
+				AND PlanRepayDate &lt;= #{planRepayDateEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(principal)">
+				AND Principal = #{principal}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interest)">
+				AND Interest = #{interest}
+			</if>
+	       <if test="@Ognl@isNotEmpty(overInterest)">
+				AND OverInterest = #{overInterest}
+			</if>
+	       <if test="@Ognl@isNotEmpty(overDay)">
+				AND OverDay = #{overDay}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(versionNo)">
+				AND VersionNo = #{versionNo}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanRepayPo">
+    	SELECT *
+	    FROM bizplan_repay 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getPlanRepayPoByUniqueKey" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanRepayPo">
+    	SELECT *
+	    FROM bizplan_repay 
+		WHERE ListingInfoId = #{listingInfoId} AND PeriodNumber = #{periodNumber} 
+    </select>
+</mapper>
+

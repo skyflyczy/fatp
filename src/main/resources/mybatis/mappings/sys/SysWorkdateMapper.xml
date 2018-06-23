@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fatp.dao.sys.SysWorkdateDao">
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(workDateBegin)">
+				AND WorkDate >= #{workDateBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(workDateEnd)">
+				AND WorkDate &lt;= #{workDateEnd}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(workDate)">
+				AND WorkDate = #{workDate}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(isWorked)">
+				AND IsWorked = #{isWorked}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(weekDayDesc)">
+				AND WeekDayDesc = #{weekDayDesc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(workDesc)">
+				AND WorkDesc = #{workDesc}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysWorkdatePo">
+    	SELECT *
+	    FROM sys_workdate 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getBelongWorkDate" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysWorkdatePo">
+    	SELECT * FROM sys_workdate 
+    	WHERE IsWorked = 1 AND WorkDate >=#{workDate}
+    	ORDER BY WorkDate ASC 
+    	LIMIT 0,1 
+    </select>
+</mapper>
+

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fatp.dao.biz.BizplanPayinvestDao">
+	 <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO bizplan_payinvest (
+        	Id ,
+        	PayinvestPlanGuid ,
+        	RepayPlanId ,
+        	ListingInfoId ,
+        	InvestUserId ,
+        	CardAccount ,
+        	SubBankName ,
+        	PeriodNumber ,
+        	Principal ,
+        	Interest ,
+        	OverInterest ,
+        	OverDay ,
+        	CreateTime ,
+        	CreateOperatorId ,
+        	UpdateTime ,
+        	UpdateOperatorId ,
+        	VersionNo 
+        ) VALUES 
+        <foreach collection="list" item="item"  separator="," > 
+	        (
+	        	#{item.id} ,
+	        	#{item.payinvestPlanGuid} ,
+	        	#{item.repayPlanId} ,
+	        	#{item.listingInfoId} ,
+	        	#{item.investUserId} ,
+	        	#{item.cardAccount} ,
+	        	#{item.subBankName} ,
+	        	#{item.periodNumber} ,
+	        	#{item.principal} ,
+	        	#{item.interest} ,
+	        	#{item.overInterest} ,
+	        	#{item.overDay} ,
+	        	now() ,
+	        	#{item.createOperatorId} ,
+	        	now() ,
+	        	#{item.updateOperatorId} ,
+	        	1 
+	        )
+        </foreach>
+	</insert>
+	
+	<sql id="where">
+		<where>	      				
+	       <if test="@Ognl@isNotEmpty(id)">
+				AND Id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(payinvestPlanGuid)">
+				AND PayinvestPlanGuid = #{payinvestPlanGuid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(repayPlanId)">
+				AND RepayPlanId = #{repayPlanId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(listingInfoId)">
+				AND ListingInfoId = #{listingInfoId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(investUserId)">
+				AND InvestUserId = #{investUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cardAccount)">
+				AND CardAccount = #{cardAccount}
+			</if>
+	       <if test="@Ognl@isNotEmpty(subBankName)">
+				AND SubBankName = #{subBankName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(periodNumber)">
+				AND PeriodNumber = #{periodNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(principal)">
+				AND Principal = #{principal}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interest)">
+				AND Interest = #{interest}
+			</if>
+	       <if test="@Ognl@isNotEmpty(overInterest)">
+				AND OverInterest = #{overInterest}
+			</if>
+	       <if test="@Ognl@isNotEmpty(overDay)">
+				AND OverDay = #{overDay}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
+				AND CreateTime >= #{createTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
+				AND CreateTime &lt;= #{createTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(createOperatorId)">
+				AND CreateOperatorId = #{createOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+				AND UpdateTime >= #{updateTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+				AND UpdateTime &lt;= #{updateTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
+				AND UpdateOperatorId = #{updateOperatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(versionNo)">
+				AND VersionNo = #{versionNo}
+			</if>
+		</where>
+	</sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanPayinvestPo">
+    	SELECT *
+	    FROM bizplan_payinvest 
+		<include refid="where"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+</mapper>
+

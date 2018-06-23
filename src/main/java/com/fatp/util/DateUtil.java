@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
@@ -175,7 +176,12 @@ public class DateUtil extends DateUtils {
 		calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		return format.format(calendar.getTime());
 	}
-	
+	/**
+	 * 根据格式转换为日期
+	 * @param date
+	 * @param pattern
+	 * @return
+	 */
 	public static Date convertDate(String date,String pattern) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
 		try {
@@ -221,5 +227,18 @@ public class DateUtil extends DateUtils {
         calendar.roll(Calendar.DAY_OF_YEAR, -1);  
         return calendar.getTime();  
     }  
+    
+    /**
+	 * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
+	 */
+	public static String formatDate(Date date, Object... pattern) {
+		String formatDate = null;
+		if (pattern != null && pattern.length > 0) {
+			formatDate = DateFormatUtils.format(date, pattern[0].toString());
+		} else {
+			formatDate = DateFormatUtils.format(date, "yyyy-MM-dd");
+		}
+		return formatDate;
+	}
     
 }

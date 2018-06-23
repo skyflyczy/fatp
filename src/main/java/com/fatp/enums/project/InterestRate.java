@@ -23,4 +23,13 @@ public enum InterestRate {
 		return value;
 	}
 	
+	public static InterestRate getInterestRateByValue(int value) {
+		for(InterestRate rate : InterestRate.values()) {
+			if(rate.value == value) {
+				return rate;
+			}
+		}
+		return null;
+	}
+	
 }
