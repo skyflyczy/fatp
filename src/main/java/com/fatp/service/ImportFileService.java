@@ -15,12 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
 import com.fatp.service.sys.SysParamService;
+import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;
 import com.huajin.pdfconvertor.PdfProcessSupport;
@@ -34,7 +37,10 @@ public class ImportFileService {
 	@Autowired
 	private SysParamService sysParmService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
-
+	@Autowired
+	private ListingInfoDataSupportService listingInfoDataSupportService;
+	@Autowired
+	private SysbizcodeSequenceService sysbizcodeSequenceService;
 	/**
 	 * 导入投资明细文件地址
 	 * 
@@ -144,38 +150,42 @@ public class ImportFileService {
 //			}
 			
 			try{
-			listingInfo.setId( Integer.valueOf(strArray[0].trim()));
-			listingInfo.setExchangeId(Integer.valueOf(strArray[1].trim()));
-			listingInfo.setIssuer(strArray[2].trim());
-			listingInfo.setListingManager(strArray[3].trim());
-			listingInfo.setInvestManager(strArray[4].trim());
-			listingInfo.setListingCode(strArray[5].trim());
-			listingInfo.setListingGuid(strArray[6].trim());
-			listingInfo.setPartnerBizCode(strArray[7].trim());
-			listingInfo.setPartnerBiz(strArray[8].trim());
-			listingInfo.setListingName(strArray[9].trim());
-			listingInfo.setListingFullName(strArray[10].trim());
-			listingInfo.setListingMoney(new BigDecimal(strArray[11].trim()));
-			listingInfo.setListingLimit(Integer.valueOf(strArray[12].trim()));
-			listingInfo.setListingLimitType(Integer.valueOf(strArray[13].trim()));
-			listingInfo.setInvestProfitType(Integer.valueOf(strArray[14].trim()));
-			listingInfo.setExpireDateStyle(Integer.valueOf(strArray[15].trim()));
-			listingInfo.setValueDate(Date.valueOf(strArray[16].trim()));
-			listingInfo.setExpireDate(Date.valueOf(strArray[17].trim()));
-			listingInfo.setPayInterestType(Integer.valueOf(strArray[18].trim()));
-			listingInfo.setInterestType(Integer.valueOf(strArray[19].trim()));
-			listingInfo.setInterestRate(Integer.valueOf(strArray[20].trim()));
-			listingInfo.setInterestBase(Integer.valueOf(strArray[21].trim()));
-			listingInfo.setInterestBaseDays(Integer.valueOf(strArray[22].trim()));
-			listingInfo.setExpireDateInterest(Integer.valueOf(strArray[23].trim()));
-			listingInfo.setListingStatus(Integer.valueOf(strArray[24].trim()));
-			listingInfo.setCreateTime(Date.valueOf(strArray[25].trim()));
-			listingInfo.setCreateOperatorId(Integer.valueOf(strArray[26].trim()));
-			listingInfo.setUpdateTime(Date.valueOf(strArray[27].trim()));
-			listingInfo.setUpateOperatorId(Integer.valueOf(strArray[28].trim()));
-			listingInfo.setVersionNo(Integer.valueOf(strArray[29].trim()));
-			}catch(Exception e)
-			{e.printStackTrace();}
+				listingInfo.setId( Integer.valueOf(strArray[0].trim()));			
+				listingInfo.setExchangeId(Integer.valueOf(strArray[1].trim()));
+				listingInfo.setIssuer(strArray[2].trim());
+				listingInfo.setListingManager(strArray[3].trim());
+				listingInfo.setInvestManager(strArray[4].trim());
+				//新增挂牌代码,系统自动生成
+				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
+				listingInfo.setListingGuid(strArray[6].trim());
+				listingInfo.setPartnerBizCode(strArray[7].trim());
+				listingInfo.setPartnerBiz(strArray[8].trim());
+				listingInfo.setListingName(strArray[9].trim());
+				listingInfo.setListingFullName(strArray[10].trim());
+				listingInfo.setListingMoney(new BigDecimal(strArray[11].trim()));
+				listingInfo.setListingLimit(Integer.valueOf(strArray[12].trim()));
+				listingInfo.setListingLimitType(Integer.valueOf(strArray[13].trim()));
+				listingInfo.setInvestProfitType(Integer.valueOf(strArray[14].trim()));
+				listingInfo.setExpireDateStyle(Integer.valueOf(strArray[15].trim()));
+				listingInfo.setValueDate(Date.valueOf(strArray[16].trim()));
+				listingInfo.setExpireDate(Date.valueOf(strArray[17].trim()));
+				listingInfo.setPayInterestType(Integer.valueOf(strArray[18].trim()));
+				listingInfo.setInterestType(Integer.valueOf(strArray[19].trim()));
+				listingInfo.setInterestRate(Integer.valueOf(strArray[20].trim()));
+				listingInfo.setInterestBase(Integer.valueOf(strArray[21].trim()));
+				listingInfo.setInterestBaseDays(Integer.valueOf(strArray[22].trim()));
+				listingInfo.setExpireDateInterest(Integer.valueOf(strArray[23].trim()));
+				listingInfo.setListingStatus(Integer.valueOf(strArray[24].trim()));
+				listingInfo.setCreateTime(Date.valueOf(strArray[25].trim()));
+				listingInfo.setCreateOperatorId(Integer.valueOf(strArray[26].trim()));
+				listingInfo.setUpdateTime(Date.valueOf(strArray[27].trim()));
+				listingInfo.setUpateOperatorId(Integer.valueOf(strArray[28].trim()));
+				listingInfo.setVersionNo(Integer.valueOf(strArray[29].trim()));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 			list.add(listingInfo);
 			logger.debug("listingInfo["+i + "] = " + listingInfo);
 			}

@@ -93,6 +93,7 @@ public class ListingInfoController extends BaseController {
 	 */
 	@RequestMapping("edit")
 	public String edit(String id) {
+		logger.debug("id=" + id);
 		if(StringUtil.isNotBlank(id)) {
 			ListingInfo listingInfoVo = listingInfoService.getByListingGuid(id);
 			if(listingInfoVo != null) {
@@ -100,6 +101,7 @@ public class ListingInfoController extends BaseController {
 				request().setAttribute("listingTradeList", tradeVoList);
 			}
 			request().setAttribute("obj", listingInfoVo);
+			logger.debug("listingInfoVo=" + listingInfoVo);
 		}
 		request().setAttribute("todayForJudge", DateUtils.getDate());
 		request().setAttribute("investProfitTypeList", InvestProfitType.values());
@@ -166,17 +168,7 @@ public class ListingInfoController extends BaseController {
 
 	@RequestMapping("import")
 	public String importIndex(String id) {
-		if (StringUtil.isNotBlank(id)) {
-			ListingInfo listingInfoVo = listingInfoService.getByListingGuid(id);
-			if (listingInfoVo != null) {
-				List<ListingTrade> tradeVoList = listingInfoService.getTradeByListingInfoId(listingInfoVo.getId());
-				request().setAttribute("listingTradeList", tradeVoList);
-			}
-			logger.debug("id=" + id);
-			logger.debug("listingInfoVo=" + listingInfoVo);
-			request().setAttribute("obj", listingInfoVo);
-		}
-
+		logger.debug("importIndex() id=" + id);
 		return viewPath + "/importIndex";
 	}
 
