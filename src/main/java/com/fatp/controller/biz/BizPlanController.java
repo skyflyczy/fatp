@@ -1,10 +1,14 @@
 package com.fatp.controller.biz;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +114,10 @@ public class BizPlanController extends BaseController{
 			return resultSuccess();
 		} catch (FatpException e) {
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "repayCompleted", e));
-			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage()).toJSONString();
+			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
 		} catch (Exception e) {
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "repayCompleted", e));
-			return resultError(ErrorCode.SYSTEM_ERROR.getMessage()).toJSONString();
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
 	}
 	
@@ -156,13 +160,54 @@ public class BizPlanController extends BaseController{
 			bizplanPayinvestService.payinvestCompleted(repayPlanGuid,super.getSelfId());
 			return resultSuccess();
 		} catch (FatpException e) {
-			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "payinvestCompleted", e));
-			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage()).toJSONString();
+			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "payinvestCompleted", e));
-			return resultError(ErrorCode.SYSTEM_ERROR.getMessage()).toJSONString();
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
+		}
+	}
+	
+	/**
+	 * 导出兑付明细
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/export_payinvest_list")
+	@ResponseBody
+	public Object exportPayinvestList(){
+		OutputStream outputStream = null;
+		try {
+			String repayPlanGuid = request().getParameter("id");
+			if(StringUtils.isBlank(repayPlanGuid)) {
+				return resultError(ErrorCode.SYSTEM_PARAMETERS_EMPTY.getMessage());
+			}
+			BizplanRepay planRepay = bizplanRepayService.getPlanRepayByGuid(repayPlanGuid);
+			if(planRepay == null) {
+				return resultError("没有此还款计划");
+			}
+			Map<String, Object> map = new HashMap<>();
+			map.put("repayPlanId", planRepay.getId());
+			List<BizplanPayinvest> list = bizplanPayinvestService.findPlanPayinvest(map);
+			String filename = URLEncoder.encode("兑付明细", "utf-8");
+			HttpServletResponse response = response();
+			response.setCharacterEncoding("utf-8");
+	        response.setContentType("application/msexcel");
+	        response.setHeader("Content-Disposition", "attachment;fileName="+filename+".xls");
+	        outputStream = response.getOutputStream();
+	        bizplanPayinvestService.genPayinvestListExcel(list, outputStream);
+	        outputStream.flush();
+	        return resultSuccess();
+		}catch(Exception e) {
+			e.printStackTrace();
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "exportPayinvestList", e));
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
+		} finally{
+			if(outputStream != null)
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+				}
 		}
 	}
 	

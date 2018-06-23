@@ -27,9 +27,9 @@ function afterPayinvestCompleted(json){
 	    		 	已兑付完成
 	    		 </c:if>
 	    		 &nbsp;&nbsp;
-                <a href="/offsite/invest/tradeapplylist.do" 
-	    					class="btn btn-blue" data-toggle="dialog" data-width="800"  
-	    					data-height="500" data-id="dialog-mask" data-mask="true" >导出银行兑付文件</a>
+                <a href="/biz/plan/export_payinvest_list.do?id=${planRepay.repayPlanGuid }" 
+	    					class="btn btn-blue" class="btn btn-blue"   
+	    					 data-mask="true" >导出银行兑付文件</a>
                 </td>
             </tr>
    	</tbody>
