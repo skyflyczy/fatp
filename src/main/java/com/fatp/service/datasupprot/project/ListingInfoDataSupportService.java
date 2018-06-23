@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,16 +173,26 @@ public class ListingInfoDataSupportService {
 			throw new FatpException(ErrorCode.LISTING_DELELT_ERROR);
 		}
 	}
-	public int listingRecords(List<ListingInfoPo> listing) {
+	@Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
+	
+	public int listingRecords(List<ListingInfoPo> poilist) throws Exception {  
 		int result =0;
-		ListingInfoPo po = null;
-		for(int i=0;i<listing.size();i++)
-		{
-			po = listing.get(i);
-			result += listingInfoDao.insert(po);
-		}
-		// TODO Auto-generated method stub
-		return result;
-	}
+	    SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);  
+	    ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);  
+	    try {  
+	        for (ListingInfoPo po : poilist) {  
+	            result += liDao.insert(po);
+	        }  
+	        sqlSession.commit();  
+	    }
+	    catch(Exception e){
+	    	throw e;
+	    }finally {  
+	        sqlSession.close();  
+	    }  
+	    return result;
+	}	
+
 	
 }

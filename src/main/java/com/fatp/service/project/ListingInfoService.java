@@ -96,7 +96,7 @@ public class ListingInfoService extends BaseService{
 	 * 挂牌产品交易导入
 	 * @param fileInfo
 	 */
-	public int listingRecords(List<ListingInfoPo> listing) {
+	public int listingRecords(List<ListingInfoPo> listing)throws Exception  {
 
 		//导入挂牌产品信息
 		int numbers =listingInfoDataSupportService.listingRecords(listing);
