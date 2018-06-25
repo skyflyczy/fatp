@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
+import com.fatp.enums.project.InvestProfitType;
 import com.fatp.enums.project.ListingLimitType;
 import com.fatp.enums.project.PayInterestType;
 import com.fatp.po.project.ListingInfoPo;
@@ -21,6 +22,22 @@ public class ListingInfo extends ListingInfoPo{
 	
 	private List<ListingTrade> listingTradeList;
 
+	/**
+	 * 获取收益率类型
+	 * @return
+	 */
+	public String getInvestProfitTypeDesc() {
+		if(super.getInvestProfitType() == null) {
+			return "";
+		}
+		for(InvestProfitType desc : InvestProfitType.values()){
+			if(desc.type == super.getInvestProfitType()){
+				return desc.toString();
+			}
+		}
+		return "";
+	}	
+	
 	/**
 	 * 获取投资期限类型
 	 * @return

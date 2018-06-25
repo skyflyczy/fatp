@@ -63,23 +63,7 @@
 				 			<tr>
 		    					<td colspan="3">
 		        					<label class="control-label x110"><span class="red"></span>收益率类型：</label>
-								    <c:set var="investProfitType" value="${obj.investProfitType}" scope="request" ></c:set>								
-								<%							
-									int inp=(int)pageContext.findAttribute("investProfitType");
-									switch(inp){
-									  case 1:
-									    out.println("固定收益率");
-									    break;
-									  case 2:
-										    out.println("阶梯收益率");
-										    break;
-									  case 3:
-										    out.println("浮动收益率");
-										    break;								
-									  default:
-									    out.println("-");
-									}
-									%>
+								    <span>${obj.getInvestProfitTypeDesc() }</span>
 		    					</td>
 							</tr>
 							<tr>
@@ -112,23 +96,7 @@
 		    					<td>
 		        					<label class="control-label x110"><span class="red"></span>产品期限：</label>
 									<span>${(obj.expireDate==null || obj.valueDate==null)?'':obj.listingLimit}</span>
-									<c:set var="listingLimitType" value="${obj.listingLimitType}" scope="request" ></c:set>								
-								<%							
-									int lim=(int)pageContext.findAttribute("listingLimitType");
-									switch(lim){
-									  case 1:
-									    out.println("天");
-									    break;
-									  case 2:
-										    out.println("月");
-										    break;
-									  case 3:
-										    out.println("年");
-										    break;								
-									  default:
-									    out.println("-");
-									}
-									%>
+									<span>${obj.getListingLimitTypeDesc() }</span>
 		    					</td>
 		    					<td>
 		        					<label class="control-label x110"><span class="red"></span>起息日：</label>
@@ -153,29 +121,7 @@
 		    					</td>
 			                    <td>
 			                        <label class="control-label x110"><span class="red"></span>付息方式：</label>
-									<c:set var="payInterestType" value="${obj.payInterestType}" scope="request" ></c:set>								
-								<%							
-									int pay=(int)pageContext.findAttribute("payInterestType");
-									switch(pay){
-									  case 1:
-									    out.println("一次性还本付息");
-									    break;
-									  case 2:
-										    out.println("等额本息");
-										    break;
-									  case 3:
-										    out.println("按月付息到期还本");
-										    break;
-									  case 4:
-										    out.println("按季付息到期还本");
-										    break;
-									  case 5:
-										    out.println("按半年息到期还本");
-										    break;									
-									  default:
-									    out.println("按年付息到期还本");
-									}
-									%>
+			                        <span>${obj.getPayInterestTypeDesc() }</span>									
 			                    </td>
 							</tr>
 							<tr>			                    
@@ -186,52 +132,12 @@
 			                    </td>
 			                    <td>
 			                        <label class="control-label x110"><span class="red"></span>计息频率：</label>
-								<c:set var="interestRate" value="${obj.interestRate}" scope="request" ></c:set>
-								
-								<%							
-									int t=(int)pageContext.findAttribute("interestRate");
-									switch(t){
-									  case 1:
-									    out.println("按日计息");
-									    break;
-									  case 2:
-										    out.println("按月计息");
-										    break;
-									  case 3:
-										    out.println("按年计息");
-										    break;
-									  case 4:
-										    out.println("按季计息");
-										    break;
-									  case 5:
-										    out.println("按半年计息");
-										    break;									
-									  default:
-									    out.println("其它");
-									}
-									%>
+									<span>${obj.getInterestRateDesc() }</span>
 								
 			                    </td>
 								<td>
 			                        <label class="control-label x110"><span class="red"></span>计息基准：</label>
-								
-								<c:set var="interestBase" value="${obj.interestBase}" scope="request" ></c:set>	
-								<%							
-									int b=(int)pageContext.findAttribute("interestBase");
-									switch(b){
-									  case 1:
-									    out.println("ACT/365");
-									    break;
-									  case 2:
-										    out.println("ACT/360");
-										    break;
-									  case 3:
-										    out.println("ACT/ACT");
-										    break;								
-									  default:
-									    out.println("其它");
-									}
-									%>								
+									<span>${obj.getInterestBaseDesc() }</span>
 			                    </td>
 							</tr>
 							<tr>			                    
