@@ -251,10 +251,12 @@ public class ListingInfoController extends BaseController {
 			logger.debug("recordsNumbers=" + recordsNumbers);
 			}catch(Exception e)
 			{
-				e.printStackTrace();
+				//e.printStackTrace();
+				logger.error(">>>>>把产品信息记录到数据库中 globalFile.getId()=" + globalFile.getId());			
+				logger.error(">>>>>把产品信息记录到数据库中 error" + e.getMessage());			
 				globalFileService.deleteGlobalFileById(globalFile.getId());
 				Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-				return resultError(ErrorCode.SYSTEM_ERROR.getMessage()).toJSONString();
+				return resultError(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL.getMessage()).toJSONString();
 			}
 			logger.debug("<---------------out listInfoImport------------------------>");
 			return resultSuccess();
