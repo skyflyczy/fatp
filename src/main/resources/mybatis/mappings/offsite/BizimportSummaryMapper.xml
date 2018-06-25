@@ -31,5 +31,13 @@
             select LAST_INSERT_ID() as id
         </selectKey>
 	</insert>
+	
+	<select id="getBizimportSummaryByApplyGuid" parameterType="java.lang.String" resultType="com.fatp.po.offsite.BizimportSummaryPo">
+    	SELECT 
+			bizimport_summary.* 
+		FROM bizimport_summary 
+		LEFT JOIN bizimport_apply ON(bizimport_apply.Id = bizimport_summary.BizImportApplyId)
+		WHERE bizimport_apply.ApplyGuid = #{applyGuid} 
+	</select>
 </mapper>
 

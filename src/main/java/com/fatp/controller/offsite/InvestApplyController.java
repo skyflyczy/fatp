@@ -1,7 +1,10 @@
 package com.fatp.controller.offsite;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.fatp.controller.BaseController;
 import com.fatp.controller.param.InvestRecordsParam;
+import com.fatp.domain.GlobalFile;
 import com.fatp.domain.PageData;
 import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizImportApply;
@@ -29,7 +35,9 @@ import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.interceptor.FlashUpload;
+import com.fatp.po.offsite.BizimportSummaryPo;
 import com.fatp.po.user.MemberOperatorPo;
+import com.fatp.service.GlobalFileService;
 import com.fatp.service.ImportFileService;
 import com.fatp.service.offsite.InvestApplyService;
 import com.fatp.service.project.ListingInfoService;
@@ -46,6 +54,8 @@ import com.huajin.baymax.util.DateUtils;
 @Controller
 @RequestMapping("/offsite/invest")
 public class InvestApplyController extends BaseController{
+	
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private String viewPath = super.viewPath + "/offsite/invest";
 	
@@ -55,6 +65,8 @@ public class InvestApplyController extends BaseController{
 	private ListingInfoService listingInfoService;
 	@Autowired
 	private ImportFileService importFileService;
+	@Autowired
+	private GlobalFileService globalFileService;
 	/**
 	 * 可登记列表
 	 * @return
@@ -236,6 +248,43 @@ public class InvestApplyController extends BaseController{
 		request().setAttribute("pageSize", pageSize);
 		request().setAttribute("search", map);
 		return new ModelAndView(viewPath + "/apply-trade-details");
+	}
+	/**
+	 * 下载原始投资明细文件
+	 */
+	@SuppressWarnings("resource")
+	@RequestMapping("downtradedetails")
+	public void downLoadTeadeDetails() {
+		String applyGuid = request().getParameter("id");
+		BizimportSummaryPo summaryPo = investApplyService.getBizimportSummaryByApplyGuid(applyGuid);
+		if(summaryPo == null) {
+			log.error("下载原始投资明细文件，获取汇总信息为空。applyGuid：{}",applyGuid);
+			return;
+		}
+		GlobalFile globalFile = globalFileService.getGlobalFileById(summaryPo.getGlobalFileId());
+		if(globalFile == null) {
+			log.error("下载原始投资明细文件，获取文件信息为空。summaryPoId：{}",summaryPo.getId());
+			return;
+		}
+		try {
+			File file = new File(globalFile.getFilePath());
+			if(!file.exists()) {
+				log.error("下载原始投资明细文件，文件不存在。globalFileId：{}",globalFile.getId());
+			}
+			String fileName = URLEncoder.encode(globalFile.getOriginalFileName(), "UTF-8");
+			FileInputStream inputStream = new FileInputStream(file);
+			byte[] data = new byte[(int) file.length()];
+			inputStream.read(data);
+			response().setCharacterEncoding("utf-8");
+			response().setContentType("application/msexcel");
+			response().setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+			OutputStream outputStream = response().getOutputStream();
+			outputStream.write(data);
+			outputStream.flush();
+		} catch (Exception e) {
+			log.error("下载文件异常...");
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -122,7 +122,7 @@ public class InvestApplyService {
 		investApplyDataSupportService.insertTradeDetails(apply, summary, detailList);
 		//7、写入动态
 		timelineDetailDataSupportService.createInvestRecordsTimeLine(apply, FlowFeedTypeDesc.保存投资明细申请, "", operatorName);
-		//TODO 异步执行生成还款兑付计划
+		//异步执行生成还款兑付计划
 		planService.asynGenPlan(listingVo.getId(), apply.getId(), operatorId);
 	}
 	/**
@@ -196,6 +196,14 @@ public class InvestApplyService {
 //		//13、写入动态
 //		FlowFeedTypeDesc flowFeedTypeDesc = status == ApplyStatus.待提交 ? FlowFeedTypeDesc.保存投资明细申请 : FlowFeedTypeDesc.投资明细申请提交审核;
 //		timelineDetailDataSupportService.createInvestRecordsTimeLine(apply, flowFeedTypeDesc, "", operatorName);
+	}
+	/**
+	 * 根据申请Guid查找汇总信息
+	 * @param map
+	 * @return
+	 */
+	public BizimportSummaryPo getBizimportSummaryByApplyGuid(String applyGuid) {
+		return investApplyDataSupportService.getBizimportSummaryByApplyGuid(applyGuid);
 	}
 	
 	private String getJudgeSameInvestRecordsKey(BizimportTradeDetail vo) {

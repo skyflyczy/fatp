@@ -8,9 +8,9 @@
         <tbody>
             <tr>
                 <td align="right">
-                <a href="/offsite/invest/tradeapplylist.do?id=${obj.listingGuid}" 
-	    					class="btn btn-blue" data-toggle="dialog" data-width="800"  
-	    					data-height="500" data-id="dialog-mask" data-mask="true" >下载原始文件</a>
+                <a href="/offsite/invest/downtradedetails.do?id=${search.id}" 
+	    					class="btn btn-blue" class="btn btn-blue"   
+	    					 data-mask="true" >下载投资明细文件</a>
                 </td>
             </tr>
    	</tbody>

@@ -12,4 +12,10 @@ import com.huajin.baymax.db.annotation.MyBatisDao;
 @MyBatisDao
 public interface BizimportSummaryDao {
 	public int insert(BizimportSummaryPo o);
+	/**
+	 * 根据申请Guid查找汇总信息
+	 * @param map
+	 * @return
+	 */
+	public BizimportSummaryPo getBizimportSummaryByApplyGuid(String applyGuid);
 }
