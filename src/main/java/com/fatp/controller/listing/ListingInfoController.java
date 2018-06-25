@@ -160,6 +160,32 @@ public class ListingInfoController extends BaseController {
 			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
 	}
+	
+	
+	/**
+	 * 显示挂牌产品详细信息
+	 * 
+	 * @return
+	 * @return String
+	 */
+	@RequestMapping("view")
+	public String viewDetail(String id) {
+		logger.debug("id= " + id);
+		if(StringUtil.isNotBlank(id)) {
+			ListingInfo listingInfoVo = listingInfoService.getByListingGuid(id);
+			if(listingInfoVo != null) {
+				List<ListingTrade> tradeVoList = listingInfoService.getTradeByListingInfoId(listingInfoVo.getId());
+				request().setAttribute("listingTradeList", tradeVoList);
+			}
+			request().setAttribute("obj", listingInfoVo);
+			logger.debug("listingInfoVo=" + listingInfoVo);
+			request().setAttribute("todayForJudge", DateUtils.getDate());
+		}
+		return viewPath + "/detail";
+	}
+
+	
+	
 	/**
 	 * 挂牌产品导入页面
 	 * 
