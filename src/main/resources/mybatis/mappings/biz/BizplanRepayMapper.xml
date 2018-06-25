@@ -17,6 +17,7 @@
         	Interest ,
         	OverInterest ,
         	OverDay ,
+        	RepayStatus ,
         	CreateTime ,
         	CreateOperatorId ,
         	UpdateTime ,
@@ -37,6 +38,7 @@
         	#{interest} ,
         	#{overInterest} ,
         	#{overDay} ,
+        	#{repayStatus} ,
         	now() ,
         	#{createOperatorId} ,
         	now() ,
@@ -55,6 +57,16 @@
 	        Interest = #{interest} ,
 	        OverInterest = #{overInterest} ,
 	        OverDay = #{overDay} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        VersionNo =  VersionNo + 1 
+        WHERE 
+	        Id = #{id} AND VersionNo = #{versionNo} 
+	</update>
+	
+	<update id="updateRepayStatus">
+        UPDATE bizplan_repay SET 
+        	RepayStatus = #{repayStatus} ,
 	        UpdateTime = now() ,
 	        UpdateOperatorId = #{updateOperatorId} ,
 	        VersionNo =  VersionNo + 1 
@@ -138,8 +150,12 @@
 			</if>
 		</where>
 	</sql>
+	<select id="getPlanRepayByGuid" parameterType="java.lang.String" resultType="com.fatp.domain.biz.BizplanRepay">
+    	SELECT *
+	    FROM bizplan_repay WHERE RepayPlanGuid = #{repayPlanGuid} 
+    </select>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanRepayPo">
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.biz.BizplanRepay">
     	SELECT *
 	    FROM bizplan_repay 
 		<include refid="where"/>

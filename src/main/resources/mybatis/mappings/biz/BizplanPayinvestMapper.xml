@@ -15,6 +15,7 @@
         	Interest ,
         	OverInterest ,
         	OverDay ,
+        	PayinvestStatus ,
         	CreateTime ,
         	CreateOperatorId ,
         	UpdateTime ,
@@ -35,6 +36,7 @@
 	        	#{item.interest} ,
 	        	#{item.overInterest} ,
 	        	#{item.overDay} ,
+	        	#{item.payinvestStatus} ,
 	        	now() ,
 	        	#{item.createOperatorId} ,
 	        	now() ,
@@ -44,71 +46,85 @@
         </foreach>
 	</insert>
 	
+	<update id="updatePayinvestStatusByPlanRepayId">
+        UPDATE bizplan_payinvest SET 
+        	PayinvestStatus = #{payinvestStatus} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} ,
+	        VersionNo =  VersionNo + 1 
+        WHERE 
+	        RepayPlanId = #{repayPlanId}
+	</update>
+	
 	<sql id="where">
 		<where>	      				
 	       <if test="@Ognl@isNotEmpty(id)">
-				AND Id = #{id}
+				AND bizplan_payinvest.Id = #{id}
 			</if>
 	       <if test="@Ognl@isNotEmpty(payinvestPlanGuid)">
-				AND PayinvestPlanGuid = #{payinvestPlanGuid}
+				AND bizplan_payinvest.PayinvestPlanGuid = #{payinvestPlanGuid}
 			</if>
 	       <if test="@Ognl@isNotEmpty(repayPlanId)">
-				AND RepayPlanId = #{repayPlanId}
+				AND bizplan_payinvest.RepayPlanId = #{repayPlanId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(listingInfoId)">
-				AND ListingInfoId = #{listingInfoId}
+				AND bizplan_payinvest.ListingInfoId = #{listingInfoId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(investUserId)">
-				AND InvestUserId = #{investUserId}
+				AND bizplan_payinvest.InvestUserId = #{investUserId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(cardAccount)">
-				AND CardAccount = #{cardAccount}
+				AND bizplan_payinvest.CardAccount = #{cardAccount}
 			</if>
 	       <if test="@Ognl@isNotEmpty(subBankName)">
-				AND SubBankName = #{subBankName}
+				AND bizplan_payinvest.SubBankName = #{subBankName}
 			</if>
 	       <if test="@Ognl@isNotEmpty(periodNumber)">
-				AND PeriodNumber = #{periodNumber}
+				AND bizplan_payinvest.PeriodNumber = #{periodNumber}
 			</if>
 	       <if test="@Ognl@isNotEmpty(principal)">
-				AND Principal = #{principal}
+				AND bizplan_payinvest.Principal = #{principal}
 			</if>
 	       <if test="@Ognl@isNotEmpty(interest)">
-				AND Interest = #{interest}
+				AND bizplan_payinvest.Interest = #{interest}
 			</if>
 	       <if test="@Ognl@isNotEmpty(overInterest)">
-				AND OverInterest = #{overInterest}
+				AND bizplan_payinvest.OverInterest = #{overInterest}
 			</if>
 	       <if test="@Ognl@isNotEmpty(overDay)">
-				AND OverDay = #{overDay}
+				AND bizplan_payinvest.OverDay = #{overDay}
 			</if>
 	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
-				AND CreateTime >= #{createTimeBegin}
+				AND bizplan_payinvest.CreateTime >= #{createTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
-				AND CreateTime &lt;= #{createTimeEnd}
+				AND bizplan_payinvest.CreateTime &lt;= #{createTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(createOperatorId)">
-				AND CreateOperatorId = #{createOperatorId}
+				AND bizplan_payinvest.CreateOperatorId = #{createOperatorId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
-				AND UpdateTime >= #{updateTimeBegin}
+				AND bizplan_payinvest.UpdateTime >= #{updateTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
-				AND UpdateTime &lt;= #{updateTimeEnd}
+				AND bizplan_payinvest.UpdateTime &lt;= #{updateTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
-				AND UpdateOperatorId = #{updateOperatorId}
+				AND bizplan_payinvest.UpdateOperatorId = #{updateOperatorId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(versionNo)">
-				AND VersionNo = #{versionNo}
+				AND bizplan_payinvest.VersionNo = #{versionNo}
 			</if>
 		</where>
 	</sql>
 
-    <select id="select" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanPayinvestPo">
-    	SELECT *
+    <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.biz.BizplanPayinvest">
+    	SELECT 
+    		bizplan_payinvest.*,
+    		CONVERT(AES_DECRYPT(uc_user.RealName,'fatp.com')USING utf8) investUserRealName   
 	    FROM bizplan_payinvest 
+	    LEFT JOIN uc_user ON(uc_user.Id = bizplan_payinvest.InvestUserId) 
+	    
 		<include refid="where"/>
 		
 		<if test="@Ognl@isNotEmpty(sortColumns)">

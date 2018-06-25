@@ -13,6 +13,7 @@ import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.YesNo;
+import com.fatp.enums.biz.RepayStatus;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
 import com.fatp.exception.FatpException;
@@ -139,6 +140,10 @@ public class OneTimeStragey extends PlanGenStragey{
 			repay.setInterestEndDate(periodResult.getInterestEndDate());
 			repay.setInterestStartDate(periodResult.getInterestStartDate());
 			repay.setPlanRepayDate(repayDate);
+			repay.setRepayStatus(RepayStatus.未还款.status);
+		}
+		if(repay.getRepayStatus() != RepayStatus.未还款.status) {
+			throw new FatpException("已还款，不能再生成还款兑付计划。");
 		}
 		repay.setUpdateOperatorId(operatorId);
 		return repay;

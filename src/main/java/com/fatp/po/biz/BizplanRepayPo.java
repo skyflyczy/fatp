@@ -50,7 +50,7 @@ public class BizplanRepayPo {
 	/**
 	 * 计划应还日期
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	@DateTimeFormat(pattern="yyyy-MM-dd")  
 	private java.util.Date planRepayDate;
 	/**
 	 * 本期应还本金（元）
@@ -68,6 +68,10 @@ public class BizplanRepayPo {
 	 * 累计逾期天数
 	 */
 	private Integer overDay;
+	/**
+	 * 还款状态
+	 */
+	private int repayStatus;
 	/**
 	 * 创建时间
 	 */
@@ -205,6 +209,11 @@ public class BizplanRepayPo {
 	public Integer getVersionNo() {
 		return this.versionNo;
 	}
-
+	public int getRepayStatus() {
+		return repayStatus;
+	}
+	public void setRepayStatus(int repayStatus) {
+		this.repayStatus = repayStatus;
+	}
 }
 

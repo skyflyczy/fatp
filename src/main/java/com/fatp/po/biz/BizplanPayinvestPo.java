@@ -58,6 +58,10 @@ public class BizplanPayinvestPo {
 	 */
 	private Integer overDay;
 	/**
+	 * 兑付状态
+	 */
+	private int payinvestStatus;
+	/**
 	 * 创建时间
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
@@ -182,6 +186,11 @@ public class BizplanPayinvestPo {
 	public Integer getVersionNo() {
 		return this.versionNo;
 	}
-
+	public int getPayinvestStatus() {
+		return payinvestStatus;
+	}
+	public void setPayinvestStatus(int payinvestStatus) {
+		this.payinvestStatus = payinvestStatus;
+	}
 }
 

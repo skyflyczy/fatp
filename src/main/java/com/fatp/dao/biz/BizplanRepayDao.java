@@ -3,6 +3,7 @@ package com.fatp.dao.biz;
 import java.util.List;
 import java.util.Map;
 
+import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.po.biz.BizplanRepayPo;
 import com.huajin.baymax.db.annotation.MyBatisDao;
 
@@ -19,7 +20,11 @@ public interface BizplanRepayDao {
 	
 	public int updateByVersion(BizplanRepayPo o);
 	
-	public List<BizplanRepayPo> select(Map<String, Object> map);
+	public List<BizplanRepay> select(Map<String, Object> map);
 	
 	public BizplanRepayPo getPlanRepayPoByUniqueKey(Map<String,Object> map);
+	
+	public BizplanRepay getPlanRepayByGuid(String repayPlanGuid);
+	
+	public int updateRepayStatus(BizplanRepayPo po);
 }
