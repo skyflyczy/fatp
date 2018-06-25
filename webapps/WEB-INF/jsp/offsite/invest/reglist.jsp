@@ -35,7 +35,7 @@
     				<td align="center">${obj.listingCode}</td>
     				<td align="center"><a 
 	    				href="<%=request.getContextPath()%>/project/listinginfo/view.do?id=${obj.listingGuid}"
-    					data-toggle="dialog" data-width="1000"  
+    					data-toggle="dialog" data-width="1100"  
     					data-height="600" data-id="dialog-mask" data-mask="true" class="text-omit pull-left">${obj.listingFullName}</a>
     				</td>
     				<td align="center">${obj.issuer}</td>

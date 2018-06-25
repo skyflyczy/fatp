@@ -289,6 +289,14 @@ public class InvestApplyDataSupportService {
 		return bizimportApplyDao.updateApplyStatus(po);
 	}
 	/**
+	 * 根据申请Guid查找汇总信息
+	 * @param map
+	 * @return
+	 */
+	public BizimportSummaryPo getBizimportSummaryByApplyGuid(String applyGuid) {
+		return bizimportSummaryDao.getBizimportSummaryByApplyGuid(applyGuid);
+	}
+	/**
 	 * 解密
 	 * @param list
 	 */

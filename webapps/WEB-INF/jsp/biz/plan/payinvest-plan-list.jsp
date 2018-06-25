@@ -17,6 +17,7 @@ function afterPayinvestCompleted(json){
         <tbody>
             <tr>
                 <td align="right">
+                <!-- 
                 <c:if test="${canPayinvestCompleted }">
                  <a href="/biz/plan/payinvest_completed.do?id=${planRepay.repayPlanGuid }" 
 	    					class="btn btn-blue" data-toggle="doajax" 
@@ -27,9 +28,10 @@ function afterPayinvestCompleted(json){
 	    		 	已兑付完成
 	    		 </c:if>
 	    		 &nbsp;&nbsp;
+	    		  -->
                 <a href="/biz/plan/export_payinvest_list.do?id=${planRepay.repayPlanGuid }" 
 	    					class="btn btn-blue" class="btn btn-blue"   
-	    					 data-mask="true" >导出银行兑付文件</a>
+	    					 data-mask="true" >导出兑付文件</a>
                 </td>
             </tr>
    	</tbody>

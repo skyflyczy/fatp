@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,11 +189,10 @@ public class BizPlanController extends BaseController{
 			map.put("repayPlanId", planRepay.getId());
 			List<BizplanPayinvest> list = bizplanPayinvestService.findPlanPayinvest(map);
 			String filename = URLEncoder.encode("兑付明细", "utf-8");
-			HttpServletResponse response = response();
-			response.setCharacterEncoding("utf-8");
-	        response.setContentType("application/msexcel");
-	        response.setHeader("Content-Disposition", "attachment;fileName="+filename+".xls");
-	        outputStream = response.getOutputStream();
+			response().setCharacterEncoding("utf-8");
+			response().setContentType("application/msexcel");
+			response().setHeader("Content-Disposition", "attachment;fileName="+filename+".xls");
+	        outputStream = response().getOutputStream();
 	        bizplanPayinvestService.genPayinvestListExcel(list, outputStream);
 	        outputStream.flush();
 	        return resultSuccess();

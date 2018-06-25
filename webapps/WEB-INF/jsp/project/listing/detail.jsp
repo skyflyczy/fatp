@@ -77,7 +77,7 @@
 							                    <th title="最高投资金额(元)" width="30%">
 							                    </th>
 							                    <th title="指定预期收益率(%)" width="20%">
-						                	</tr>${obj.listingTradeList}
+						                	</tr>
 					            		</thead>
 								        <tbody>
 								        	<c:forEach var="listingTrade" items="${listingTradeList}" varStatus="status"> 
@@ -157,6 +157,7 @@
 				 
 			</form>
 		</div>
+</div>
 </div>
 
 <div class="bjui-pageFooter">
