@@ -77,76 +77,88 @@
 	<sql id="where">
 		<where>	      				
 	       <if test="@Ognl@isNotEmpty(id)">
-				AND Id = #{id}
+				AND bizplan_repay.Id = #{id}
 			</if>
 	       <if test="@Ognl@isNotEmpty(repayPlanGuid)">
-				AND RepayPlanGuid = #{repayPlanGuid}
+				AND bizplan_repay.RepayPlanGuid = #{repayPlanGuid}
 			</if>
 	       <if test="@Ognl@isNotEmpty(listingInfoId)">
-				AND ListingInfoId = #{listingInfoId}
+				AND bizplan_repay.ListingInfoId = #{listingInfoId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(loanUserId)">
-				AND LoanUserId = #{loanUserId}
+				AND bizplan_repay.LoanUserId = #{loanUserId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(periodNumber)">
-				AND PeriodNumber = #{periodNumber}
+				AND bizplan_repay.PeriodNumber = #{periodNumber}
 			</if>
 	       <if test="@Ognl@isNotEmpty(interestDay)">
-				AND InterestDay = #{interestDay}
+				AND bizplan_repay.InterestDay = #{interestDay}
 			</if>
 	       <if test="@Ognl@isNotEmpty(interestStartDateBegin)">
-				AND InterestStartDate >= #{interestStartDateBegin}
+				AND bizplan_repay.InterestStartDate >= #{interestStartDateBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(interestStartDateEnd)">
-				AND InterestStartDate &lt;= #{interestStartDateEnd}
+				AND bizplan_repay.InterestStartDate &lt;= #{interestStartDateEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(interestEndDateBegin)">
-				AND InterestEndDate >= #{interestEndDateBegin}
+				AND bizplan_repay.InterestEndDate >= #{interestEndDateBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(interestEndDateEnd)">
-				AND InterestEndDate &lt;= #{interestEndDateEnd}
+				AND bizplan_repay.InterestEndDate &lt;= #{interestEndDateEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(interestPrincipal)">
-				AND InterestPrincipal = #{interestPrincipal}
+				AND bizplan_repay.InterestPrincipal = #{interestPrincipal}
 			</if>
 	       <if test="@Ognl@isNotEmpty(planRepayDateBegin)">
-				AND PlanRepayDate >= #{planRepayDateBegin}
+				AND bizplan_repay.PlanRepayDate >= #{planRepayDateBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(planRepayDateEnd)">
-				AND PlanRepayDate &lt;= #{planRepayDateEnd}
+				AND bizplan_repay.PlanRepayDate &lt;= #{planRepayDateEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(principal)">
-				AND Principal = #{principal}
+				AND bizplan_repay.Principal = #{principal}
 			</if>
 	       <if test="@Ognl@isNotEmpty(interest)">
-				AND Interest = #{interest}
+				AND bizplan_repay.Interest = #{interest}
 			</if>
 	       <if test="@Ognl@isNotEmpty(overInterest)">
-				AND OverInterest = #{overInterest}
+				AND bizplan_repay.OverInterest = #{overInterest}
 			</if>
 	       <if test="@Ognl@isNotEmpty(overDay)">
-				AND OverDay = #{overDay}
+				AND bizplan_repay.OverDay = #{overDay}
 			</if>
 	       <if test="@Ognl@isNotEmpty(createTimeBegin)">
-				AND CreateTime >= #{createTimeBegin}
+				AND bizplan_repay.CreateTime >= #{createTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(createTimeEnd)">
-				AND CreateTime &lt;= #{createTimeEnd}
+				AND bizplan_repay.CreateTime &lt;= #{createTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(createOperatorId)">
-				AND CreateOperatorId = #{createOperatorId}
+				AND bizplan_repay.CreateOperatorId = #{createOperatorId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(updateTimeBegin)">
-				AND UpdateTime >= #{updateTimeBegin}
+				AND bizplan_repay.UpdateTime >= #{updateTimeBegin}
 		   </if>
 		   <if test="@Ognl@isNotEmpty(updateTimeEnd)">
-				AND UpdateTime &lt;= #{updateTimeEnd}
+				AND bizplan_repay.UpdateTime &lt;= #{updateTimeEnd}
 		   </if>
 	       <if test="@Ognl@isNotEmpty(updateOperatorId)">
-				AND UpdateOperatorId = #{updateOperatorId}
+				AND bizplan_repay.UpdateOperatorId = #{updateOperatorId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(versionNo)">
-				AND VersionNo = #{versionNo}
+				AND bizplan_repay.VersionNo = #{versionNo}
+			</if>
+			<if test="@Ognl@isNotEmpty(listingCode)">
+				AND listing_info.ListingCode = #{listingCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(issuer)">
+				AND listing_info.Issuer like "%"#{issuer}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(listingFullName)">
+				AND listing_info.ListingFullName like "%"#{listingFullName}"%"
+			</if>
+			<if test="@Ognl@isNotEmpty(noRepayStatus)">
+				AND bizplan_repay.RepayStatus != #{noRepayStatus}
 			</if>
 		</where>
 	</sql>
@@ -156,8 +168,18 @@
     </select>
 
     <select id="select" parameterType="java.util.Map" resultType="com.fatp.domain.biz.BizplanRepay">
-    	SELECT *
+    	SELECT 
+    		bizplan_repay.*,
+    		listing_info.Issuer,
+    		listing_info.ListingCode,
+    		listing_info.ListingFullName,
+    		listing_info.ListingMoney,
+    		listing_info.ListingLimit,
+    		listing_info.ListingLimitType,
+    		listing_info.PayInterestType,
+    		listing_info.ListingGuid 
 	    FROM bizplan_repay 
+	    LEFT JOIN listing_info ON(listing_info.id = bizplan_repay.ListingInfoId)
 		<include refid="where"/>
 		
 		<if test="@Ognl@isNotEmpty(sortColumns)">

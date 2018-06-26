@@ -3,6 +3,7 @@ package com.fatp.controller.biz;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.fatp.service.project.ListingInfoService;
 import com.fatp.util.Constant;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
+import com.huajin.baymax.util.DateUtils;
 /**
  * 还款计划
  */
@@ -207,6 +209,28 @@ public class BizPlanController extends BaseController{
 				} catch (IOException e) {
 				}
 		}
+	}
+	/**
+	 * 最近还款提示列表
+	 * @return
+	 */
+	@RequestMapping("recentrepaylist")
+	public String recentRepayList(){
+		Map<String, Object> map = paramToMap(request());
+		//最近五天的
+		map.put("planRepayDateBegin", DateUtils.formatDate(new Date()));
+		map.put("planRepayDateEnd",  DateUtils.formatDate(DateUtils.addDays(new Date(), 5)));
+		map.put("noRepayStatus", RepayStatus.还款完成.status);
+		map.put("sortColumns", " PlanRepayDate ");
+		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
+		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
+		PageData<BizplanRepay> pageData = bizplanRepayService.pageFindRepayList(map, pageNo, pageSize);
+		request().setAttribute("list", pageData.getList());
+		request().setAttribute("total", pageData.getTotalsize());
+		request().setAttribute("pageCurrent", pageNo);
+		request().setAttribute("pageSize", pageSize);
+		request().setAttribute("search", map);
+		return viewPath + "/recent/listinglist-repay";
 	}
 	
 }

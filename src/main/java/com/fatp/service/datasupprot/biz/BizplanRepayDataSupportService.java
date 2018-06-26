@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatp.dao.biz.BizplanRepayDao;
+import com.fatp.domain.PageData;
 import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.exception.FatpException;
 import com.fatp.po.biz.BizplanRepayPo;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 /**
  * 还款计划
  * @author zhiya.chai
@@ -22,6 +25,18 @@ public class BizplanRepayDataSupportService {
 
 	@Autowired
 	private BizplanRepayDao bizplanRepayDao;
+	/**
+	 * 分页查找还款计划
+	 * @param map
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<BizplanRepay> pageFindRepayList(Map<String,Object> map,int pageNo, int pageSize){
+		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
+		List<BizplanRepay> list = bizplanRepayDao.select(map);
+		return new PageData<>(page.getTotal(), page.getPages(), list);
+	}
 	
 	/**
 	 * 插入还款计划

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fatp.domain.PageData;
 import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.enums.biz.RepayStatus;
 import com.fatp.po.biz.BizplanRepayPo;
@@ -17,6 +18,16 @@ public class BizplanRepayService extends BaseService{
 
 	@Autowired
 	private BizplanRepayDataSupportService bizplanRepayDataSupportService;
+	/**
+	 * 分页查找还款计划
+	 * @param map
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public PageData<BizplanRepay> pageFindRepayList(Map<String,Object> map,int pageNo, int pageSize) {
+		return bizplanRepayDataSupportService.pageFindRepayList(map, pageNo, pageSize);
+	}
 	/**
 	 * 获取还款计划
 	 * @param map
