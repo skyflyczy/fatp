@@ -6,7 +6,7 @@
 function afterRepayCompleted(json){
 	if(json.statusCode == 200){
 		$(this).alertmsg("correct", json.message);
-		$(this).dialog("refresh");
+		$(this).dialog("refresh","dialog-repay-plan");
 	}else{
 		$(this).alertmsg("error", json.message);
 	}
@@ -69,7 +69,7 @@ function afterRepayCompleted(json){
     			<td align="center">
     			<c:if test="${obj.canRepayCompleted()}">
     				<a href="/biz/plan/repay_completed.do?id=${obj.repayPlanGuid}" 
-	    					class="btn btn-blue" data-toggle="doajax" data-callback="afterRepayCompleted()" data-confirm-msg="确定还款完成吗？" data-mask="true" >还款完成</a>
+	    					class="btn btn-blue" data-toggle="doajax" data-loadingmask="false" data-callback='function(){$(this).dialog("refresh","dialog-repay-plan");}' data-confirm-msg="确定还款完成吗？" data-mask="true" >还款完成</a>
 	    		</c:if>
 	    			<a href="/biz/plan/payinvest_plan_list.do?id=${obj.repayPlanGuid}" 
 	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  

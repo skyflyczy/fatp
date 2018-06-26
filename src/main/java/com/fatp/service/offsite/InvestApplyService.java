@@ -9,18 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
+import com.fatp.domain.biz.BizplanPayinvest;
+import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.domain.offsite.InvestApply;
 import com.fatp.domain.offsite.InvestRecordsResult;
 import com.fatp.enums.FlowFeedTypeDesc;
+import com.fatp.enums.YesNo;
 import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
@@ -30,6 +35,8 @@ import com.fatp.po.offsite.BizimportSummaryPo;
 import com.fatp.service.GlobalFileService;
 import com.fatp.service.ImportFileService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
+import com.fatp.service.datasupprot.biz.BizplanPayinvestDataSupportService;
+import com.fatp.service.datasupprot.biz.BizplanRepayDataSupportService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
 import com.fatp.service.plan.PlanService;
@@ -50,6 +57,10 @@ public class InvestApplyService {
 	private TimelineDetailDataSupportService timelineDetailDataSupportService;
 	@Autowired
 	private PlanService planService;
+	@Autowired
+	private BizplanPayinvestDataSupportService bizplanPayinvestDataSupportService;
+	@Autowired
+	private BizplanRepayDataSupportService bizplanRepayDataSupportService;
 	
 	/**
 	 * 分页查找可进行登记的挂牌产品列表
@@ -198,12 +209,92 @@ public class InvestApplyService {
 //		timelineDetailDataSupportService.createInvestRecordsTimeLine(apply, flowFeedTypeDesc, "", operatorName);
 	}
 	/**
+	 * 删除登记申请
+	 * @param applyGuid
+	 * @param operatorId
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteApply(String applyGuid,int operatorId) {
+		if(StringUtils.isBlank(applyGuid)) {
+			throw new FatpException(ErrorCode.SYSTEM_PARAMETERS_EMPTY);
+		}
+		BizImportApply apply = investApplyDataSupportService.getApplyByApplyGuid(applyGuid);
+		if(apply == null) {
+			throw new FatpException("此申请不存在");
+		}
+		if(apply.getIsDelete() == YesNo.是.value) {
+			return;
+		}
+		//设置登记申请为删除状态
+		apply.setIsDelete(YesNo.是.value);
+		investApplyDataSupportService.updateApplyDeleteStatus(apply);
+		//分期获取此次申请所获取兑付总额和总利息
+		List<BizplanPayinvest> payinvestList = bizplanPayinvestDataSupportService.findPlanPayinvestByApplyId(apply.getId());
+		if(CollectionUtils.isEmpty(payinvestList)) {
+			return;
+		}
+		Map<Integer, BigDecimal> principalMap = new HashMap<>();//本金期数金额Map
+		Map<Integer,BigDecimal> interestMap = new HashMap<>();//利息期数金额Map
+		for(BizplanPayinvest payinvest : payinvestList) {
+			Integer key = payinvest.getPeriodNumber();
+			BigDecimal principal = principalMap.get(key);
+			if(principal == null) {
+				principalMap.put(key, payinvest.getPrincipal());
+			} else {
+				principalMap.put(key, principal.add(payinvest.getPrincipal()));
+			}
+			BigDecimal interest = interestMap.get(key);
+			if(interest == null) {
+				interestMap.put(key, payinvest.getInterest());
+			} else {
+				interestMap.put(key, interest.add(payinvest.getInterest()));
+			}
+		}
+		//更新此次兑付数据为删除状态
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("isDelete", YesNo.是.value);
+		map.put("updateOperatorId", operatorId);
+		map.put("bizImportApplyId", apply.getId());
+		bizplanPayinvestDataSupportService.updatePayinvestDeleteStatusByApplyId(map);
+		//更新还款计划还款金额和还款利息，分期更新
+		map.clear();
+		map.put("listingInfoId", apply.getListingInfoId());
+		List<BizplanRepay> planRepayList = bizplanRepayDataSupportService.findRepayPlanByCondition(map);
+		if(CollectionUtils.isEmpty(planRepayList)) {
+			return;
+		}
+		planRepayList.stream().forEach(planRepay ->{
+			BigDecimal principal = principalMap.get(planRepay.getPeriodNumber());
+			if(principal != null) {
+				planRepay.setPrincipal(planRepay.getPrincipal().subtract(principal));
+				planRepay.setPrincipal(planRepay.getPrincipal().compareTo(BigDecimal.ZERO) > 0 ? planRepay.getPrincipal() : BigDecimal.ZERO);
+				planRepay.setInterestPrincipal(planRepay.getPrincipal());
+				planRepay.setUpdateOperatorId(operatorId);
+			}
+			BigDecimal interest = interestMap.get(planRepay.getPeriodNumber());
+			if(interest != null) {
+				planRepay.setInterest(planRepay.getInterest().subtract(interest));
+				planRepay.setInterest(planRepay.getInterest().compareTo(BigDecimal.ZERO) > 0 ? planRepay.getInterest() : BigDecimal.ZERO);
+			}
+		});
+		bizplanRepayDataSupportService.updateBatch(planRepayList);
+	}
+	
+	/**
 	 * 根据申请Guid查找汇总信息
 	 * @param map
 	 * @return
 	 */
 	public BizimportSummaryPo getBizimportSummaryByApplyGuid(String applyGuid) {
 		return investApplyDataSupportService.getBizimportSummaryByApplyGuid(applyGuid);
+	}
+	/**
+	 * 根据Guid获取项目申请登记信息
+	 * @param applyId
+	 * @return
+	 */
+	public BizImportApply getApplyByApplyGuid(String applyGuid){
+		return investApplyDataSupportService.getApplyByApplyGuid(applyGuid);
 	}
 	
 	private String getJudgeSameInvestRecordsKey(BizimportTradeDetail vo) {

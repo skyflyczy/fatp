@@ -27,4 +27,5 @@ public interface BizplanRepayDao {
 	public BizplanRepay getPlanRepayByGuid(String repayPlanGuid);
 	
 	public int updateRepayStatus(BizplanRepayPo po);
+	
 }

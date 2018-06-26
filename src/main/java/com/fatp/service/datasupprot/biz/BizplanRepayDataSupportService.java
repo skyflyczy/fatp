@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,20 @@ public class BizplanRepayDataSupportService {
 	 */
 	public List<BizplanRepay> findRepayPlanByCondition(Map<String, Object> map) {
 		return bizplanRepayDao.select(map);
+	}
+	/**
+	 * 批量更新
+	 * @param list
+	 */
+	public void updateBatch(List<BizplanRepay> list) {
+		list.stream().forEach(planRepay ->{
+			BizplanRepayPo po = new BizplanRepayPo();
+			BeanUtils.copyProperties(planRepay, po);
+			int n = bizplanRepayDao.updateByVersion(po);
+			if(n <=0) {
+				throw new FatpException("更新还款计划失败");
+			}
+		});
 	}
 	/**
 	 * 根据Guid获取还款计划

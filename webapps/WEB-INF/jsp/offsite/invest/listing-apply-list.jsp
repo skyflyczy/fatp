@@ -51,6 +51,8 @@
     			<td align="center">${obj.totalPeopleNum}</td>
     			<td align="center">${obj.getApplyStatusDesc()}</td>
     			<td align="center">
+    				<a href="/offsite/invest/deleteapply.do?id=${obj.applyGuid}" 
+	    					class="btn btn-red" data-toggle="doajax" data-mask="true" data-loadingmask="false" data-callback='function(){$(this).dialog("refresh","dialog-apply-list");}' data-confirm-msg="确定要删除吗？">删除</a>
 	    			<a href="/offsite/invest/applytradedetails.do?id=${obj.applyGuid}" 
 	    					class="btn btn-blue" data-toggle="dialog" data-width="1000"  
 	    					data-height="500" data-id="dialog-trade-details" data-mask="true" >查看详情</a>

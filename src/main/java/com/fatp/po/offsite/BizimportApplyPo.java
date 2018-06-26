@@ -34,6 +34,10 @@ public class BizimportApplyPo implements Serializable{
 	 */
 	private Integer applyStatus;
 	/**
+	 * 是否删除1：是，0：否
+	 */
+	private int isDelete;
+	/**
 	 * 申请操作员id, member_operator.id
 	 */
 	private Integer applyOperatorId;
@@ -117,6 +121,11 @@ public class BizimportApplyPo implements Serializable{
 	public java.util.Date getValueDate() {
 		return this.valueDate;
 	}
-
+	public int getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(int isDelete) {
+		this.isDelete = isDelete;
+	}
 }
 

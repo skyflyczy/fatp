@@ -10,6 +10,7 @@
         	ApplyStatus ,
         	ApplyOperatorId ,
         	ApplyMemberId ,
+        	IsDelete ,
         	CreateTime ,
         	UpdateTime ,
         	valueDate 
@@ -21,6 +22,7 @@
         	#{applyStatus} ,
         	#{applyOperatorId} ,
         	#{applyMemberId} ,
+        	#{isDelete} ,
         	now() ,
         	now() ,
         	#{valueDate} 
@@ -37,9 +39,24 @@
 		WHERE Id = #{id}
 	</select>
 	
+	<select id="getApplyByApplyGuid" parameterType="java.lang.String" resultType="com.fatp.domain.offsite.BizImportApply">
+    	SELECT 
+			* 
+		FROM bizimport_apply 
+		WHERE ApplyGuid = #{applyGuid}
+	</select>
+	
 	<update id="updateApplyStatus">
         UPDATE bizimport_apply SET 
 	        ApplyStatus = #{applyStatus} ,
+	        UpdateTime = now() 
+        WHERE 
+	        Id = #{id} 
+	</update>
+	
+	<update id="updateApplyDeleteStatus">
+        UPDATE bizimport_apply SET 
+	        IsDelete = #{isDelete} ,
 	        UpdateTime = now() 
         WHERE 
 	        Id = #{id} 

@@ -1,5 +1,6 @@
 package com.fatp.service.datasupprot.biz;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fatp.dao.biz.BizplanPayinvestDao;
 import com.fatp.domain.biz.BizplanPayinvest;
+import com.fatp.enums.YesNo;
 import com.fatp.exception.FatpException;
 import com.fatp.po.biz.BizplanPayinvestPo;
 import com.fatp.util.StringUtil;
@@ -39,11 +41,22 @@ public class BizplanPayinvestDataSupportService {
 	 * @return
 	 */
 	public List<BizplanPayinvest> findPlanPayinvest(Map<String, Object> map) {
+		map.put("isDelete", YesNo.否.value);
 		List<BizplanPayinvest> list = bizplanPayinvestDao.select(map);
 		if(CollectionUtils.isNotEmpty(list)) {
 			decryptStr(list);
 		}
 		return list;
+	}
+	/**
+	 * 根据申请获取兑付信息
+	 * @param applyId
+	 * @return
+	 */
+	public List<BizplanPayinvest> findPlanPayinvestByApplyId(int applyId) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("bizImportApplyId", applyId);
+		return findPlanPayinvest(map);
 	}
 	/**
 	 * 根据还款计划Id更新兑付状态
@@ -53,6 +66,16 @@ public class BizplanPayinvestDataSupportService {
 		int n = bizplanPayinvestDao.updatePayinvestStatusByPlanRepayId(map);
 		if(n <= 0) {
 			throw new FatpException("更新兑付状态失败");
+		}
+	}
+	/**
+	 * 更新兑付明细删除状态
+	 * @param map
+	 */
+	public void updatePayinvestDeleteStatusByApplyId(Map<String,Object> map) {
+		int n =bizplanPayinvestDao.updatePayinvestDeleteStatusByApplyId(map);
+		if(n <= 0) {
+			throw new FatpException("更新兑付明细删除状态失败");
 		}
 	}
 	/**

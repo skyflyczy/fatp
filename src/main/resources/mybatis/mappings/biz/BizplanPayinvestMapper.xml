@@ -7,6 +7,7 @@
         	PayinvestPlanGuid ,
         	RepayPlanId ,
         	ListingInfoId ,
+        	BizImportApplyId ,
         	InvestUserId ,
         	CardAccount ,
         	SubBankName ,
@@ -16,6 +17,7 @@
         	OverInterest ,
         	OverDay ,
         	PayinvestStatus ,
+        	IsDelete ,
         	CreateTime ,
         	CreateOperatorId ,
         	UpdateTime ,
@@ -28,6 +30,7 @@
 	        	#{item.payinvestPlanGuid} ,
 	        	#{item.repayPlanId} ,
 	        	#{item.listingInfoId} ,
+	        	#{item.bizImportApplyId} ,
 	        	#{item.investUserId} ,
 	        	#{item.cardAccount} ,
 	        	#{item.subBankName} ,
@@ -37,6 +40,7 @@
 	        	#{item.overInterest} ,
 	        	#{item.overDay} ,
 	        	#{item.payinvestStatus} ,
+	        	#{item.isDelete} ,
 	        	now() ,
 	        	#{item.createOperatorId} ,
 	        	now() ,
@@ -69,6 +73,9 @@
 			</if>
 	       <if test="@Ognl@isNotEmpty(listingInfoId)">
 				AND bizplan_payinvest.ListingInfoId = #{listingInfoId}
+			</if>
+			<if test="@Ognl@isNotEmpty(bizImportApplyId)">
+				AND bizplan_payinvest.BizImportApplyId = #{bizImportApplyId}
 			</if>
 	       <if test="@Ognl@isNotEmpty(investUserId)">
 				AND bizplan_payinvest.InvestUserId = #{investUserId}
@@ -115,6 +122,9 @@
 	       <if test="@Ognl@isNotEmpty(versionNo)">
 				AND bizplan_payinvest.VersionNo = #{versionNo}
 			</if>
+			<if test="@Ognl@isNotEmpty(isDelete)">
+				AND bizplan_payinvest.IsDelete = #{isDelete}
+			</if>
 		</where>
 	</sql>
 
@@ -131,5 +141,14 @@
 			ORDER BY ${sortColumns}
 		</if>
     </select>
+    
+    <update id="updatePayinvestDeleteStatusByApplyId">
+        UPDATE bizplan_payinvest SET 
+        	IsDelete = #{isDelete} ,
+	        UpdateTime = now() ,
+	        UpdateOperatorId = #{updateOperatorId} 
+        WHERE 
+	        BizImportApplyId = #{bizImportApplyId} 
+	</update>
 </mapper>
 

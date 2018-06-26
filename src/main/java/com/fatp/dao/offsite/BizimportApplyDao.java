@@ -19,11 +19,19 @@ public interface BizimportApplyDao {
 	 * @param id
 	 * @return
 	 */
-	BizImportApply getApplyById(int id);
+	public BizImportApply getApplyById(int id);
 	/**
 	 * 更新登记状态
 	 * @param po
 	 * @return
 	 */
 	public int updateApplyStatus(BizimportApplyPo po);
+	/**
+	 * 更新删除状态
+	 * @param po
+	 * @return
+	 */
+	public int updateApplyDeleteStatus(BizimportApplyPo po);
+	
+	public BizImportApply getApplyByApplyGuid(String applyGuid);
 }

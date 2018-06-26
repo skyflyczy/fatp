@@ -24,6 +24,7 @@ import com.fatp.domain.UcUser;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.domain.offsite.InvestApply;
+import com.fatp.enums.YesNo;
 import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.enums.offsite.ApplyType;
 import com.fatp.enums.user.IdTypeDesc;
@@ -95,6 +96,7 @@ public class InvestApplyDataSupportService {
 		po.setUpdateTime(new Date());
 		po.setValueDate(DateUtil.convertDate(valueDate, "yyyy-MM-dd"));
 		po.setApplyGuid(UUIDUtil.getUUID());
+		po.setIsDelete(YesNo.否.value);
 		int id =bizimportApplyDao.insert(po);
 		if(id <= 0) {
 			throw new FatpException(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL);
@@ -281,12 +283,33 @@ public class InvestApplyDataSupportService {
 		return bizimportApplyDao.getApplyById(applyId);
 	}
 	/**
+	 * 根据Guid获取项目申请登记信息
+	 * @param applyId
+	 * @return
+	 */
+	public BizImportApply getApplyByApplyGuid(String applyGuid){
+		return bizimportApplyDao.getApplyByApplyGuid(applyGuid);
+	}
+	/**
 	 * 更新登记状态
 	 * @param po
 	 * @return
 	 */
 	public int updateApplyStatus(BizimportApplyPo po) {
 		return bizimportApplyDao.updateApplyStatus(po);
+	}
+	/**
+	 * 更新删除状态
+	 * @param apply
+	 */
+	public void updateApplyDeleteStatus(BizImportApply apply) {
+		BizimportApplyPo po = new BizimportApplyPo();
+		po.setIsDelete(apply.getIsDelete());
+		po.setId(apply.getId());
+		int n = bizimportApplyDao.updateApplyDeleteStatus(po);
+		if(n <=0) {
+			throw new FatpException("删除申请失败");
+		}
 	}
 	/**
 	 * 根据申请Guid查找汇总信息

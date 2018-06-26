@@ -26,6 +26,10 @@ public class BizplanPayinvestPo {
 	 */
 	private Integer listingInfoId;
 	/**
+	 * 登记申请Id
+	 */
+	private Integer bizImportApplyId;
+	/**
 	 * 投资方/兑付用户id
 	 */
 	private Integer investUserId;
@@ -61,6 +65,10 @@ public class BizplanPayinvestPo {
 	 * 兑付状态
 	 */
 	private int payinvestStatus;
+	/**
+	 * 是否删除
+	 */
+	private int isDelete;
 	/**
 	 * 创建时间
 	 */
@@ -191,6 +199,18 @@ public class BizplanPayinvestPo {
 	}
 	public void setPayinvestStatus(int payinvestStatus) {
 		this.payinvestStatus = payinvestStatus;
+	}
+	public int getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(int isDelete) {
+		this.isDelete = isDelete;
+	}
+	public Integer getBizImportApplyId() {
+		return bizImportApplyId;
+	}
+	public void setBizImportApplyId(Integer bizImportApplyId) {
+		this.bizImportApplyId = bizImportApplyId;
 	}
 }
 

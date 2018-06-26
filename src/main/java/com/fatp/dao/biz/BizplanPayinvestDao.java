@@ -21,4 +21,7 @@ public interface BizplanPayinvestDao {
 	public List<BizplanPayinvest> select(Map<String, Object> map);
 	
 	public int updatePayinvestStatusByPlanRepayId(Map<String,Object> map);
+	
+	public int updatePayinvestDeleteStatusByApplyId(Map<String,Object> map);
+	
 }

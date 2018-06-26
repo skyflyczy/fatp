@@ -71,6 +71,8 @@ public class OneTimeStragey extends PlanGenStragey{
 			payinvest.setPeriodNumber(periodResult.getPeriod());
 			payinvest.setPrincipal(tradeDetail.getTradeMoney());
 			payinvest.setInterest(interest);
+			payinvest.setBizImportApplyId(apply.getId());
+			payinvest.setIsDelete(YesNo.否.value);
 			return payinvest;
 		}).collect(Collectors.toList());
 		//计算还款兑付日，为到期日所在的工作日 TODO 目前规则

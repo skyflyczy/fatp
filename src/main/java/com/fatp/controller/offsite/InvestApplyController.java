@@ -171,11 +171,9 @@ public class InvestApplyController extends BaseController{
 			investApplyService.addInvestRecords(param, operator.getMemberId(), operator.getExchangeId(), operator.getId(), operator.getRealName());
 			return resultSuccess();
 		} catch (FatpException e) {
-			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "applyRegister", e));
 			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "applyRegister", e));
 			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
 		}
@@ -226,6 +224,26 @@ public class InvestApplyController extends BaseController{
 		request().setAttribute("applyList", applyList);
 		request().setAttribute("listingInfo",listingVo);
 		return new ModelAndView(viewPath + "/listing-apply-list");
+	}
+	/**
+	 * 删除申请
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("deleteapply")
+	@ResponseBody
+	public Object deleteApply(String id) {
+		try {
+			//删除
+			investApplyService.deleteApply(id, super.getSelfId());
+			return resultSuccess();
+		} catch (FatpException e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "applyRegister", e));
+			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage());
+		} catch (Exception e) {
+			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "applyRegister", e));
+			return resultError(ErrorCode.SYSTEM_ERROR.getMessage());
+		}
 	}
 	/**
 	 * 挂牌产品申请列表交易明细
