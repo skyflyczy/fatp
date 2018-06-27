@@ -51,8 +51,16 @@ public class ListingInfoDataSupportService {
 	 */
 	public PageData<ListingInfo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize){
 		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
-		List<ListingInfo> list = listingInfoDao.pageFindByCondition(map);
+		List<ListingInfo> list = listingInfoDao.findByCondition(map);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
+	}
+	/**
+	 * 根据条件查找挂牌信息
+	 * @param map
+	 * @return
+	 */
+	public List<ListingInfo> findByCondition(Map<String,Object> map) {
+		return listingInfoDao.findByCondition(map);
 	}
 	/**
 	 * 根据Guid查找挂牌信息

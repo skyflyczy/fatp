@@ -40,6 +40,14 @@ public class ListingInfoService extends BaseService{
 		return listingInfoDataSupportService.pageFindByCondition(map, pageNo, pageSize);
 	}
 	/**
+	 * 根据条件查找挂牌信息
+	 * @param map
+	 * @return
+	 */
+	public List<ListingInfo> findByCondition(Map<String,Object> map) {
+		return listingInfoDataSupportService.findByCondition(map);
+	}
+	/**
 	 * 根据Guid查找挂牌信息
 	 * @param listingGuid
 	 * @return

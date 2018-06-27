@@ -227,7 +227,7 @@
 		</where>
 	</sql>
 
-    <select id="pageFindByCondition" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
+    <select id="findByCondition" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
     	SELECT *
 	    FROM listing_info 
 		<include refid="where"/>

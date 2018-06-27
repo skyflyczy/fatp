@@ -81,7 +81,6 @@ public class ListingInfoController extends BaseController {
 		request().setAttribute("pageCurrent", pageNo);
 		request().setAttribute("pageSize", pageSize);
 		request().setAttribute("search", map);
-		request().setAttribute("projectLimitTypeList", ListingLimitType.values());
 		return viewPath + "/infolist";
 	}
 

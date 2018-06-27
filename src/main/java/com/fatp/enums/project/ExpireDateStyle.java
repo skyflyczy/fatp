@@ -17,4 +17,13 @@ public enum ExpireDateStyle {
 	public int getStyle() {
 		return style;
 	}
+	
+	public static ExpireDateStyle getStyleByValue(int style){
+		for(ExpireDateStyle item : ExpireDateStyle.values()) {
+			if(style == item.style) {
+				return item;
+			}
+		}
+		return null;
+	}
 }

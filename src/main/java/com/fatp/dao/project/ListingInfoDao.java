@@ -25,7 +25,7 @@ public interface ListingInfoDao {
 	
 	public ListingInfoPo getPoById(Integer id);
 	
-	public List<ListingInfo> pageFindByCondition(Map<String, Object> map);
+	public List<ListingInfo> findByCondition(Map<String, Object> map);
 	
 	public int listInfoImport(String fileInfo);
 
