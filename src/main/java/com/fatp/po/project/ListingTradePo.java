@@ -115,6 +115,9 @@ public class ListingTradePo implements Serializable{
 	public void setListingInfoId(Integer listingInfoId) {
 		this.listingInfoId = listingInfoId;
 	}
-
+	public String toString()
+	{
+	return "{[id="+id+"][listingInfoId="+listingInfoId+"][minInvestMoney="+minInvestMoney+"][maxInvestMoney="+maxInvestMoney+"][investProfit="+investProfit+"][createTime="+createTime+"][createOperatorId="+createOperatorId+"][updateTime="+updateTime+"][upateOperatorId="+upateOperatorId+"][versionNo="+versionNo+"]}";
+	}
 }
 
