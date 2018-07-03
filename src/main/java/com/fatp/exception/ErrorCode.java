@@ -50,6 +50,7 @@ public enum ErrorCode {
 	LISTING_INVESTRECORDS_IMPORT_FAIL(600005,"挂牌产品导入交易明细失败。"),
 	LISTING_ALREADY_UPDATE(600006,"挂牌产品已变更，请刷新后重新修改。"),
 	LISTING_DELELT_ERROR(600007,"挂牌产品删除失败。"),
+	LISTING_IMPORT_FAIL(600008,"挂牌产品导入文件内容值为空或格式错误。"),
 	
 	FILE_NOT_EXIST(700001,"文件不存在。"),
 	FILE_READ_DATA_NULL(700002,"读取文件数据为空。"),

@@ -256,7 +256,7 @@ public class ListingInfoController extends BaseController {
 				logger.error(">>>>>把产品信息记录到数据库中 error" + e.getMessage());			
 				globalFileService.deleteGlobalFileById(globalFile.getId());
 				Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-				return resultError(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL.getMessage()).toJSONString();
+				return resultError(ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 			}
 			logger.debug("<---------------out listInfoImport------------------------>");
 			return resultSuccess();
@@ -270,7 +270,7 @@ public class ListingInfoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-			return resultError(ErrorCode.SYSTEM_ERROR.getMessage()).toJSONString();
+			return resultError(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL.getMessage()).toJSONString();
 		}
 	}
 
