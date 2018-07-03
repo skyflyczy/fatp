@@ -7,11 +7,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * 
  * ListingInfo
- * @author zhiya.chai
- * 2018-06-12 50:15:51
+ * 
+ * @author zhiya.chai 2018-06-12 50:15:51
  */
-public class ListingInfoPo implements Serializable{
-	
+public class ListingInfoPo implements Serializable {
+
 	private static final long serialVersionUID = -9123376231557170000L;
 	/**
 	 * 唯一id，自增主键
@@ -80,12 +80,12 @@ public class ListingInfoPo implements Serializable{
 	/**
 	 * 产品起息日
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date valueDate;
 	/**
 	 * 产品到期日
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private java.util.Date expireDate;
 	/**
 	 * 付息方式：
@@ -118,7 +118,7 @@ public class ListingInfoPo implements Serializable{
 	/**
 	 * 创建时间
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;
 	/**
 	 * 创建人,member_operator.id
@@ -127,7 +127,7 @@ public class ListingInfoPo implements Serializable{
 	/**
 	 * 更新时间
 	 */
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date updateTime;
 	/**
 	 * 更新人,member_operator.id
@@ -138,190 +138,270 @@ public class ListingInfoPo implements Serializable{
 	 */
 	private Integer versionNo;
 
+	// 预期收益率值（%）
+	private String profitValue;
+
 	public void setId(Integer value) {
 		this.id = value;
 	}
+
 	public Integer getId() {
 		return this.id;
 	}
+
 	public void setExchangeId(Integer value) {
 		this.exchangeId = value;
 	}
+
 	public Integer getExchangeId() {
 		return this.exchangeId;
 	}
+
 	public void setIssuer(String value) {
 		this.issuer = value;
 	}
+
 	public String getIssuer() {
 		return this.issuer;
 	}
+
 	public void setListingManager(String value) {
 		this.listingManager = value;
 	}
+
 	public String getListingManager() {
 		return this.listingManager;
 	}
+
 	public void setInvestManager(String value) {
 		this.investManager = value;
 	}
+
 	public String getInvestManager() {
 		return this.investManager;
 	}
+
 	public void setListingCode(String value) {
 		this.listingCode = value;
 	}
+
 	public String getListingCode() {
 		return this.listingCode;
 	}
+
 	public void setListingGuid(String value) {
 		this.listingGuid = value;
 	}
+
 	public String getListingGuid() {
 		return this.listingGuid;
 	}
+
 	public void setPartnerBizCode(String value) {
 		this.partnerBizCode = value;
 	}
+
 	public String getPartnerBizCode() {
 		return this.partnerBizCode;
 	}
+
 	public void setPartnerBiz(String value) {
 		this.partnerBiz = value;
 	}
+
 	public String getPartnerBiz() {
 		return this.partnerBiz;
 	}
+
 	public void setListingName(String value) {
 		this.listingName = value;
 	}
+
 	public String getListingName() {
 		return this.listingName;
 	}
+
 	public void setListingFullName(String value) {
 		this.listingFullName = value;
 	}
+
 	public String getListingFullName() {
 		return this.listingFullName;
 	}
+
 	public void setListingMoney(java.math.BigDecimal value) {
 		this.listingMoney = value;
 	}
+
 	public java.math.BigDecimal getListingMoney() {
 		return this.listingMoney;
 	}
+
 	public void setListingLimit(Integer value) {
 		this.listingLimit = value;
 	}
+
 	public Integer getListingLimit() {
 		return this.listingLimit;
 	}
+
 	public void setListingLimitType(Integer value) {
 		this.listingLimitType = value;
 	}
+
 	public Integer getListingLimitType() {
 		return this.listingLimitType;
 	}
+
 	public void setExpireDateStyle(Integer value) {
 		this.expireDateStyle = value;
 	}
+
 	public Integer getExpireDateStyle() {
 		return this.expireDateStyle;
 	}
+
 	public void setValueDate(java.util.Date value) {
 		this.valueDate = value;
 	}
+
 	public java.util.Date getValueDate() {
 		return this.valueDate;
 	}
+
 	public void setExpireDate(java.util.Date value) {
 		this.expireDate = value;
 	}
+
 	public java.util.Date getExpireDate() {
 		return this.expireDate;
 	}
+
 	public void setPayInterestType(Integer value) {
 		this.payInterestType = value;
 	}
+
 	public Integer getPayInterestType() {
 		return this.payInterestType;
 	}
+
 	public void setInterestType(Integer value) {
 		this.interestType = value;
 	}
+
 	public Integer getInterestType() {
 		return this.interestType;
 	}
+
 	public void setInterestRate(Integer value) {
 		this.interestRate = value;
 	}
+
 	public Integer getInterestRate() {
 		return this.interestRate;
 	}
+
 	public void setInterestBase(Integer value) {
 		this.interestBase = value;
 	}
+
 	public Integer getInterestBase() {
 		return this.interestBase;
 	}
+
 	public void setInterestBaseDays(Integer value) {
 		this.interestBaseDays = value;
 	}
+
 	public Integer getInterestBaseDays() {
 		return this.interestBaseDays;
 	}
+
 	public void setCreateTime(java.util.Date value) {
 		this.createTime = value;
 	}
+
 	public java.util.Date getCreateTime() {
 		return this.createTime;
 	}
+
 	public void setCreateOperatorId(Integer value) {
 		this.createOperatorId = value;
 	}
+
 	public Integer getCreateOperatorId() {
 		return this.createOperatorId;
 	}
+
 	public void setUpdateTime(java.util.Date value) {
 		this.updateTime = value;
 	}
+
 	public java.util.Date getUpdateTime() {
 		return this.updateTime;
 	}
+
 	public void setUpateOperatorId(Integer value) {
 		this.upateOperatorId = value;
 	}
+
 	public Integer getUpateOperatorId() {
 		return this.upateOperatorId;
 	}
+
 	public void setVersionNo(Integer value) {
 		this.versionNo = value;
 	}
+
 	public Integer getVersionNo() {
 		return this.versionNo;
 	}
+
 	public Integer getExpireDateInterest() {
 		return expireDateInterest;
 	}
+
 	public void setExpireDateInterest(Integer expireDateInterest) {
 		this.expireDateInterest = expireDateInterest;
 	}
+
 	public Integer getInvestProfitType() {
 		return investProfitType;
 	}
+
 	public void setInvestProfitType(Integer investProfitType) {
 		this.investProfitType = investProfitType;
 	}
+
 	public Integer getListingStatus() {
 		return listingStatus;
 	}
+
 	public void setListingStatus(Integer listingStatus) {
 		this.listingStatus = listingStatus;
 	}
-	
-	public String toString()
-	{
-	return "{ListingInfoPo [id="+id+"][exchangeId="+exchangeId+"][issuer="+issuer+"][listingManager="+listingManager+"][investManager="+investManager+"][listingCode="+listingCode+"][listingGuid="+listingGuid+"][partnerBizCode="+partnerBizCode+"][partnerBiz="+partnerBiz+"][listingName="+listingName+"][listingFullName="+listingFullName+"][listingMoney="+listingMoney+"][listingLimit="+listingLimit+"][listingLimitType="+listingLimitType+"][investProfitType="+investProfitType+"][expireDateStyle="+expireDateStyle+"][valueDate="+valueDate+"][expireDate="+expireDate+"][payInterestType="+payInterestType+"][interestType="+interestType+"][interestRate="+interestRate+"][interestBase="+interestBase+"][interestBaseDays="+interestBaseDays+"][expireDateInterest="+expireDateInterest+"][listingStatus="+listingStatus+"][createTime="+createTime+"][createOperatorId="+createOperatorId+"][updateTime="+updateTime+"][upateOperatorId="+upateOperatorId+"][versionNo="+versionNo+"]}";
+
+	public String toString() {
+		return "{ListingInfoPo [id=" + id + "][exchangeId=" + exchangeId + "][issuer=" + issuer + "][listingManager="
+				+ listingManager + "][investManager=" + investManager + "][listingCode=" + listingCode
+				+ "][listingGuid=" + listingGuid + "][partnerBizCode=" + partnerBizCode + "][partnerBiz=" + partnerBiz
+				+ "][listingName=" + listingName + "][listingFullName=" + listingFullName + "][listingMoney="
+				+ listingMoney + "][listingLimit=" + listingLimit + "][listingLimitType=" + listingLimitType
+				+ "][investProfitType=" + investProfitType + "][expireDateStyle=" + expireDateStyle + "][valueDate="
+				+ valueDate + "][expireDate=" + expireDate + "][payInterestType=" + payInterestType + "][interestType="
+				+ interestType + "][interestRate=" + interestRate + "][interestBase=" + interestBase
+				+ "][interestBaseDays=" + interestBaseDays + "][expireDateInterest=" + expireDateInterest
+				+ "][listingStatus=" + listingStatus + "][createTime=" + createTime + "][createOperatorId="
+				+ createOperatorId + "][updateTime=" + updateTime + "][upateOperatorId=" + upateOperatorId
+				+ "][profitValue=" + profitValue+ "][versionNo=" + versionNo + "]}";
+	}
+
+	//保存预期收益率值（%）
+	public void setProfitValue(String value) {
+		this.profitValue = value;
+	}
+
+	public String getProfitValue() {
+		return this.profitValue;
 	}
 }
-
