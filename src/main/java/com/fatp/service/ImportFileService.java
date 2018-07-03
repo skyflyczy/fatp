@@ -150,11 +150,13 @@ public class ImportFileService {
 			
 			try{
 				listingInfo.setId((int)System.currentTimeMillis());
-				listingInfo.setExchangeId(2012);
+				listingInfo.setExchangeId(1);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
 				listingInfo.setListingGuid(strArray[0].trim());
-				listingInfo.setListingName(strArray[1].trim()); 
+				String name= strArray[1].trim();
+				listingInfo.setListingName(name); 
+				listingInfo.setListingFullName(name); 
 				listingInfo.setIssuer(strArray[2].trim());
 				listingInfo.setListingManager(strArray[3].trim());
 				listingInfo.setInvestManager(strArray[4].trim());
