@@ -37,7 +37,7 @@ function afterRepayCompleted(json){
                 </td>
                 <td >
                     <label class="control-label x120">计息基准：</label>
-                    <span>${listingInfo.getInterestBaseDesc() } 个</span>
+                    <span>${listingInfo.getInterestBaseDesc() } </span>
                 </td>
             </tr>
    	</tbody>

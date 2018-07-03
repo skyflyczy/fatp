@@ -50,7 +50,7 @@
 			            <tbody>
 			                <tr>
 			                    <td><span class="red">*</span>投资明细文件</td>
-			                    <td style="text-align:left;">同一产品的投资明细数据合并在一个文件中上传，支持excel文件格式(xlsx/xls)，大小控制在10MB以内。<a href="<%=request.getContextPath()%>/offsite/invest/downinvesttemplate.do?fileType=9">下载：投资明细模板</a></td>
+			                    <td style="text-align:left;">同一产品的投资明细数据合并在一个文件中上传，支持excel文件格式(xlsx/xls)，大小控制在10MB以内。<a href="<%=request.getContextPath()%>/offsite/invest/downinvesttemplate.do">下载：投资明细模板</a></td>
 			                    <td style="text-align:left;" id="div_1">
 			                    </td>
 			                    <td>
@@ -101,7 +101,7 @@
 	 		<tr>
 				<td colspan="3" style="text-align:center;">
 					<button type="submit" class="btn-green" id="save">保存</button>
-					<button type="button" class="btn-close" data-icon="close">取消</button>	
+					<button type="button" class="btn-close" data-icon="close">关闭</button>	
 				</td>
 			</tr>
 	 	</tbody>

@@ -164,7 +164,13 @@ public class InvestApplyDataSupportService {
 			detail.setIdNumber(StringUtil.isBlank(detail.getIdNumber()) ? "" : SymmetricEncrypt.encryptStr(detail.getIdNumber()));
 			detail.setCardAccount(StringUtil.isBlank(detail.getCardAccount()) ? "" : SymmetricEncrypt.encryptStr(detail.getCardAccount()));
 			//加密后插入用户信息
-			handleTradeDetailUser(detail);
+			try {
+				handleTradeDetailUser(detail);
+			} catch (FatpException e) {
+				throw new FatpException(e.getMessage());
+			} catch (Exception e) {
+				throw new FatpException("客户" + detail.getUserRealName() + "登记失败，可能是手机号已存在，请检查。");
+			}
 		}
 		bizimportTradeDetailDao.insertBatch(detailList);
 	}

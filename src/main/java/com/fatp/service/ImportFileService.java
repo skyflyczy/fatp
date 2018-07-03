@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;

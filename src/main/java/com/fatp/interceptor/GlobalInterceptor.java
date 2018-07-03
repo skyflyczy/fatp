@@ -19,6 +19,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fatp.enums.user.OperatorStatus;
+import com.fatp.exception.ErrorCode;
+import com.fatp.exception.FatpException;
 import com.fatp.po.user.MemberOperatorPo;
 import com.fatp.service.sys.SysMenuService;
 import com.fatp.service.user.MemberOperatorService;
@@ -170,15 +172,14 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter  {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		//TODO
-//		if(ex != null && ex instanceof BayMaxBaseException) {
-//			BayMaxBaseException bayMaxBaseException = (BayMaxBaseException)ex;
-//			if(bayMaxBaseException.getRetCode() == UserServerResponseCode.LOGIN_EXPIRED) {
-//				//登录过期
-//				responseLogin(request, response);
-//				return;
-//			}
-//			responseError(request, response, (HandlerMethod) handler, bayMaxBaseException.getMessage());
-//		}
+		if(ex != null && ex instanceof FatpException) {
+			FatpException fatpException = (FatpException)ex;
+			if(fatpException.getErrorCode().getCode() == ErrorCode.LOGIN_EXPIRED.getCode()) {
+				//登录过期
+				responseLogin(request, response);
+				return;
+			}
+			responseError(request, response, (HandlerMethod) handler, fatpException.getMessage());
+		}
 	}
 }
