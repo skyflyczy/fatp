@@ -23,7 +23,7 @@
 						<label class="control-label x160 pull-right" >请选择导入文件：</label> 
 					</td>
 					<td>
-		            	<input type="file" name="file" id="file_input">
+		            	<input data-rule="required;" type="file" name="file" id="file_input">
 		            </td>
 		            <td>
 		            	<input type="submit" class="btn-blue pull-left submitButton" value="导入数据" class="file">
