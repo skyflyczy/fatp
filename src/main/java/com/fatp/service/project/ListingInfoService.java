@@ -81,6 +81,7 @@ public class ListingInfoService extends BaseService{
 			listingInfoPo = listingInfoDataSupportService.updateListingInfo(listingInfoVo);
 			flowFeedType = FlowFeedTypeDesc.编辑保存;
 		}
+		listingInfoVo.setVersionNo(listingInfoPo.getVersionNo());
 		//更新交易信息，收益率
 		listingInfoDataSupportService.updateListingTrade(listingInfoVo);
 		//新增动态

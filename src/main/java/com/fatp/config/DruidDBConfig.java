@@ -233,7 +233,8 @@ public class DruidDBConfig {
     }
 	
 	public static void main(String[] args) {
-		System.out.println(SymmetricEncrypt.encryptStr("jdbc:mysql://localhost:3306/fatp?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull"));
+		System.out.println(SymmetricEncrypt.encryptStr("jdbc:mysql://47.104.204.131:3306/fatp?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull"));
+		System.out.println(SymmetricEncrypt.encryptStr("rCoHoAtI@123"));
 		System.out.println(SymmetricEncrypt.decryptStr("QFmJUw6FszqWphBm39n7WKcHJ0hsNLVo2M6f8A3m+/q/s3YWML1OEp9S2y0UZOAuqlb3VGbF4Zfuwy13leBp2n7P8tsfcXInuq69AgkSlg83r9Wg+9ROxucJKNWeRgfiFo9HdbLPQoHR2cXJPjhAs+rt74Pdc6EYycuU8f2GVMFsCXXmizT3oY7jo3LdZ2CfE5qJQEwv+ec="));
 		System.out.println(SymmetricEncrypt.decryptStr("xDU2Wbm59Qk="));
 		System.out.println(SymmetricEncrypt.decryptStr("ub0Tph4IOv8R3ncU4T5foA=="));

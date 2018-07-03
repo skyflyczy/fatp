@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class InvestApplyController extends BaseController{
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private String viewPath = super.viewPath + "/offsite/invest";
+	
+	private static String investTemplate = "template/invest_template.xlsx";
 	
 	@Autowired
 	private InvestApplyService investApplyService;
@@ -300,9 +303,41 @@ public class InvestApplyController extends BaseController{
 			outputStream.write(data);
 			outputStream.flush();
 		} catch (Exception e) {
-			log.error("下载文件异常...");
-			e.printStackTrace();
+			log.error("下载文件异常...",e);
 		}
 	}
 
+	@RequestMapping("downinvesttemplate")
+	public void downInvestTemplate() {
+		FileInputStream inputStream = null;
+		OutputStream outputStream = null;
+		try {
+			 File file = Resources.getResourceAsFile(investTemplate);
+			 if( !file.exists() ){
+					return ;
+			}
+			inputStream = new FileInputStream(file);
+			byte[] data = new byte[(int) file.length()];
+			inputStream.read(data);
+			response().setCharacterEncoding("utf-8");
+			response().setContentType("application/octet-stream");
+			String fileName = URLEncoder.encode("投资明细模板.xlsx", "UTF-8");
+			response().setHeader("Content-Disposition", "attachment;fileName="+fileName+";fileName*=UTF-8''"+ fileName);
+			outputStream = response().getOutputStream();
+			outputStream.write(data);
+			outputStream.flush();
+		} catch (Exception e) {
+			log.error("下载投资明细失败，{}",e);
+		} finally {
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+				}
+				if (outputStream != null) {
+					outputStream.close();
+				}
+			} catch (Exception e2) {
+			}
+		}
+	}
 }

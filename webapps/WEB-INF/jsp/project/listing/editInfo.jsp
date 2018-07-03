@@ -3,9 +3,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="bjui-pageContent">
-	<form id="projectupate" data-loadingmask="true" action="<%=request.getContextPath()%>/project/listinginfo/update.do" data-toggle="validate" data-reload="true">
-		 <input type="hidden" name="id" value="${obj.id}">
-		 <input type="hidden" name="versionNo" value="${obj.versionNo}">
+	<form id="projectupate" data-callback="projectupateCallback" data-loadingmask="true" action="<%=request.getContextPath()%>/project/listinginfo/update.do" data-toggle="validate" data-reload="true">
+		 <input type="hidden" name="id" value="${obj.id}" id="id">
+		 <input type="hidden" name="versionNo" value="${obj.versionNo}" id="versionNo">
 		 <input type="hidden" name="todayForJudge" data-rule="当天:" value="${todayForJudge}">
 		 <table class="table table-condensed table-noborder table-hover">
 		 	<thead>
@@ -77,10 +77,10 @@
 			            		<thead>
 				                	<tr>
 					                    <th title="最低投资金额(元)" width="30%">
-					                    	<input placeholder="请输入最低投资金额" class="digitUppercase" data-rule="required;" type="text" name="listingTradeList[#index#].minInvestMoney"/>
+					                    	<input placeholder="请输入最低投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney]" type="text" name="listingTradeList[#index#].minInvestMoney"/>
 					                    </th>
 					                    <th title="最高投资金额(元)" width="30%">
-					                    	<input placeholder="请输入最高投资金额" class="digitUppercase" data-rule="required;" type="text" name="listingTradeList[#index#].maxInvestMoney"/>
+					                    	<input placeholder="请输入最高投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney]" type="text" name="listingTradeList[#index#].maxInvestMoney"/>
 					                    </th>
 					                    <th title="指定预期收益率(%)" width="20%"><input data-rule="required;validthreedecimal" data-rule-validthreedecimal="validFunction.validthreedecimal" type="text" name="listingTradeList[#index#].investProfit" style="width:90%;"/>%</th>
 					                    <th title="新增" data-addbtn="true" width="10%">
@@ -234,7 +234,7 @@ $("#submitBtn").click(function(){
 function projectupateCallback(json) {
 	if(json.statusCode == 200) {
 		$(this).alertmsg("correct", json.message);
-		$(this).dialog("refresh");
+		$(this).dialog("closeCurrent");
 	}else {
 		$(this).alertmsg("error", json.message);
 	}

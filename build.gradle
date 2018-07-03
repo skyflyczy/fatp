@@ -27,13 +27,6 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'org.springframework.boot'
 apply from:   "deploy.gradle"
 
-// 构建的目标环境定义
-final PROFILE_DEV  = 'dev'
-final PROFILE_TEST = 'test'
-final PROFILE_QA   = 'qa'
-final PROFILE_GRAY = 'gray'
-final PROFILE_PROD = 'pro'
-final PROFILE_PROPERTY = "deploy.profile"
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'

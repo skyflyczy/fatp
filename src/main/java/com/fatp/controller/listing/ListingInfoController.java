@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fatp.controller.BaseController;
 import com.fatp.domain.PageData;
 import com.fatp.domain.listing.ListingInfo;

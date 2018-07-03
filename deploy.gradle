@@ -1,5 +1,5 @@
 ext {
-    deployType = "jar"
+    deployType = "war"
     deployDir = new File(project.buildDir, "/deploy")
 }
 
