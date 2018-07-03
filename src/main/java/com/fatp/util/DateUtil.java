@@ -240,5 +240,18 @@ public class DateUtil extends DateUtils {
 		}
 		return formatDate;
 	}
+	/**
+	 * 获取N天、月、年后的日期
+	 * @param date
+	 * @param field 
+	 * @param value
+	 * @return
+	 */
+	public static Date add(Date date, int field, int n) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(field, n);
+		return c.getTime();
+	}
     
 }

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.controller.param.InvestRecordsParam;
 import com.fatp.domain.PageData;
-import com.fatp.domain.biz.BizplanPayinvest;
-import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.domain.listing.ListingInfo;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
@@ -228,56 +225,14 @@ public class InvestApplyService {
 		//设置登记申请为删除状态
 		apply.setIsDelete(YesNo.是.value);
 		investApplyDataSupportService.updateApplyDeleteStatus(apply);
-		//分期获取此次申请所获取兑付总额和总利息
-		List<BizplanPayinvest> payinvestList = bizplanPayinvestDataSupportService.findPlanPayinvestByApplyId(apply.getId());
-		if(CollectionUtils.isEmpty(payinvestList)) {
-			return;
-		}
-		Map<Integer, BigDecimal> principalMap = new HashMap<>();//本金期数金额Map
-		Map<Integer,BigDecimal> interestMap = new HashMap<>();//利息期数金额Map
-		for(BizplanPayinvest payinvest : payinvestList) {
-			Integer key = payinvest.getPeriodNumber();
-			BigDecimal principal = principalMap.get(key);
-			if(principal == null) {
-				principalMap.put(key, payinvest.getPrincipal());
-			} else {
-				principalMap.put(key, principal.add(payinvest.getPrincipal()));
-			}
-			BigDecimal interest = interestMap.get(key);
-			if(interest == null) {
-				interestMap.put(key, payinvest.getInterest());
-			} else {
-				interestMap.put(key, interest.add(payinvest.getInterest()));
-			}
-		}
-		//更新此次兑付数据为删除状态
+		//更新还款计划为删除状态
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("isDelete", YesNo.是.value);
 		map.put("updateOperatorId", operatorId);
 		map.put("bizImportApplyId", apply.getId());
+		bizplanRepayDataSupportService.updateDeletStatusByApply(map);
+		//更新此次兑付数据为删除状态
 		bizplanPayinvestDataSupportService.updatePayinvestDeleteStatusByApplyId(map);
-		//更新还款计划还款金额和还款利息，分期更新
-		map.clear();
-		map.put("listingInfoId", apply.getListingInfoId());
-		List<BizplanRepay> planRepayList = bizplanRepayDataSupportService.findRepayPlanByCondition(map);
-		if(CollectionUtils.isEmpty(planRepayList)) {
-			return;
-		}
-		planRepayList.stream().forEach(planRepay ->{
-			BigDecimal principal = principalMap.get(planRepay.getPeriodNumber());
-			if(principal != null) {
-				planRepay.setPrincipal(planRepay.getPrincipal().subtract(principal));
-				planRepay.setPrincipal(planRepay.getPrincipal().compareTo(BigDecimal.ZERO) > 0 ? planRepay.getPrincipal() : BigDecimal.ZERO);
-				planRepay.setInterestPrincipal(planRepay.getPrincipal());
-				planRepay.setUpdateOperatorId(operatorId);
-			}
-			BigDecimal interest = interestMap.get(planRepay.getPeriodNumber());
-			if(interest != null) {
-				planRepay.setInterest(planRepay.getInterest().subtract(interest));
-				planRepay.setInterest(planRepay.getInterest().compareTo(BigDecimal.ZERO) > 0 ? planRepay.getInterest() : BigDecimal.ZERO);
-			}
-		});
-		bizplanRepayDataSupportService.updateBatch(planRepayList);
 	}
 	
 	/**

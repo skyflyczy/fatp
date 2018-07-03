@@ -83,7 +83,7 @@ public class ImportFileService {
 			String[] strArray = resultList.get(i);
 			BizimportTradeDetail detail = new BizimportTradeDetail();
 			if (StringUtils.isBlank(strArray[0]) || !strArray[0].trim().equals(projectCode)) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行产品信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行产品信息错误，可能是单元格格式错误，请检查");
 			}
 			detail.setListingCode(strArray[0].trim());
 			detail.setListingFullName(strArray[1]);
@@ -91,7 +91,7 @@ public class ImportFileService {
 			detail.setTradeTime(DateUtil.autoParseDate(strArray[3]));
 			detail.setTradeMoney(BigDecimalUtil.convertDefaultZero(strArray[4]));
 			if (detail.getTradeTime() == null || detail.getTradeMoney().compareTo(BigDecimal.ZERO) <= 0) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行交易信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行交易信息错误，请检查");
 			}
 			detail.setAddInvestProfit(BigDecimalUtil.convertDefaultZero(strArray[5]).divide(new BigDecimal("100"), 5,
 					BigDecimal.ROUND_HALF_UP));
@@ -108,7 +108,7 @@ public class ImportFileService {
 					|| detail.getIdNumber().indexOf(".") >= 0 || StringUtils.isBlank(detail.getUserRealName())
 					|| (detail.getIdTypeId() == IdTypeDesc.身份证.getIdType()
 							&& detail.getIdNumber().split(" ").length > 1)) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行客户信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行客户信息错误，请检查");
 			}
 			list.add(detail);
 		}

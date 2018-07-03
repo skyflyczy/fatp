@@ -14,6 +14,7 @@ import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.YesNo;
 import com.fatp.enums.biz.RepayStatus;
+import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
 import com.fatp.exception.FatpException;
@@ -78,7 +79,7 @@ public class OneTimeStragey extends PlanGenStragey{
 		//计算还款兑付日，为到期日所在的工作日 TODO 目前规则
 		Date repayDate = sysWorkdateDataSupportService.getBelongWorkDate(periodResult.getInterestEndDate());
 		//生成还款对象
-		BizplanRepayPo repay = this.genBizplanRepay(operatorId, listingInfoPo, interestDay, periodResult, repayDate);
+		BizplanRepayPo repay = this.genBizplanRepay(operatorId, listingInfoPo, interestDay, periodResult, repayDate,apply.getId());
 		BigDecimal principal = repay.getPrincipal(); //应还本金
 		BigDecimal interest = repay.getInterest(); //应还利息
 		for(BizplanPayinvestPo payInvest : payinvestList) {
@@ -90,13 +91,8 @@ public class OneTimeStragey extends PlanGenStragey{
 		repay.setInterestPrincipal(principal);
 		
 		//插入数据库
-		int n = -1;
-		if(repay.getId() != null) {
-			n = bizplanRepayDataSupportService.updateByVersion(repay);
-		} else {
-			n = bizplanRepayDataSupportService.insert(repay);
-		}
-		if(n <= 0) {
+		int id = bizplanRepayDataSupportService.insert(repay);
+		if(id <= 0) {
 			throw new FatpException("更新还款计划失败。");
 		}
 		payinvestList.stream().forEach(payInvest ->{
@@ -128,26 +124,22 @@ public class OneTimeStragey extends PlanGenStragey{
 	 * @return
 	 */
 	private BizplanRepayPo genBizplanRepay(int operatorId,ListingInfoPo listingInfoPo
-			,int interestDay,PeriodResult periodResult,Date repayDate) {
-		BizplanRepayPo repay = bizplanRepayDataSupportService.getPlanRepayPoByUniqueKey(listingInfoPo.getId(), periodResult.getPeriod());
-		if(repay == null) {
-			repay = new BizplanRepayPo();
-			repay.setCreateOperatorId(operatorId);
-			repay.setListingInfoId(listingInfoPo.getId());
-			repay.setRepayPlanGuid(UUIDUtil.getUUID());
-			repay.setPeriodNumber(periodResult.getPeriod());
-			repay.setPrincipal(BigDecimal.ZERO);
-			repay.setInterest(BigDecimal.ZERO);
-			repay.setInterestDay(interestDay);
-			repay.setInterestEndDate(periodResult.getInterestEndDate());
-			repay.setInterestStartDate(periodResult.getInterestStartDate());
-			repay.setPlanRepayDate(repayDate);
-			repay.setRepayStatus(RepayStatus.未还款.status);
-		}
-		if(repay.getRepayStatus() != RepayStatus.未还款.status) {
-			throw new FatpException("已还款，不能再生成还款兑付计划。");
-		}
+			,int interestDay,PeriodResult periodResult,Date repayDate,int applyId) {
+		BizplanRepayPo repay = new BizplanRepayPo();
+		repay.setCreateOperatorId(operatorId);
+		repay.setListingInfoId(listingInfoPo.getId());
+		repay.setRepayPlanGuid(UUIDUtil.getUUID());
+		repay.setPeriodNumber(periodResult.getPeriod());
+		repay.setPrincipal(BigDecimal.ZERO);
+		repay.setInterest(BigDecimal.ZERO);
+		repay.setInterestDay(interestDay);
+		repay.setInterestEndDate(periodResult.getInterestEndDate());
+		repay.setInterestStartDate(periodResult.getInterestStartDate());
+		repay.setPlanRepayDate(repayDate);
+		repay.setRepayStatus(RepayStatus.未还款.status);
 		repay.setUpdateOperatorId(operatorId);
+		repay.setBizImportAppyId(applyId);
+		repay.setIsDelete(YesNo.否.value);
 		return repay;
 	}
 	/**
@@ -157,11 +149,17 @@ public class OneTimeStragey extends PlanGenStragey{
 	 * @return
 	 */
 	private int getInterestDays(ListingInfoPo listingInfoPo,PeriodResult periodResult) {
-		if(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
-			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate()) + 1;
+		if(listingInfoPo.getExpireDateStyle().intValue() == ExpireDateStyle.固定到期日.style) {
+			if(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
+				return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate()) + 1;
+			} else {
+				return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			}
 		} else {
-			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			//固定期限
+			return listingInfoPo.getListingLimit();
 		}
+		
 	}
 	/**
 	 * 获取分期信息
@@ -173,10 +171,9 @@ public class OneTimeStragey extends PlanGenStragey{
 		PeriodResult result = PeriodResult.build();
 		result.setPeriod(1);
 		result.setInterestStartDate(apply.getValueDate() == null ? listingInfoPo.getValueDate() : apply.getValueDate());
-		result.setInterestEndDate(listingInfoPo.getExpireDate());
 		result.setInterestType(listingInfoPo.getPayInterestType());
+		result.setInterestEndDate(getInterestEndDate(listingInfoPo, result.getInterestStartDate()));
 		return result;
 	}
-
 
 }

@@ -1,10 +1,8 @@
 package com.fatp.service.datasupprot.biz;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,26 +45,6 @@ public class BizplanRepayDataSupportService {
 		return bizplanRepayDao.insert(o);
 	}
 	/**
-	 * 根据版本号更新
-	 * @param o
-	 * @return
-	 */
-	public int updateByVersion(BizplanRepayPo o) {
-		return bizplanRepayDao.updateByVersion(o);
-	}
-	/**
-	 * 根据唯一键查找还款信息
-	 * @param listingInfoId
-	 * @param periodNumber
-	 * @return
-	 */
-	public BizplanRepayPo getPlanRepayPoByUniqueKey(int listingInfoId,int periodNumber) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("listingInfoId", listingInfoId);
-		map.put("periodNumber", periodNumber);
-		return bizplanRepayDao.getPlanRepayPoByUniqueKey(map);
-	}
-	/**
 	 * 根据条件查找还款计划
 	 * @param map
 	 * @return
@@ -75,18 +53,15 @@ public class BizplanRepayDataSupportService {
 		return bizplanRepayDao.select(map);
 	}
 	/**
-	 * 批量更新
-	 * @param list
+	 * 更新删除状态
+	 * @param map
+	 * @return
 	 */
-	public void updateBatch(List<BizplanRepay> list) {
-		list.stream().forEach(planRepay ->{
-			BizplanRepayPo po = new BizplanRepayPo();
-			BeanUtils.copyProperties(planRepay, po);
-			int n = bizplanRepayDao.updateByVersion(po);
-			if(n <=0) {
-				throw new FatpException("更新还款计划失败");
-			}
-		});
+	public void updateDeletStatusByApply(Map<String,Object> map) {
+		int n = bizplanRepayDao.updateDeletStatusByApply(map);
+		if(n <= 0) {
+			throw new FatpException("更新还款计划失败");
+		}
 	}
 	/**
 	 * 根据Guid获取还款计划

@@ -18,11 +18,9 @@ public interface BizplanRepayDao {
 	
 	public int insert(BizplanRepayPo o);
 	
-	public int updateByVersion(BizplanRepayPo o);
+	public int updateDeletStatusByApply(Map<String,Object> map);
 	
 	public List<BizplanRepay> select(Map<String, Object> map);
-	
-	public BizplanRepayPo getPlanRepayPoByUniqueKey(Map<String,Object> map);
 	
 	public BizplanRepay getPlanRepayByGuid(String repayPlanGuid);
 	
