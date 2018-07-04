@@ -17,6 +17,7 @@ import com.fatp.enums.biz.RepayStatus;
 import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
+import com.fatp.enums.project.ListingLimitType;
 import com.fatp.exception.FatpException;
 import com.fatp.po.biz.BizplanPayinvestPo;
 import com.fatp.po.biz.BizplanRepayPo;
@@ -54,18 +55,14 @@ public class OneTimeStragey extends PlanGenStragey{
 			int operatorId) {
 		//获取分期结果
 		PeriodResult periodResult = getPeriodResult(listingInfoPo, apply);
-		//得到计息天数
-		int interestDay = getInterestDays(listingInfoPo, periodResult);
 		//组装计算利息参数,生成利息
 		CalInterestParam param = genCalInterestParam(periodResult, listingInfoPo);
+		//得到计息数量
+		param.setInterestCount(getInterestCount(listingInfoPo, periodResult));
 		List<BizplanPayinvestPo> payinvestList = tradeDetailList.stream().map(tradeDetail ->{
 			param.setPrincipal(tradeDetail.getTradeMoney());
 			param.setInvestProfitParamList(super.genInvestProfitParamList(listingTradeList,tradeDetail.getAddInvestProfit()));
-			if(tradeDetail.getAddInvestProfitDays() != null) {
-				param.setInterestDay(interestDay + tradeDetail.getAddInvestProfitDays().intValue());
-			} else {
-				param.setInterestDay(interestDay);
-			}
+			param.setAddInvestProfitDays(tradeDetail.getAddInvestProfitDays() == null ? 0 : tradeDetail.getAddInvestProfitDays().intValue());
 			//计算利息
 			BigDecimal interest = super.calProfit(param);
 			BizplanPayinvestPo payinvest = super.genBasePayinvest(operatorId, tradeDetail);
@@ -79,7 +76,7 @@ public class OneTimeStragey extends PlanGenStragey{
 		//计算还款兑付日，为到期日所在的工作日 TODO 目前规则
 		Date repayDate = sysWorkdateDataSupportService.getBelongWorkDate(periodResult.getInterestEndDate());
 		//生成还款对象
-		BizplanRepayPo repay = this.genBizplanRepay(operatorId, listingInfoPo, interestDay, periodResult, repayDate,apply.getId());
+		BizplanRepayPo repay = this.genBizplanRepay(operatorId, listingInfoPo, periodResult, repayDate,apply.getId());
 		BigDecimal principal = repay.getPrincipal(); //应还本金
 		BigDecimal interest = repay.getInterest(); //应还利息
 		for(BizplanPayinvestPo payInvest : payinvestList) {
@@ -118,13 +115,12 @@ public class OneTimeStragey extends PlanGenStragey{
 	 * 生成还款对象
 	 * @param operatorId
 	 * @param listingInfoPo
-	 * @param interestDay
 	 * @param periodResult
 	 * @param repayDate
 	 * @return
 	 */
 	private BizplanRepayPo genBizplanRepay(int operatorId,ListingInfoPo listingInfoPo
-			,int interestDay,PeriodResult periodResult,Date repayDate,int applyId) {
+			,PeriodResult periodResult,Date repayDate,int applyId) {
 		BizplanRepayPo repay = new BizplanRepayPo();
 		repay.setCreateOperatorId(operatorId);
 		repay.setListingInfoId(listingInfoPo.getId());
@@ -132,7 +128,7 @@ public class OneTimeStragey extends PlanGenStragey{
 		repay.setPeriodNumber(periodResult.getPeriod());
 		repay.setPrincipal(BigDecimal.ZERO);
 		repay.setInterest(BigDecimal.ZERO);
-		repay.setInterestDay(interestDay);
+		//repay.setInterestDay(interestDay);
 		repay.setInterestEndDate(periodResult.getInterestEndDate());
 		repay.setInterestStartDate(periodResult.getInterestStartDate());
 		repay.setPlanRepayDate(repayDate);
@@ -143,23 +139,26 @@ public class OneTimeStragey extends PlanGenStragey{
 		return repay;
 	}
 	/**
-	 * 获取计息天数
+	 * 获取计息数量
 	 * @param listingInfoPo
 	 * @param periodResult
 	 * @return
 	 */
-	private int getInterestDays(ListingInfoPo listingInfoPo,PeriodResult periodResult) {
-		if(listingInfoPo.getExpireDateStyle().intValue() == ExpireDateStyle.固定到期日.style) {
-			if(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
-				return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate()) + 1;
-			} else {
-				return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
-			}
-		} else {
-			//固定期限
+	private int getInterestCount(ListingInfoPo listingInfoPo,PeriodResult periodResult) {
+		if(listingInfoPo.getExpireDateStyle().intValue() ==  ExpireDateStyle.固定期限.style) {
 			return listingInfoPo.getListingLimit();
 		}
-		
+		//固定到期日
+		if(listingInfoPo.getListingLimitType().intValue() == ListingLimitType.年.type 
+				|| listingInfoPo.getListingLimitType().intValue() == ListingLimitType.月.type) {
+			return listingInfoPo.getListingLimit();
+		}
+		//如果按天计算
+		if(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
+			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate()) + 1;
+		} else {
+			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+		}
 	}
 	/**
 	 * 获取分期信息

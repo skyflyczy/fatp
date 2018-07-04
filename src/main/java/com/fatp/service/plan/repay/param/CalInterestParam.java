@@ -13,8 +13,8 @@ import com.fatp.enums.project.InterestRate;
  * @date 2018年6月22日 下午10:32:00
  */
 public class CalInterestParam {
-	//计息天数
-	private int interestDay;
+	//计息数量  如果是按日，即为计息天数，如果是按月，即为计息月数，如果是按年，则是计息年数
+	private int interestCount;
 	//本金
 	private BigDecimal principal;
 	//计息频率：按日、按月、按年
@@ -25,17 +25,14 @@ public class CalInterestParam {
 	private Date valueDate;
 	//到期日
 	private Date expireDate;
+	//加息天数
+	private int addInvestProfitDays;
 	/**
 	 * 收益利息阶梯
 	 */
 	private List<InvestProfitParam> investProfitParamList;
 	
-	public int getInterestDay() {
-		return interestDay;
-	}
-	public void setInterestDay(int interestDay) {
-		this.interestDay = interestDay;
-	}
+	
 	public BigDecimal getPrincipal() {
 		return principal;
 	}
@@ -72,6 +69,18 @@ public class CalInterestParam {
 	public void setInvestProfitParamList(
 			List<InvestProfitParam> investProfitParamList) {
 		this.investProfitParamList = investProfitParamList;
+	}
+	public int getInterestCount() {
+		return interestCount;
+	}
+	public void setInterestCount(int interestCount) {
+		this.interestCount = interestCount;
+	}
+	public int getAddInvestProfitDays() {
+		return addInvestProfitDays;
+	}
+	public void setAddInvestProfitDays(int addInvestProfitDays) {
+		this.addInvestProfitDays = addInvestProfitDays;
 	}
 	
 }
