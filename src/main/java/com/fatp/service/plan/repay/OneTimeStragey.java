@@ -138,7 +138,7 @@ public class OneTimeStragey extends PlanGenStragey{
 		repay.setPlanRepayDate(repayDate);
 		repay.setRepayStatus(RepayStatus.未还款.status);
 		repay.setUpdateOperatorId(operatorId);
-		repay.setBizImportAppyId(applyId);
+		repay.setBizImportApplyId(applyId);
 		repay.setIsDelete(YesNo.否.value);
 		return repay;
 	}

@@ -22,6 +22,7 @@ import com.fatp.domain.PageData;
 import com.fatp.domain.biz.BizplanPayinvest;
 import com.fatp.domain.biz.BizplanRepay;
 import com.fatp.domain.listing.ListingInfo;
+import com.fatp.enums.YesNo;
 import com.fatp.enums.biz.PayinvestStatus;
 import com.fatp.enums.biz.RepayStatus;
 import com.fatp.enums.project.ListingLimitType;
@@ -89,6 +90,7 @@ public class BizPlanController extends BaseController{
 		}
 		Map<String,Object> map = new HashMap<>();
 		map.put("listingInfoId", listingVo.getId());
+		map.put("isDelete", YesNo.否.value);
 		map.put("sortColumns", " PeriodNumber ASC ");
 		List<BizplanRepay> list = bizplanRepayService.findRepayPlan(map);
 		request().setAttribute("list", list);

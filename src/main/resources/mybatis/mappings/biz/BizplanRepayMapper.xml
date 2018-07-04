@@ -23,7 +23,7 @@
         	UpdateTime ,
         	UpdateOperatorId ,
         	VersionNo ,
-        	BizImportAppyId ,
+        	BizImportApplyId ,
         	IsDelete 
         ) VALUES (
         	#{id} ,
@@ -46,7 +46,7 @@
         	now() ,
         	#{updateOperatorId} ,
         	1 ,
-        	#{bizImportAppyId} ,
+        	#{bizImportApplyId} ,
         	#{isDelete} 
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
@@ -61,7 +61,7 @@
 	        VersionNo =  VersionNo + 1 ,
 	        IsDelete = #{isDelete} 
         WHERE 
-	         BizImportAppyId = #{bizImportAppyId}
+	         BizImportApplyId = #{bizImportApplyId}
 	</update>
 	
 	<update id="updateRepayStatus">

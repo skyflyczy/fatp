@@ -22,7 +22,7 @@ public class BizplanRepayPo {
 	 */
 	private Integer listingInfoId;
 	
-	private Integer bizImportAppyId;
+	private Integer bizImportApplyId;
 	/**
 	 * 借款方（融资方）
 	 */
@@ -221,11 +221,11 @@ public class BizplanRepayPo {
 	public void setRepayStatus(int repayStatus) {
 		this.repayStatus = repayStatus;
 	}
-	public Integer getBizImportAppyId() {
-		return bizImportAppyId;
+	public Integer getBizImportApplyId() {
+		return bizImportApplyId;
 	}
-	public void setBizImportAppyId(Integer bizImportAppyId) {
-		this.bizImportAppyId = bizImportAppyId;
+	public void setBizImportApplyId(Integer bizImportApplyId) {
+		this.bizImportApplyId = bizImportApplyId;
 	}
 	public int getIsDelete() {
 		return isDelete;
