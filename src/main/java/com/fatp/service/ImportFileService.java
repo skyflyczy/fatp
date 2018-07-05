@@ -124,7 +124,7 @@ public class ImportFileService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<ListingInfoPo> importListingInfo(String filePath, String projectCode, Integer exchangeId)
+	public List<ListingInfoPo> importListingInfo(String filePath, String operatorId, Integer exchangeId)
 			throws IOException {
 		logger.debug(">>>>>ImportFileService.importListingInfo()-filePath="+filePath);
 		File file = new File(filePath);
@@ -150,7 +150,7 @@ public class ImportFileService {
 			
 			try{
 				listingInfo.setId((int)System.currentTimeMillis());
-				listingInfo.setExchangeId(1);
+				listingInfo.setExchangeId(exchangeId);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
 				listingInfo.setListingGuid(strArray[0].trim());
@@ -232,6 +232,8 @@ public class ImportFileService {
 				listingInfo.setExpireDateInterest(strArray[18].trim().equals("是")?1:0);
 				
 				listingInfo.setListingStatus(1);
+				listingInfo.setCreateOperatorId(Integer.valueOf(operatorId));
+				listingInfo.setUpateOperatorId(Integer.valueOf(operatorId));
 			}
 			catch(Exception e)
 			{

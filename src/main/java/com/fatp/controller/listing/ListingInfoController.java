@@ -224,11 +224,9 @@ public class ListingInfoController extends BaseController {
 			logger.debug(">>>>>fileName=" + fileName);
 			logger.debug(">>>>>file.getName()=" + file.getName());
 
-
 			// 获取上传地址
 			String importRecordsPath = importFileService.importListingRecordsFilePath(Integer.valueOf(listingGuid));
 			logger.debug(">>>>>importRecordsPath=" + importRecordsPath);
-
 
 			// 上传产品文件到服务器
 			String fileNames = upload(fileMap, importRecordsPath);
@@ -236,31 +234,31 @@ public class ListingInfoController extends BaseController {
 			String originalFilename = fileNameArray[0];
 			String linkFileName = fileNameArray[1];
 			String filePath = importRecordsPath + File.separator + linkFileName;
-			
-			//上传服务器成功后，记录挂牌产品文件的信息 global_file
-			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename, Integer.parseInt(memberId), Integer.parseInt(operatorId));
-			logger.debug(">>>>>globalFile=" + globalFile);			
-			
+
+			// 上传服务器成功后，记录挂牌产品文件的信息 global_file
+			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename,
+					Integer.parseInt(memberId), Integer.parseInt(operatorId));
+			logger.debug(">>>>>globalFile=" + globalFile);
+
 			// 解析产品信息
-			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, projectCode,super.getExchangeId());
+			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, operatorId,
+					super.getExchangeId());
 			logger.debug(">>>>>List<ListingInfoPo>=" + list);
-			int  recordsNumbers =-1;
-			try{
-			//把产品信息记录到数据库中
-			recordsNumbers = listingInfoService.listingRecords(list);
-			logger.debug("recordsNumbers=" + recordsNumbers);
-			}catch(Exception e)
-			{
-				//e.printStackTrace();
-				logger.error(">>>>>把产品信息记录到数据库中 globalFile.getId()=" + globalFile.getId());			
-				logger.error(">>>>>把产品信息记录到数据库中 error" + e.getMessage());			
+			String recordsNumbers = "";
+			try {
+				// 把产品信息记录到数据库中
+				recordsNumbers = listingInfoService.listingRecords(list);
+				logger.debug("recordsNumbers=" + recordsNumbers);
+			} catch (Exception e) {
+				// e.printStackTrace();
+				logger.error(">>>>>把产品信息记录到数据库中 globalFile.getId()=" + globalFile.getId());
+				logger.error(">>>>>把产品信息记录到数据库中 error" + e.getMessage());
 				globalFileService.deleteGlobalFileById(globalFile.getId());
 				Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
 				return resultError(ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 			}
 			logger.debug("<---------------out listInfoImport------------------------>");
-			return resultSuccess();
-
+			return resultSuccess(recordsNumbers);
 
 		} catch (FatpException e) {
 			e.printStackTrace();
@@ -273,7 +271,6 @@ public class ListingInfoController extends BaseController {
 			return resultError(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL.getMessage()).toJSONString();
 		}
 	}
-
 
 
 	private void setOperatorData(ListingInfo listingInfoVo) {

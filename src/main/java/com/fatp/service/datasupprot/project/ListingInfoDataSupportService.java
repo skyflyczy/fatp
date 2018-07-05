@@ -183,33 +183,47 @@ public class ListingInfoDataSupportService {
 			throw new FatpException(ErrorCode.LISTING_DELELT_ERROR);
 		}
 	}
+
 	@Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
-	
-	public int listingRecords(List<ListingInfoPo> poilist) throws Exception {  
-		int result =0;
-	    SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);  
-	    ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);  
-	    try {  
+	private SqlSessionTemplate sqlSessionTemplate;
+	public String listingRecords(List<ListingInfoPo> poilist) throws Exception {
+		int result = 0;
+		SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);
+		String errRecord = "";
+		try {
 			for (ListingInfoPo po : poilist) {
-				result += liDao.insert(po);//插入listing_info表
-				List<ListingTradePo> tradePo = getListingTradePo(po);
-				for (ListingTradePo tp : tradePo) {
-					System.out.println("--------插入listing_trade表"+tp);
-					listingTradeDao.insert(tp);//插入listing_trade表
+				try {
+					int importNums = liDao.insert(po);// 插入listing_info表
+					System.out.println("--------插入listing_info表:" + importNums);
+					result += 1;
+					List<ListingTradePo> tradePo = getListingTradePo(po);
+					for (ListingTradePo tp : tradePo) {
+						System.out.println("--------插入listing_trade表" + tp);
+						listingTradeDao.insert(tp);// 插入listing_trade表
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					errRecord += po.getListingGuid() + ";";
 				}
-	        }  
-	        sqlSession.commit();  
-	    }
-	    catch(Exception e){
-	    	e.printStackTrace();
-	    	throw e;
-	    }finally {  
-	        sqlSession.close();  
-	    }  
-	    return result;
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			sqlSession.close();
+		}
+
+		if (errRecord.equals("")) {
+			errRecord = "成功导入[ " + result + " ]条";
+		} else {
+			errRecord = "成功导入[ " + result + " ]条,失败【" + errRecord + "】";
+		}
+		return errRecord;
 	}
-/**
+
+	/**
  * 把导入文件中【预期收益率值（%）】的值解析为ListingTradePo，插入到listing_trade表中
  * @param po ListingTradePo
  * @return
@@ -232,7 +246,8 @@ public class ListingInfoDataSupportService {
 					BigDecimal bd2 = new BigDecimal("0.01");
 					tradePo.setInvestProfit(bd.multiply(bd2));// 拟定年化收益率,没有乘以%InvestProfit
 					tradePo.setMaxInvestMoney(new BigDecimal(minToMax[0]));// 最高投资金额，元（不包含此值）
-					tradePo.setCreateOperatorId(1);
+					tradePo.setCreateOperatorId(po.getCreateOperatorId());
+					tradePo.setUpateOperatorId(po.getUpateOperatorId());
 					plist.add(tradePo);
 				}
 			}

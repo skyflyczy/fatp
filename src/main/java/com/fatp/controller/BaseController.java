@@ -120,7 +120,12 @@ public class BaseController {
 		jsonObj.put("message", "操作成功。");
 		return jsonObj;
 	}
-	/**
+	public JSONObject resultSuccess(String msg) {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("statusCode", Integer.valueOf(200));
+		jsonObj.put("message", msg);
+		return jsonObj;
+	}	/**
 	 * 获取登录用户
 	 * @return
 	 */
