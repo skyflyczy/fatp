@@ -32,7 +32,12 @@
         	CreateOperatorId ,
         	UpdateTime ,
         	UpateOperatorId ,
-        	VersionNo 
+        	VersionNo ,
+        	MinInvestMoney ,
+        	SettleAccountName ,
+        	SettleCardAccount ,
+        	SettleSubBankName ,
+        	GlobalFileId 
         ) VALUES (
         	#{id} ,
         	#{exchangeId} ,
@@ -63,7 +68,12 @@
         	#{createOperatorId} ,
         	now() ,
         	#{upateOperatorId} ,
-        	1  
+        	1  ,
+        	#{minInvestMoney} ,
+        	#{settleAccountName} ,
+        	#{settleCardAccount} ,
+        	#{settleSubBankName} ,
+        	#{globalFileId} 
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
             select LAST_INSERT_ID() as id
@@ -94,7 +104,12 @@
 	        ExpireDateInterest = #{expireDateInterest} ,
 	        UpdateTime = now() ,
 	        UpateOperatorId = #{upateOperatorId} ,
-	        VersionNo = VersionNo + 1  
+	        VersionNo = VersionNo + 1 ,
+	        MinInvestMoney = #{minInvestMoney} ,
+        	SettleAccountName = #{settleAccountName} ,
+        	SettleCardAccount = #{settleCardAccount} ,
+        	SettleSubBankName = #{settleSubBankName} ,
+        	GlobalFileId = #{globalFileId}  
         WHERE 
 	        Id = #{id} AND VersionNo = #{versionNo} 
 	</update>

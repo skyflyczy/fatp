@@ -62,6 +62,10 @@ public class ListingInfoPo implements Serializable {
 	 */
 	private java.math.BigDecimal listingMoney;
 	/**
+	 * 起投金额
+	 */
+	private java.math.BigDecimal minInvestMoney;
+	/**
 	 * 产品期限
 	 */
 	private Integer listingLimit;
@@ -115,6 +119,22 @@ public class ListingInfoPo implements Serializable {
 	 * 挂牌状态
 	 */
 	private Integer listingStatus;
+	/**
+	 * 结算账户
+	 */
+	private String settleAccountName;
+	/**
+	 * 结算账号
+	 */
+	private String settleCardAccount;
+	/**
+	 * 结算开户行
+	 */
+	private String SettleSubBankName;
+	/**
+	 * 来自哪个文件导入，为空时，创建
+	 */
+	private Integer globalFileId;
 	/**
 	 * 创建时间
 	 */
@@ -403,5 +423,45 @@ public class ListingInfoPo implements Serializable {
 
 	public String getProfitValue() {
 		return this.profitValue;
+	}
+
+	public java.math.BigDecimal getMinInvestMoney() {
+		return minInvestMoney;
+	}
+
+	public void setMinInvestMoney(java.math.BigDecimal minInvestMoney) {
+		this.minInvestMoney = minInvestMoney;
+	}
+
+	public String getSettleAccountName() {
+		return settleAccountName;
+	}
+
+	public void setSettleAccountName(String settleAccountName) {
+		this.settleAccountName = settleAccountName;
+	}
+
+	public String getSettleCardAccount() {
+		return settleCardAccount;
+	}
+
+	public void setSettleCardAccount(String settleCardAccount) {
+		this.settleCardAccount = settleCardAccount;
+	}
+
+	public String getSettleSubBankName() {
+		return SettleSubBankName;
+	}
+
+	public void setSettleSubBankName(String settleSubBankName) {
+		SettleSubBankName = settleSubBankName;
+	}
+
+	public Integer getGlobalFileId() {
+		return globalFileId;
+	}
+
+	public void setGlobalFileId(Integer globalFileId) {
+		this.globalFileId = globalFileId;
 	}
 }
