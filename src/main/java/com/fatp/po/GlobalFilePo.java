@@ -140,4 +140,8 @@ public class GlobalFilePo implements Serializable {
 	public java.util.Date getUpdateTime() {
 		return this.updateTime;
 	}
+	public String toString()
+	{
+	return "{[id="+id+"][fileGuid="+fileGuid+"][contentType="+contentType+"][filePath="+filePath+"][originalFileName="+originalFileName+"][displayName="+displayName+"][createOperatorId="+createOperatorId+"][createUserId="+createUserId+"][createTime="+createTime+"][updateTime="+updateTime+"]}";
+	}
 }

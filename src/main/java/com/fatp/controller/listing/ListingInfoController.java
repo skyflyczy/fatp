@@ -229,7 +229,7 @@ public class ListingInfoController extends BaseController {
 			logger.info(">>>>>globalFile=" + globalFile);			
 			
 			// 解析产品信息
-			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, super.getExchangeId(),super.getSelfId());
+			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, globalFile.getId(),super.getExchangeId(),super.getSelfId());
 			logger.info(">>>>>List<ListingInfoPo>=" + list);
 			String recordsNumbers = "";
 			try {

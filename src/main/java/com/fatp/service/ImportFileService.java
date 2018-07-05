@@ -124,9 +124,9 @@ public class ImportFileService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<ListingInfoPo> importListingInfo(String filePath,Integer exchangeId,int operatorId)
+	public List<ListingInfoPo> importListingInfo(String filePath,int fileid,Integer exchangeId,int operatorId)
 			throws IOException {
-		logger.debug(">>>>>ImportFileService.importListingInfo()-filePath="+filePath);
+		logger.info(">>>>>ImportFileService.importListingInfo()-filePath="+filePath);
 		File file = new File(filePath);
 
 		if (!file.exists()) {		
@@ -141,7 +141,7 @@ public class ImportFileService {
 			String[] strArray = resultList.get(i);
 			if (strArray != null)
 				for (int j = 0; j < strArray.length; j++)
-					System.err.println(i+"  strArray["+j + "] = " + strArray[j]);
+					logger.info(i+"  strArray["+j + "] = " + strArray[j]);
 			
 			ListingInfoPo listingInfo = new ListingInfoPo();
 //			if (StringUtils.isBlank(strArray[0]) || !strArray[0].trim().equals(projectCode)) {
@@ -231,12 +231,14 @@ public class ImportFileService {
 				//到期日是否计息：1是0否
 				listingInfo.setExpireDateInterest(strArray[19].trim().equals("是")?1:0);
 				
-				listingInfo.setListingStatus(1);
 				listingInfo.setCreateOperatorId(Integer.valueOf(operatorId));
 				listingInfo.setUpateOperatorId(Integer.valueOf(operatorId));
 				listingInfo.setSettleAccountName(SymmetricEncrypt.encryptStr(strArray[20].trim()));
 				listingInfo.setSettleCardAccount(SymmetricEncrypt.encryptStr(strArray[21].trim()));
 				listingInfo.setSettleSubBankName(strArray[22].trim());
+				
+				listingInfo.setGlobalFileId(fileid);;
+				listingInfo.setListingStatus(1);
 			}
 			catch(Exception e)
 			{
