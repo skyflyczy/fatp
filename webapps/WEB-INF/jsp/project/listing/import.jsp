@@ -6,10 +6,7 @@
 	<form id="file_form" data-loadingmask="true" method="post" enctype="multipart/form-data"
 		action="<%=request.getContextPath()%>/project/listinginfo/listInfoImport.do"
 		data-toggle="validate" data-reload="true">
-	<input type="hidden" value="20120022" name="listingGuid" id="listingGuid"/>
 	<input type="hidden" id="excelFileName" name="excelFileName" value=""/>
-	<input type="hidden" id="memberId" name="memberId" value="23"/>
-	<input type="hidden" id="operatorId" name="operatorId" value="112"/>
 	<input type="hidden" id="excelFilePath" name="excelFilePath" value=""/>
 		<table id="userfiles" class="table other-table table-bordered">
 		 	<thead>

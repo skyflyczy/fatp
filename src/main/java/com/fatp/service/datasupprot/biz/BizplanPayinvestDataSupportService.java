@@ -1,6 +1,5 @@
 package com.fatp.service.datasupprot.biz;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,16 +46,6 @@ public class BizplanPayinvestDataSupportService {
 			decryptStr(list);
 		}
 		return list;
-	}
-	/**
-	 * 根据申请获取兑付信息
-	 * @param applyId
-	 * @return
-	 */
-	public List<BizplanPayinvest> findPlanPayinvestByApplyId(int applyId) {
-		Map<String,Object> map = new HashMap<>();
-		map.put("bizImportApplyId", applyId);
-		return findPlanPayinvest(map);
 	}
 	/**
 	 * 根据还款计划Id更新兑付状态

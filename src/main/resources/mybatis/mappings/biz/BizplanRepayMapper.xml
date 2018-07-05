@@ -22,7 +22,9 @@
         	CreateOperatorId ,
         	UpdateTime ,
         	UpdateOperatorId ,
-        	VersionNo 
+        	VersionNo ,
+        	BizImportApplyId ,
+        	IsDelete 
         ) VALUES (
         	#{id} ,
         	#{repayPlanGuid} ,
@@ -43,25 +45,23 @@
         	#{createOperatorId} ,
         	now() ,
         	#{updateOperatorId} ,
-        	1 
+        	1 ,
+        	#{bizImportApplyId} ,
+        	#{isDelete} 
         )
     	<selectKey resultType="java.lang.Integer" keyProperty="id">
             select LAST_INSERT_ID() as id
         </selectKey>
 	</insert>
 	
-	<update id="updateByVersion">
+	<update id="updateDeletStatusByApply" parameterType="java.util.Map">
         UPDATE bizplan_repay SET
-	        InterestPrincipal = #{interestPrincipal} ,
-	        Principal = #{principal} ,
-	        Interest = #{interest} ,
-	        OverInterest = #{overInterest} ,
-	        OverDay = #{overDay} ,
 	        UpdateTime = now() ,
 	        UpdateOperatorId = #{updateOperatorId} ,
-	        VersionNo =  VersionNo + 1 
+	        VersionNo =  VersionNo + 1 ,
+	        IsDelete = #{isDelete} 
         WHERE 
-	        Id = #{id} AND VersionNo = #{versionNo} 
+	         BizImportApplyId = #{bizImportApplyId}
 	</update>
 	
 	<update id="updateRepayStatus">
@@ -79,7 +79,10 @@
 	       <if test="@Ognl@isNotEmpty(id)">
 				AND bizplan_repay.Id = #{id}
 			</if>
-	       <if test="@Ognl@isNotEmpty(repayPlanGuid)">
+	       <if test="@Ognl@isNotEmpty(isDelete)">
+				AND bizplan_repay.IsDelete = #{isDelete}
+			</if>
+			<if test="@Ognl@isNotEmpty(repayPlanGuid)">
 				AND bizplan_repay.RepayPlanGuid = #{repayPlanGuid}
 			</if>
 	       <if test="@Ognl@isNotEmpty(listingInfoId)">
@@ -185,12 +188,6 @@
 		<if test="@Ognl@isNotEmpty(sortColumns)">
 			ORDER BY ${sortColumns}
 		</if>
-    </select>
-    
-    <select id="getPlanRepayPoByUniqueKey" parameterType="java.util.Map" resultType="com.fatp.po.biz.BizplanRepayPo">
-    	SELECT *
-	    FROM bizplan_repay 
-		WHERE ListingInfoId = #{listingInfoId} AND PeriodNumber = #{periodNumber} 
     </select>
 </mapper>
 

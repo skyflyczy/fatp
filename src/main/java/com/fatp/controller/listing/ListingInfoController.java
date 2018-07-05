@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fatp.controller.BaseController;
 import com.fatp.domain.PageData;
 import com.fatp.domain.listing.ListingInfo;
@@ -39,7 +38,6 @@ import com.fatp.po.project.ListingInfoPo;
 import com.fatp.po.user.MemberOperatorPo;
 import com.fatp.service.GlobalFileService;
 import com.fatp.service.ImportFileService;
-import com.fatp.service.offsite.InvestApplyService;
 import com.fatp.service.project.ListingInfoService;
 import com.fatp.util.Constant;
 import com.fatp.util.StringUtil;
@@ -57,8 +55,6 @@ public class ListingInfoController extends BaseController {
 	private ListingInfoService listingInfoService;
 	@Autowired
 	private ImportFileService importFileService;
-	@Autowired
-	private InvestApplyService investApplyService;
 	@Autowired
 	private GlobalFileService globalFileService;
 
@@ -193,8 +189,7 @@ public class ListingInfoController extends BaseController {
 	 */
 
 	@RequestMapping("import")
-	public String importIndex(String id) {
-		logger.debug("importIndex() id=" + id);
+	public String importIndex() {
 		return viewPath + "/importIndex";
 	}
 
@@ -214,18 +209,12 @@ public class ListingInfoController extends BaseController {
 			Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 			logger.debug(">>>>>fileMap=" + fileMap);
 			logger.debug(">>>>>fileMap.size()=" + fileMap.size());
-			String listingGuid = request.getParameter("listingGuid");
-			String projectCode = request.getParameter("projectCode");
-			String memberId = request.getParameter("memberId");
-			String operatorId = request.getParameter("operatorId");
 			String fileName = file.getOriginalFilename();
-			logger.debug(">>>>>listingGuid=" + listingGuid);
-			logger.debug(">>>>>projectCode=" + projectCode);
 			logger.debug(">>>>>fileName=" + fileName);
 			logger.debug(">>>>>file.getName()=" + file.getName());
 
 			// 获取上传地址
-			String importRecordsPath = importFileService.importListingRecordsFilePath(Integer.valueOf(listingGuid));
+			String importRecordsPath = importFileService.importListingRecordsFilePath();
 			logger.debug(">>>>>importRecordsPath=" + importRecordsPath);
 
 			// 上传产品文件到服务器
@@ -236,13 +225,12 @@ public class ListingInfoController extends BaseController {
 			String filePath = importRecordsPath + File.separator + linkFileName;
 
 			// 上传服务器成功后，记录挂牌产品文件的信息 global_file
-			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename,
-					Integer.parseInt(memberId), Integer.parseInt(operatorId));
-			logger.debug(">>>>>globalFile=" + globalFile);
-
+			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename,super.getMemberId(),super.getSelfId());
+			
+			logger.debug(">>>>>globalFile=" + globalFile);			
+			
 			// 解析产品信息
-			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, operatorId,
-					super.getExchangeId());
+			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, super.getExchangeId(),super.getSelfId());
 			logger.debug(">>>>>List<ListingInfoPo>=" + list);
 			String recordsNumbers = "";
 			try {

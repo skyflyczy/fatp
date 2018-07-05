@@ -1,6 +1,8 @@
 package com.fatp.service.plan.repay;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,11 +10,14 @@ import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.biz.PayinvestStatus;
+import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestRate;
+import com.fatp.enums.project.ListingLimitType;
 import com.fatp.po.biz.BizplanPayinvestPo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.plan.repay.param.CalInterestParam;
 import com.fatp.service.plan.repay.param.InvestProfitParam;
+import com.fatp.util.DateUtil;
 import com.fatp.util.UUIDUtil;
 
 
@@ -78,9 +83,11 @@ public abstract class PlanGenStragey {
 			interest = CalInterestUtil.calYearProfit(param, zeroplace, paramInt);
 			break;
 		case 按季计息:
-			//TODO
+			interest = CalInterestUtil.calSeasonProfit(param, zeroplace, paramInt);
+			break;
 		case 按半年计息:
-			//TODO
+			interest = CalInterestUtil.calHalfAYearProfit(param, zeroplace, paramInt);
+			break;
 		default:
 			break;
 		}
@@ -105,5 +112,24 @@ public abstract class PlanGenStragey {
 			return param;
 		}).collect(Collectors.toList());
 		return list;
+	}
+	/**
+	 * 获取计息结束日期
+	 * @param listingInfoPo
+	 * @return
+	 */
+	protected Date getInterestEndDate(ListingInfoPo listingInfoPo,Date interestStartDate) {
+		if(listingInfoPo.getExpireDateStyle().intValue() == ExpireDateStyle.固定到期日.style) {
+			return listingInfoPo.getExpireDate();
+		}
+		//如果是固定期限
+		if(listingInfoPo.getListingLimitType().intValue() == ListingLimitType.天.type) {
+			return DateUtil.add(interestStartDate, Calendar.DATE, listingInfoPo.getListingLimit().intValue());
+		} else if(listingInfoPo.getListingLimitType().intValue() == ListingLimitType.月.type) {
+			return DateUtil.add(interestStartDate, Calendar.MONTH, listingInfoPo.getListingLimit().intValue());
+		} else if(listingInfoPo.getListingLimitType().intValue() == ListingLimitType.年.type) {
+			return DateUtil.add(interestStartDate, Calendar.YEAR, listingInfoPo.getListingLimit().intValue());
+		}
+		return listingInfoPo.getExpireDate();
 	}
 }

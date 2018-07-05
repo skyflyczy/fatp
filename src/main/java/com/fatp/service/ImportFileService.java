@@ -20,11 +20,11 @@ import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
-import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
 import com.fatp.service.sys.SysParamService;
 import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;
+import com.fatp.util.UUIDUtil;
 import com.huajin.pdfconvertor.PdfProcessSupport;
 
 /**
@@ -32,12 +32,11 @@ import com.huajin.pdfconvertor.PdfProcessSupport;
  */
 @Service
 public class ImportFileService {
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private SysParamService sysParmService;
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	@Autowired
-	private ListingInfoDataSupportService listingInfoDataSupportService;
+	
 	@Autowired
 	private SysbizcodeSequenceService sysbizcodeSequenceService;
 	/**
@@ -54,8 +53,8 @@ public class ImportFileService {
 	 * 
 	 * @return
 	 */
-	public String importListingRecordsFilePath(int projectId) {
-		return sysParmService.getProjectUploadAddress() + File.separator + projectId + File.separator + "listing_records"
+	public String importListingRecordsFilePath() {
+		return sysParmService.getProjectUploadAddress() + File.separator + getRandomNum() + File.separator + "listing_records"
 				+ File.separator + getRandomNum() + File.separator;
 	}
 	/**
@@ -83,7 +82,7 @@ public class ImportFileService {
 			String[] strArray = resultList.get(i);
 			BizimportTradeDetail detail = new BizimportTradeDetail();
 			if (StringUtils.isBlank(strArray[0]) || !strArray[0].trim().equals(projectCode)) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行产品信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行产品信息错误，可能是单元格格式错误，请检查");
 			}
 			detail.setListingCode(strArray[0].trim());
 			detail.setListingFullName(strArray[1]);
@@ -91,7 +90,7 @@ public class ImportFileService {
 			detail.setTradeTime(DateUtil.autoParseDate(strArray[3]));
 			detail.setTradeMoney(BigDecimalUtil.convertDefaultZero(strArray[4]));
 			if (detail.getTradeTime() == null || detail.getTradeMoney().compareTo(BigDecimal.ZERO) <= 0) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行交易信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行交易信息错误，请检查");
 			}
 			detail.setAddInvestProfit(BigDecimalUtil.convertDefaultZero(strArray[5]).divide(new BigDecimal("100"), 5,
 					BigDecimal.ROUND_HALF_UP));
@@ -108,7 +107,7 @@ public class ImportFileService {
 					|| detail.getIdNumber().indexOf(".") >= 0 || StringUtils.isBlank(detail.getUserRealName())
 					|| (detail.getIdTypeId() == IdTypeDesc.身份证.getIdType()
 							&& detail.getIdNumber().split(" ").length > 1)) {
-				throw new FatpException("投资明细文件第" + (i + 2) + "行客户信息错误，请检查后重新上传");
+				throw new FatpException("投资明细文件第" + (i + 2) + "行客户信息错误，请检查");
 			}
 			list.add(detail);
 		}
@@ -124,7 +123,7 @@ public class ImportFileService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<ListingInfoPo> importListingInfo(String filePath, String operatorId, Integer exchangeId)
+	public List<ListingInfoPo> importListingInfo(String filePath,Integer exchangeId,int operatorId)
 			throws IOException {
 		logger.debug(">>>>>ImportFileService.importListingInfo()-filePath="+filePath);
 		File file = new File(filePath);
@@ -153,7 +152,8 @@ public class ImportFileService {
 				listingInfo.setExchangeId(exchangeId);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
-				listingInfo.setListingGuid(strArray[0].trim());
+				listingInfo.setListingGuid(UUIDUtil.getUUID());
+				listingInfo.setPartnerBizCode(strArray[0].trim());
 				String name= strArray[1].trim();
 				listingInfo.setListingName(name); 
 				listingInfo.setListingFullName(name); 
@@ -163,7 +163,6 @@ public class ImportFileService {
 				listingInfo.setPartnerBiz(strArray[5].trim());
 				listingInfo.setListingMoney(new BigDecimal(strArray[6].trim()));
 				listingInfo.setListingLimit(Integer.valueOf(strArray[7].trim()));
-
 				//产品期限类型：1天2月3年
 				listingInfo.setListingLimitType(1);
 				if(strArray[8].trim().equals("月")){

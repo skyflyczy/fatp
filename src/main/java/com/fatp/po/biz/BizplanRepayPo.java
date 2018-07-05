@@ -21,6 +21,8 @@ public class BizplanRepayPo {
 	 * 挂牌产品Id
 	 */
 	private Integer listingInfoId;
+	
+	private Integer bizImportApplyId;
 	/**
 	 * 借款方（融资方）
 	 */
@@ -72,6 +74,10 @@ public class BizplanRepayPo {
 	 * 还款状态
 	 */
 	private int repayStatus;
+	/**
+	 * 是否被删除1：是，0：否
+	 */
+	private int isDelete;
 	/**
 	 * 创建时间
 	 */
@@ -215,5 +221,19 @@ public class BizplanRepayPo {
 	public void setRepayStatus(int repayStatus) {
 		this.repayStatus = repayStatus;
 	}
+	public Integer getBizImportApplyId() {
+		return bizImportApplyId;
+	}
+	public void setBizImportApplyId(Integer bizImportApplyId) {
+		this.bizImportApplyId = bizImportApplyId;
+	}
+	public int getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(int isDelete) {
+		this.isDelete = isDelete;
+	}
+	
+	
 }
 
