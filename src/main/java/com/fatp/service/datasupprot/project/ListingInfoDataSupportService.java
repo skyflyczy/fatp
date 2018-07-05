@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +31,7 @@ import com.fatp.po.project.ListingTradePo;
 import com.fatp.util.UUIDUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.huajin.baymax.encrypt.SymmetricEncrypt;
 
 /**
  * 挂牌数据支持服务
@@ -54,6 +55,7 @@ public class ListingInfoDataSupportService {
 	public PageData<ListingInfo> pageFindByCondition(Map<String,Object> map,int pageNo, int pageSize){
 		Page<?> page = PageHelper.startPage(pageNo, pageSize, true);
 		List<ListingInfo> list = listingInfoDao.findByCondition(map);
+		decryptStr(list);
 		return new PageData<>(page.getTotal(), page.getPages(), list);
 	}
 	/**
@@ -62,7 +64,9 @@ public class ListingInfoDataSupportService {
 	 * @return
 	 */
 	public List<ListingInfo> findByCondition(Map<String,Object> map) {
-		return listingInfoDao.findByCondition(map);
+		List<ListingInfo> list = listingInfoDao.findByCondition(map);
+		decryptStr(list);
+		return list;
 	}
 	/**
 	 * 根据Guid查找挂牌信息
@@ -70,7 +74,9 @@ public class ListingInfoDataSupportService {
 	 * @return
 	 */
 	public ListingInfo getByListingGuid(String listingGuid) {
-		return listingInfoDao.getByListingGuid(listingGuid);
+		ListingInfo listingInfo = listingInfoDao.getByListingGuid(listingGuid);
+		decryptStr(listingInfo);
+		return listingInfo;
 	}
 	/**
 	 * 根据Id获取挂牌信息
@@ -78,7 +84,9 @@ public class ListingInfoDataSupportService {
 	 * @return
 	 */
 	public ListingInfoPo getLisingInfoPoById(Integer id) {
-		return listingInfoDao.getPoById(id);
+		ListingInfoPo listingInfoPo = listingInfoDao.getPoById(id);
+		decryptStr(listingInfoPo);
+		return listingInfoPo;
 	}
 	/**
 	 * 根据挂牌Id查找挂牌交易信息
@@ -100,6 +108,7 @@ public class ListingInfoDataSupportService {
 		listingInfoPo.setListingGuid(UUIDUtil.getUUID());
 		listingInfoPo.setListingName(listingInfoVo.getListingFullName().trim());
 		listingInfoPo.setListingStatus(ListingStatus.正常.status);
+		encryptStr(listingInfoPo);//加密
 		listingInfoDao.insert(listingInfoPo);
 		return listingInfoPo;
 	}
@@ -122,6 +131,7 @@ public class ListingInfoDataSupportService {
 		newPo.setId(listingInfoVo.getId());
 		newPo.setListingName(listingInfoVo.getListingFullName());
 		newPo.setUpateOperatorId(listingInfoVo.getUpateOperatorId());
+		encryptStr(newPo);//加密
 		int row = listingInfoDao.updateByVersion(newPo);
 		if(row < 1){
 			throw new FatpException(ErrorCode.LISTING_SAVE_ERROR);
@@ -181,6 +191,62 @@ public class ListingInfoDataSupportService {
 		int n = listingInfoDao.delete(map);
 		if(n < 1) {
 			throw new FatpException(ErrorCode.LISTING_DELELT_ERROR);
+		}
+	}
+	/**
+	 * 敏感信息加密
+	 * @param listingInfoPo
+	 */
+	private void encryptStr(ListingInfoPo listingInfoPo){
+		if(StringUtils.isNotBlank(listingInfoPo.getSettleAccountName())) {
+			listingInfoPo.setSettleAccountName(SymmetricEncrypt.encryptStr(listingInfoPo.getSettleAccountName()));
+		}
+		if(StringUtils.isNotBlank(listingInfoPo.getSettleCardAccount())) {
+			listingInfoPo.setSettleCardAccount(SymmetricEncrypt.encryptStr(listingInfoPo.getSettleCardAccount()));
+		}
+	}
+	
+	/**
+	 * 解密
+	 * @param list
+	 */
+	private void decryptStr(List<ListingInfo> list){
+		if(CollectionUtils.isNotEmpty(list)) {
+			//解密
+			list.stream().forEach(detail ->{
+				if(StringUtils.isNotBlank(detail.getSettleAccountName())) {
+					detail.setSettleAccountName(SymmetricEncrypt.decryptStr(detail.getSettleAccountName()));
+				}
+				if(StringUtils.isNotBlank(detail.getSettleCardAccount())) {
+					detail.setSettleCardAccount(SymmetricEncrypt.decryptStr(detail.getSettleCardAccount()));
+				}
+			});
+		}
+	}
+	/**
+	 * 解密
+	 * @param list
+	 */
+	private void decryptStr(ListingInfo listingInfo){
+		//解密
+		if(StringUtils.isNotBlank(listingInfo.getSettleAccountName())) {
+			listingInfo.setSettleAccountName(SymmetricEncrypt.decryptStr(listingInfo.getSettleAccountName()));
+		}
+		if(StringUtils.isNotBlank(listingInfo.getSettleCardAccount())) {
+			listingInfo.setSettleCardAccount(SymmetricEncrypt.decryptStr(listingInfo.getSettleCardAccount()));
+		}
+	}
+	/**
+	 * 解密
+	 * @param list
+	 */
+	private void decryptStr(ListingInfoPo listingInfoPo){
+		//解密
+		if(StringUtils.isNotBlank(listingInfoPo.getSettleAccountName())) {
+			listingInfoPo.setSettleAccountName(SymmetricEncrypt.decryptStr(listingInfoPo.getSettleAccountName()));
+		}
+		if(StringUtils.isNotBlank(listingInfoPo.getSettleCardAccount())) {
+			listingInfoPo.setSettleCardAccount(SymmetricEncrypt.decryptStr(listingInfoPo.getSettleCardAccount()));
 		}
 	}
 

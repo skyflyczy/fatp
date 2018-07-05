@@ -30,28 +30,36 @@
 						<input  data-rule="挂牌金额:required;integer[+]" data-msg-range="请输入正确的数值" maxlength="12" class="digitUppercase" type="text" name="listingMoney" value="<fmt:formatNumber value="${obj.listingMoney}" pattern="#"/>"> 元
 					</td>
 					<td>
-						<label class="control-label x130"><span class="red">*</span>发行人：</label> 
-						<input data-rule="required;" maxlength="120" type="text" name="issuer" value="${obj.issuer}">
+						<label class="control-label x130"><span class="red">*</span>起投金额：</label> 
+						<input  data-rule="起投金额:required;integer[+];match[lte, listingMoney]" data-msg-range="请输入正确的数值" maxlength="12" class="digitUppercase" type="text" name="minInvestMoney" value="<fmt:formatNumber value="${obj.minInvestMoney}" pattern="#"/>"> 元
 					</td>
 				</tr>
                 <tr>
+                	<td>
+						<label class="control-label x130"><span class="red">*</span>发行人：</label> 
+						<input data-rule="required;" maxlength="120" type="text" name="issuer" value="${obj.issuer}">
+					</td>
 					<td>
 						<label class="control-label x130"><span class="red">*</span>管理人：</label> 
 						<input data-rule="required;" maxlength="120" type="text" name="listingManager" value="${obj.listingManager}">
 					</td>
+				</tr>
+				<tr>
 					<td>
 						<label class="control-label x130"><span class="red">*</span>投资顾问：</label> 
 						<input data-rule="required;" maxlength="120" type="text" name="investManager" value="${obj.investManager}">
 					</td>
-				</tr>
-				<tr>
 					<td>
 						<label class="control-label x130"><span class="red">*</span>发行渠道：</label> 
 						<input data-rule="required;" maxlength="120" type="text" name="partnerBiz" value="${obj.partnerBiz}">
 					</td>
+				</tr>
+				<tr>
 					<td>
 						<label class="control-label x130"><span class="red">*</span>发行渠道产品代码：</label> 
 						<input data-rule="required;" maxlength="120" type="text" name="partnerBizCode" value="${obj.partnerBizCode}">
+					</td>
+					<td>
 					</td>
 				</tr>
 		 	</tbody>
@@ -59,130 +67,145 @@
 		 		<tr><th colspan="2">结算信息</th></tr>
 		 	</thead>
 		 	<tbody>	
-		 			<tr>
-    					<td colspan="2">
-        					<label class="control-label x130"><span class="red">*</span>收益率类型：</label>
+		 		<tr>
+		 			<td>
+		 				<label class="control-label x130"><span class="red">*</span>结算账户：</label>
+		 				<input data-rule="required;"  maxlength="120" type="text" name="settleAccountName" value="${obj.settleAccountName}">
+		 			</td>
+		 			<td>
+		 				<label class="control-label x130"><span class="red">*</span>结算账号：</label>
+		 				<input class="bank-format" type="text" size="20" name="settleCardAccount" value="${obj.settleCardAccount}" data-rule="required;validLength" data-rule-validLength="validFunction.validLength"/>
+		 			</td>
+		 		</tr>
+		 		<tr>
+		 			<td colspan="2">
+		 				<label class="control-label x130"><span class="red">*</span>结算开户行：</label>
+		 				<input data-rule="required;" maxlength="120" type="text" name="settleSubBankName" value="${obj.settleSubBankName}" size="35">
+		 			</td>
+		 		</tr>
+		 		<tr>
+    				<td colspan="2">
+        				<label class="control-label x130"><span class="red">*</span>收益率类型：</label>
 	        				<select  data-rule="required" name="investProfitType" id="investProfitType" data-toggle="selectpicker" class="show-tick" style="display: none;">
 	                            <option value="">-选择收益率类型-</option>
 	                            <c:forEach var="item" items="${investProfitTypeList}" varStatus="status">
 	                                <option value="${item.type}"  <c:if test="${item.type  eq  obj.investProfitType}">selected="selected"</c:if>>${item}</option>
 	                            </c:forEach>
 	                        </select>
-    					</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<p><span class="red">*</span><b>预期收益率：</b></p>
-							<table id="investProfitTE" data-noread="true" data-reload-navtab="true" class="table other-table table-bordered"  data-toggle="tabledit" data-initnum="0" data-action="" data-single-noindex="true">
-			            		<thead>
-				                	<tr>
-					                    <th title="最低投资金额(元)" width="30%">
-					                    	<input placeholder="请输入最低投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney]" type="text" name="listingTradeList[#index#].minInvestMoney"/>
-					                    </th>
-					                    <th title="最高投资金额(元)" width="30%">
-					                    	<input placeholder="请输入最高投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney]" type="text" name="listingTradeList[#index#].maxInvestMoney"/>
-					                    </th>
-					                    <th title="指定预期收益率(%)" width="20%"><input data-rule="required;validthreedecimal" data-rule-validthreedecimal="validFunction.validthreedecimal" type="text" name="listingTradeList[#index#].investProfit" style="width:90%;"/>%</th>
-					                    <th title="新增" data-addbtn="true" width="10%">
-					                        <a href="javascript:;" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？" id="_#index#">删除</a>
-					                    </th>
-				                	</tr>
-			            		</thead>
-						        <tbody>
-						        	<c:forEach var="listingTrade" items="${listingTradeList}" varStatus="status"> 
-						        	<tr data-id="${ status.index + 1}">
-							        	<td>${listingTrade.minInvestMoney }</td>
-							        	<td>${listingTrade.maxInvestMoney }</td>
-							        	<td><fmt:formatNumber value="${listingTrade.investProfit*100 }" pattern="0.000"/></td>
-							        	<td data-noedit="true">
-								        	<input type="hidden" value="${listingTrade.id }" name="listingTradeList[#index#].id"/>
-								        	<a href="javascript:;" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？" id="_#index#">删除</a>
-							        	</td>
-						        	</tr>
-						        	</c:forEach>
-						        </tbody>
-		        			</table>
-						</td>
-					</tr>
-					<tr>
-    					<td>
-        					<label class="control-label x130"><span class="red">*</span>起息日：</label>
-       						 <input  data-rule="预计起息日:required;date;match[gte, todayForJudge, date]" type="text" value="<fmt:formatDate value="${obj.valueDate}" pattern="yyyy-MM-dd"/>" name="valueDate" id="valueDate" data-toggle="datepicker" data-min-date="{%y}-%M-%d" data-max-date="{%y+13}-%M-{%d+1}" data-nobtn="true">
-    					</td>
-    					<td>
-        					<label class="control-label x130"><span class="red">*</span>预计到期日：</label>
-        					<input  data-rule="预计到期日:required;date;match[gte, valueDate, date];" type="text" value="<fmt:formatDate value="${obj.expireDate}" pattern="yyyy-MM-dd"/>" name="expireDate" id="expireDate" data-toggle="datepicker" data-min-date="{%y}-%M-%d" data-max-date="{%y+13}-%M-{%d+1}" data-nobtn="true">
-    					</td>
-					</tr>
-					<tr>
-    					<td colspan="2">
-        					<label class="control-label x130"><span class="red">*</span>产品期限：</label>
-        					<input  data-rule="required;listingLimit;" data-rule-listingLimit="validFunction.listingLimit" type="text" name="listingLimit" value="${(obj.expireDate==null || obj.valueDate==null)?'':obj.listingLimit}" id="listingLimit" data-autoClose="true">
-	        				<select data-rule="validate(listingLimit)" name="listingLimitType" id="listingLimitType" data-toggle="selectpicker" class="show-tick">
-		            			<c:forEach var="item" items="${listingLimitTypeList}">
-		               		 		<option value="${item.type}" <c:if test="${item.type==obj.listingLimitType}">selected="selected"</c:if>>${item}</option>
-		            			</c:forEach>
-	        				</select>
-    					</td>
-					</tr>
-					<tr>
-    					<td>
-        					<label class="control-label x130"><span class="red">*</span>到期日规则：</label>
-        					<select  name="expireDateStyle" id="expireDateStyle" data-toggle="selectpicker" class="show-tick">
-		            			<c:forEach var="item" items="${expireDateStyleList}">
-		               		 		<option value="${item.style}" <c:if test="${item.style==obj.expireDateStyle}">selected="selected"</c:if>>${item}</option>
-		            			</c:forEach>
-	        				</select>
-    					</td>
-    					<td>
-        					<label class="control-label x130"><span class="red">*</span>到期日是否计息：</label>
-        					<input <c:if test="${obj.expireDateInterest==1}">checked</c:if> id="ransferable0" name="expireDateInterest" type="radio" value="1" data-toggle="icheck" data-label="是" data-rule="checked">
-        					<input <c:if test="${obj.expireDateInterest==0}">checked</c:if> id="ransferable1" name="expireDateInterest" type="radio" value="0" data-toggle="icheck" data-label="否" data-rule="checked">
-    					</td>
-					</tr>
-					<tr>
-	                    <td>
-	                        <label class="control-label x130"><span class="red">*</span>付息方式：</label>
-	                        <select  data-rule="required" name="payInterestType" id="payInterestType" data-toggle="selectpicker" class="show-tick" style="display: none;">
-	                            <option value="">-选择付息方式-</option>
-	                            <c:forEach var="item" items="${payInterestTypeList}" varStatus="status">
-	                                <option value="${item.type}"  <c:if test="${item.type  eq  obj.payInterestType}">selected="selected"</c:if>>${item}</option>
-	                            </c:forEach>
-	                        </select>
-	                    </td>
-						<td>
-	                        <label class="control-label x130"><span class="red">*</span>计息类型：</label>
-	                        <select  data-rule="required" name="interestType" id="interestType" data-toggle="selectpicker" class="show-tick" style="display: none;">
-	                            <option value="">-选择付息类型-</option>
-	                            <c:forEach var="item" items="${interestTypeList}" varStatus="status">
-	                                <option value="${item.type}"  <c:if test="${item.type  eq  obj.interestType}">selected="selected"</c:if>>${item}</option>
-	                            </c:forEach>
-	                        </select>
-	                    </td>
-					</tr>
-					<tr>
-	                    <td>
-	                        <label class="control-label x130"><span class="red">*</span>计息频率：</label>
-	                        <select  data-rule="required" name="interestRate" id="interestRate" data-toggle="selectpicker" class="show-tick" style="display: none;">
-	                            <option value="">-选择计息频率-</option>
-	                            <c:forEach var="item" items="${interestRateList}" varStatus="status">
-	                                <option value="${item.value}"  <c:if test="${item.value  eq  obj.interestRate}">selected="selected"</c:if>>${item}</option>
-	                            </c:forEach>
-	                        </select>
-	                    </td>
-						<td>
-	                        <label class="control-label x130"><span class="red">*</span>计息基准：</label>
-	                        <select  data-rule="required" name="interestBase" id="interestBase" data-toggle="selectpicker" class="show-tick" style="display: none;">
-	                            <option value="">-选择计息基准-</option>
-	                            <c:forEach var="item" items="${interestBaseList}" varStatus="status">
-	                                <option value="${item.value}"  <c:if test="${item.value  eq  obj.interestBase}">selected="selected"</c:if>>${item}</option>
-	                            </c:forEach>
-	                        </select>
-	                    </td>
-					</tr>
+    				</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<p><span class="red">*</span><b>预期收益率：</b></p>
+						<table id="investProfitTE" data-noread="true" data-reload-navtab="true" class="table other-table table-bordered"  data-toggle="tabledit" data-initnum="0" data-action="" data-single-noindex="true">
+		            		<thead>
+			                	<tr>
+				                    <th title="最低投资金额(元)" width="30%">
+				                    	<input placeholder="请输入最低投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney];match[gte, minInvestMoney]" type="text" name="listingTradeList[#index#].minInvestMoney"/>
+				                    </th>
+				                    <th title="最高投资金额(元)" width="30%">
+				                    	<input placeholder="请输入最高投资金额" class="digitUppercase" data-rule="required;match[lte, listingMoney];match[gte, minInvestMoney]" type="text" name="listingTradeList[#index#].maxInvestMoney"/>
+				                    </th>
+				                    <th title="指定预期收益率(%)" width="20%"><input data-rule="required;validthreedecimal" data-rule-validthreedecimal="validFunction.validthreedecimal" type="text" name="listingTradeList[#index#].investProfit" style="width:90%;"/>%</th>
+				                    <th title="新增" data-addbtn="true" width="10%">
+				                        <a href="javascript:;" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？" id="_#index#">删除</a>
+				                    </th>
+			                	</tr>
+		            		</thead>
+					        <tbody>
+					        	<c:forEach var="listingTrade" items="${listingTradeList}" varStatus="status"> 
+					        	<tr data-id="${ status.index + 1}">
+						        	<td>${listingTrade.minInvestMoney }</td>
+						        	<td>${listingTrade.maxInvestMoney }</td>
+						        	<td><fmt:formatNumber value="${listingTrade.investProfit*100 }" pattern="0.000"/></td>
+						        	<td data-noedit="true">
+							        	<input type="hidden" value="${listingTrade.id }" name="listingTradeList[#index#].id"/>
+							        	<a href="javascript:;" class="btn btn-red row-del" data-confirm-msg="确定要删除该行信息吗？" id="_#index#">删除</a>
+						        	</td>
+					        	</tr>
+					        	</c:forEach>
+					        </tbody>
+	        			</table>
+					</td>
+				</tr>
+				<tr>
+   					<td>
+       					<label class="control-label x130"><span class="red">*</span>起息日：</label>
+      						 <input  data-rule="预计起息日:required;date;match[gte, todayForJudge, date]" type="text" value="<fmt:formatDate value="${obj.valueDate}" pattern="yyyy-MM-dd"/>" name="valueDate" id="valueDate" data-toggle="datepicker" data-min-date="{%y}-%M-%d" data-max-date="{%y+13}-%M-{%d+1}" data-nobtn="true">
+   					</td>
+   					<td>
+       					<label class="control-label x130"><span class="red">*</span>预计到期日：</label>
+       					<input  data-rule="预计到期日:required;date;match[gte, valueDate, date];" type="text" value="<fmt:formatDate value="${obj.expireDate}" pattern="yyyy-MM-dd"/>" name="expireDate" id="expireDate" data-toggle="datepicker" data-min-date="{%y}-%M-%d" data-max-date="{%y+13}-%M-{%d+1}" data-nobtn="true">
+   					</td>
+				</tr>
+				<tr>
+   					<td colspan="2">
+       					<label class="control-label x130"><span class="red">*</span>产品期限：</label>
+       					<input  data-rule="required;listingLimit;" data-rule-listingLimit="validFunction.listingLimit" type="text" name="listingLimit" value="${(obj.expireDate==null || obj.valueDate==null)?'':obj.listingLimit}" id="listingLimit" data-autoClose="true">
+        				<select data-rule="validate(listingLimit)" name="listingLimitType" id="listingLimitType" data-toggle="selectpicker" class="show-tick">
+	            			<c:forEach var="item" items="${listingLimitTypeList}">
+	               		 		<option value="${item.type}" <c:if test="${item.type==obj.listingLimitType}">selected="selected"</c:if>>${item}</option>
+	            			</c:forEach>
+        				</select>
+   					</td>
+				</tr>
+				<tr>
+   					<td>
+       					<label class="control-label x130"><span class="red">*</span>到期日规则：</label>
+       					<select  name="expireDateStyle" id="expireDateStyle" data-toggle="selectpicker" class="show-tick">
+	            			<c:forEach var="item" items="${expireDateStyleList}">
+	               		 		<option value="${item.style}" <c:if test="${item.style==obj.expireDateStyle}">selected="selected"</c:if>>${item}</option>
+	            			</c:forEach>
+        				</select>
+   					</td>
+   					<td>
+       					<label class="control-label x130"><span class="red">*</span>到期日是否计息：</label>
+       					<input <c:if test="${obj.expireDateInterest==1}">checked</c:if> id="ransferable0" name="expireDateInterest" type="radio" value="1" data-toggle="icheck" data-label="是" data-rule="checked">
+       					<input <c:if test="${obj.expireDateInterest==0}">checked</c:if> id="ransferable1" name="expireDateInterest" type="radio" value="0" data-toggle="icheck" data-label="否" data-rule="checked">
+   					</td>
+				</tr>
+				<tr>
+                    <td>
+                        <label class="control-label x130"><span class="red">*</span>付息方式：</label>
+                        <select  data-rule="required" name="payInterestType" id="payInterestType" data-toggle="selectpicker" class="show-tick" style="display: none;">
+                            <option value="">-选择付息方式-</option>
+                            <c:forEach var="item" items="${payInterestTypeList}" varStatus="status">
+                                <option value="${item.type}"  <c:if test="${item.type  eq  obj.payInterestType}">selected="selected"</c:if>>${item}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+					<td>
+                        <label class="control-label x130"><span class="red">*</span>计息类型：</label>
+                        <select  data-rule="required" name="interestType" id="interestType" data-toggle="selectpicker" class="show-tick" style="display: none;">
+                            <option value="">-选择付息类型-</option>
+                            <c:forEach var="item" items="${interestTypeList}" varStatus="status">
+                                <option value="${item.type}"  <c:if test="${item.type  eq  obj.interestType}">selected="selected"</c:if>>${item}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+				</tr>
+				<tr>
+                    <td>
+                        <label class="control-label x130"><span class="red">*</span>计息频率：</label>
+                        <select  data-rule="required" name="interestRate" id="interestRate" data-toggle="selectpicker" class="show-tick" style="display: none;">
+                            <option value="">-选择计息频率-</option>
+                            <c:forEach var="item" items="${interestRateList}" varStatus="status">
+                                <option value="${item.value}"  <c:if test="${item.value  eq  obj.interestRate}">selected="selected"</c:if>>${item}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+					<td>
+                        <label class="control-label x130"><span class="red">*</span>计息基准：</label>
+                        <select  data-rule="required" name="interestBase" id="interestBase" data-toggle="selectpicker" class="show-tick" style="display: none;">
+                            <option value="">-选择计息基准-</option>
+                            <c:forEach var="item" items="${interestBaseList}" varStatus="status">
+                                <option value="${item.value}"  <c:if test="${item.value  eq  obj.interestBase}">selected="selected"</c:if>>${item}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+				</tr>
 			</tbody>	
 		 </table>
-		 
 	</form>
 </div>
 <script>
@@ -215,6 +238,14 @@ var validFunction = {
     		}
     	}
     	return true;
+    } ,
+    validLength:function(element){
+    	var value = element.value.replace(" ", "");
+    	if(value.length>=4 && value.length<=30){
+    		return true;
+    	}else{
+    		return "账户名称长度必须为4-30位";
+    	}
     }
 }
 $("#projectupate").on('invalid.form', function(e, form, errors) {

@@ -27,5 +27,29 @@ public class StringUtil extends StringUtils{
 		}
 		return list;
 	}
+	/**
+	 * 格式化银行卡号
+	 * @param cardAccount
+	 * @return
+	 */
+	public static String formatCardAccount(String cardAccount) {
+		if(isBlank(cardAccount)) {
+			return "";
+		}
+		int length = cardAccount.length();
+	    int beforeLength = 4;
+	    int afterLength = 4;
+	    //替换字符串，当前使用“*”
+	    String replaceSymbol = "*";
+	    StringBuffer sb = new StringBuffer();
+	    for(int i=0; i<length; i++) {
+	       if(i < beforeLength || i >= (length - afterLength)) {
+	          sb.append(cardAccount.charAt(i));
+	       } else {
+	           sb.append(replaceSymbol);
+	       }
+	    }
+	    return sb.toString();
+	}
 	
 }

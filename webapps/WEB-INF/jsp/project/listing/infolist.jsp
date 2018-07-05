@@ -39,7 +39,7 @@
 	    		<td align="center">${varStatus.count}</td>
 				<td align="center">${list.listingCode}</td>
 	    		<td><a href="<%=request.getContextPath()%>/project/listinginfo/view.do?id=${list.listingGuid}" 
-	    				data-toggle="dialog" data-width="1000"  data-height="600" data-id="dialog-mask" 
+	    				data-toggle="dialog" data-width="900"  data-height="600" data-id="dialog-mask" 
 	    				data-mask="true" class="text-omit pull-left">${list.listingFullName}</a></td>
 	    		<td><span title="${list.issuer}">${list.issuer}</span></td>
 	    		<td align="right"><fmt:formatNumber value="${list.listingMoney}" pattern="#,##0.00"/></td>

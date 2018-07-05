@@ -2,12 +2,15 @@ package com.fatp.domain.listing;
 
 import java.util.List;
 
+import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
+import com.fatp.enums.project.InterestType;
 import com.fatp.enums.project.InvestProfitType;
 import com.fatp.enums.project.ListingLimitType;
 import com.fatp.enums.project.PayInterestType;
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.util.StringUtil;
 
 /**
  * 挂牌
@@ -69,6 +72,21 @@ public class ListingInfo extends ListingInfoPo{
 		return "";
 	}
 	/**
+	 * 付息类型
+	 * @return
+	 */
+	public String getInterestTypeDesc(){
+		if(super.getInterestType() == null) {
+			return "";
+		}
+		for(InterestType type : InterestType.values()) {
+			if(type.type == super.getInterestType().intValue()) {
+				return type.name();
+			}
+		}
+		return "";
+	}
+	/**
 	 * 计息频率
 	 * @return
 	 */
@@ -98,7 +116,28 @@ public class ListingInfo extends ListingInfoPo{
 		}
 		return "";
 	}
-
+	/**
+	 * 到期日规则
+	 * @return
+	 */
+	public String getExpireDateStyleDesc(){
+		if(super.getExpireDateStyle() == null) {
+			return "";
+		}
+		for(ExpireDateStyle style : ExpireDateStyle.values()) {
+			if(style.style == super.getExpireDateStyle().intValue()) {
+				return style.name();
+			}
+		}
+		return "";
+	}
+	/**
+	 * 获取卡号
+	 * @return
+	 */
+	public String getSettleCardAccountDesc() {
+		return StringUtil.formatCardAccount(super.getSettleCardAccount());
+	}
 
 	public String getCreateOperatorName() {
 		return createOperatorName;

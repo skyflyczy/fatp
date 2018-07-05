@@ -120,17 +120,17 @@ public class ListingInfoPo implements Serializable {
 	 */
 	private Integer listingStatus;
 	/**
-	 * 结算账户
+	 * 结算账户 加密
 	 */
 	private String settleAccountName;
 	/**
-	 * 结算账号
+	 * 结算账号 加密
 	 */
 	private String settleCardAccount;
 	/**
 	 * 结算开户行
 	 */
-	private String SettleSubBankName;
+	private String settleSubBankName;
 	/**
 	 * 来自哪个文件导入，为空时，创建
 	 */
@@ -450,11 +450,11 @@ public class ListingInfoPo implements Serializable {
 	}
 
 	public String getSettleSubBankName() {
-		return SettleSubBankName;
+		return settleSubBankName;
 	}
 
 	public void setSettleSubBankName(String settleSubBankName) {
-		SettleSubBankName = settleSubBankName;
+		this.settleSubBankName = settleSubBankName;
 	}
 
 	public Integer getGlobalFileId() {

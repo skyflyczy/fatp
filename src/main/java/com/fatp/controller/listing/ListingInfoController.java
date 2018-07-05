@@ -120,6 +120,7 @@ public class ListingInfoController extends BaseController {
 	@ResponseBody
 	public Object update(@ModelAttribute ListingInfo listingInfoVo) {
 		try {
+			listingInfoVo.setSettleCardAccount(listingInfoVo.getSettleCardAccount().replace(" ", ""));
 			setOperatorData(listingInfoVo);
 			listingInfoService.updateListingInfo(listingInfoVo);
 			return resultSuccess();
