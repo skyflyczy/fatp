@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.enums.project.ListingLimitType;
 import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
@@ -25,6 +26,7 @@ import com.fatp.service.sys.SysParamService;
 import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;
+import com.fatp.util.UUIDUtil;
 import com.huajin.pdfconvertor.PdfProcessSupport;
 
 /**
@@ -54,8 +56,8 @@ public class ImportFileService {
 	 * 
 	 * @return
 	 */
-	public String importListingRecordsFilePath(int projectId) {
-		return sysParmService.getProjectUploadAddress() + File.separator + projectId + File.separator + "listing_records"
+	public String importListingRecordsFilePath() {
+		return sysParmService.getProjectUploadAddress() + File.separator + getRandomNum() + File.separator + "listing_records"
 				+ File.separator + getRandomNum() + File.separator;
 	}
 	/**
@@ -124,7 +126,7 @@ public class ImportFileService {
 	 * @return
 	 * @throws IOException
 	 */
-	public List<ListingInfoPo> importListingInfo(String filePath, String projectCode, Integer exchangeId)
+	public List<ListingInfoPo> importListingInfo(String filePath,Integer exchangeId)
 			throws IOException {
 		logger.debug(">>>>>ImportFileService.importListingInfo()-filePath="+filePath);
 		File file = new File(filePath);
@@ -153,7 +155,8 @@ public class ImportFileService {
 				listingInfo.setExchangeId(1);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
-				listingInfo.setListingGuid(strArray[0].trim());
+				listingInfo.setListingGuid(UUIDUtil.getUUID());
+				listingInfo.setPartnerBizCode(strArray[0].trim());
 				String name= strArray[1].trim();
 				listingInfo.setListingName(name); 
 				listingInfo.setListingFullName(name); 
@@ -163,7 +166,6 @@ public class ImportFileService {
 				listingInfo.setPartnerBiz(strArray[5].trim());
 				listingInfo.setListingMoney(new BigDecimal(strArray[6].trim()));
 				listingInfo.setListingLimit(Integer.valueOf(strArray[7].trim()));
-
 				//产品期限类型：1天2月3年
 				listingInfo.setListingLimitType(1);
 				if(strArray[8].trim().equals("月")){

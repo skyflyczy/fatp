@@ -193,8 +193,7 @@ public class ListingInfoController extends BaseController {
 	 */
 
 	@RequestMapping("import")
-	public String importIndex(String id) {
-		logger.debug("importIndex() id=" + id);
+	public String importIndex() {
 		return viewPath + "/importIndex";
 	}
 
@@ -214,19 +213,13 @@ public class ListingInfoController extends BaseController {
 			Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 			logger.debug(">>>>>fileMap=" + fileMap);
 			logger.debug(">>>>>fileMap.size()=" + fileMap.size());
-			String listingGuid = request.getParameter("listingGuid");
-			String projectCode = request.getParameter("projectCode");
-			String memberId = request.getParameter("memberId");
-			String operatorId = request.getParameter("operatorId");
 			String fileName = file.getOriginalFilename();
-			logger.debug(">>>>>listingGuid=" + listingGuid);
-			logger.debug(">>>>>projectCode=" + projectCode);
 			logger.debug(">>>>>fileName=" + fileName);
 			logger.debug(">>>>>file.getName()=" + file.getName());
 
 
 			// 获取上传地址
-			String importRecordsPath = importFileService.importListingRecordsFilePath(Integer.valueOf(listingGuid));
+			String importRecordsPath = importFileService.importListingRecordsFilePath();
 			logger.debug(">>>>>importRecordsPath=" + importRecordsPath);
 
 
@@ -238,11 +231,11 @@ public class ListingInfoController extends BaseController {
 			String filePath = importRecordsPath + File.separator + linkFileName;
 			
 			//上传服务器成功后，记录挂牌产品文件的信息 global_file
-			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename, Integer.parseInt(memberId), Integer.parseInt(operatorId));
+			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename, super.getMemberId(), super.getSelfId());
 			logger.debug(">>>>>globalFile=" + globalFile);			
 			
 			// 解析产品信息
-			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, projectCode,super.getExchangeId());
+			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, super.getExchangeId());
 			logger.debug(">>>>>List<ListingInfoPo>=" + list);
 			int  recordsNumbers =-1;
 			try{

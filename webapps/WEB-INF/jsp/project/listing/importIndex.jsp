@@ -4,7 +4,6 @@
           <div class="tab-pane fade active in" id="baseinfo">
           	<%@ include file="/WEB-INF/jsp/project/listing/import.jsp" %>
           </div>
-         <div class="tab-pane fade bjui-layout" id="feedlist"></div>
       </div>
 </div>
 
