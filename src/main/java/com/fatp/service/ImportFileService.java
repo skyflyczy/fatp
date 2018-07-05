@@ -25,6 +25,7 @@ import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;
 import com.fatp.util.UUIDUtil;
+import com.huajin.baymax.encrypt.SymmetricEncrypt;
 import com.huajin.pdfconvertor.PdfProcessSupport;
 
 /**
@@ -170,69 +171,72 @@ public class ImportFileService {
 				}else if(strArray[8].trim().equals("年")){
 					listingInfo.setListingLimitType(3);
 				}					
-
-				
+				//起投金额（元）
+				listingInfo.setMinInvestMoney(new BigDecimal(strArray[9].trim()));
 				//收益率类型：1固定收益率；2阶梯收益率，3浮动收益率'
 				listingInfo.setInvestProfitType(1);
-				if(strArray[9].trim().equals("阶梯收益率")){
+				if(strArray[10].trim().equals("阶梯收益率")){
 					listingInfo.setInvestProfitType(2);
-				}else if(strArray[9].trim().equals("浮动收益率")){
+				}else if(strArray[10].trim().equals("浮动收益率")){
 					listingInfo.setInvestProfitType(3);
 				}					
-				listingInfo.setProfitValue(strArray[10].trim());				
-				listingInfo.setValueDate(Date.valueOf(strArray[11].trim()));
+				listingInfo.setProfitValue(strArray[11].trim());				
+				listingInfo.setValueDate(Date.valueOf(strArray[12].trim()));
 				
 				//到期日规则 1：固定期限 2：固定到期日
 				listingInfo.setExpireDateStyle(1);
-				if(strArray[12].trim().equals("固定到期日")){
+				if(strArray[13].trim().equals("固定到期日")){
 					listingInfo.setExpireDateStyle(2);
 				}
-				listingInfo.setExpireDate(Date.valueOf(strArray[13].trim()));
+				listingInfo.setExpireDate(Date.valueOf(strArray[14].trim()));
 				
 				//付息方式：一次性还本付息（1），等额本息(2),按月付息到期还本(3)，按季付息到期还本(4),按半年息到期还本(5),按年付息到期还本(6);
 				listingInfo.setPayInterestType(1);
-				if(strArray[14].trim().equals("等额本息")){
+				if(strArray[15].trim().equals("等额本息")){
 					listingInfo.setPayInterestType(2);
-				}else if(strArray[14].trim().equals("按月付息到期还本")){
+				}else if(strArray[15].trim().equals("按月付息到期还本")){
 					listingInfo.setPayInterestType(3);
-				}else if(strArray[14].trim().equals("按季付息到期还本")){
+				}else if(strArray[15].trim().equals("按季付息到期还本")){
 					listingInfo.setPayInterestType(4);
-				}else if(strArray[14].trim().equals("按半年息到期还本")){
+				}else if(strArray[15].trim().equals("按半年息到期还本")){
 					listingInfo.setPayInterestType(5);
-				}else if(strArray[14].trim().equals("按年付息到期还本")){
+				}else if(strArray[15].trim().equals("按年付息到期还本")){
 					listingInfo.setPayInterestType(6);
 				}					
 				
 				//计息方式：单利1，复利2
 				listingInfo.setInterestType(1);
-				if(strArray[15].trim().equals("复利")){
+				if(strArray[16].trim().equals("复利")){
 					listingInfo.setInterestType(2);
 				}
 				//计息频率：1按日计息，2按月计息，3按年计息,4按季计息，5按半年计息
 				listingInfo.setInterestRate(1);
-				if(strArray[16].trim().equals("按月计息")){
+				if(strArray[17].trim().equals("按月计息")){
 					listingInfo.setInterestRate(2);
-				}else if(strArray[16].trim().equals("按年计息")){
+				}else if(strArray[17].trim().equals("按年计息")){
 					listingInfo.setInterestRate(3);
-				}else if(strArray[16].trim().equals("按季计息")){
+				}else if(strArray[17].trim().equals("按季计息")){
 					listingInfo.setInterestRate(4);
-				}else if(strArray[16].trim().equals("按半年计息")){
+				}else if(strArray[17].trim().equals("按半年计息")){
 					listingInfo.setInterestRate(5);
 				}	
 				//计息基准：1、ACT/365，2、ACT/360，3、ACT/ACT
 				listingInfo.setInterestBase(1);
-				if(strArray[17].trim().equals("ACT//360")){
+				if(strArray[18].trim().equals("ACT//360")){
 					listingInfo.setInterestBase(2);
-				}else if(strArray[17].trim().equals("ACT//ACT")){
+				}else if(strArray[18].trim().equals("ACT//ACT")){
 					listingInfo.setInterestBase(3);
 				}
 				
 				//到期日是否计息：1是0否
-				listingInfo.setExpireDateInterest(strArray[18].trim().equals("是")?1:0);
+				listingInfo.setExpireDateInterest(strArray[19].trim().equals("是")?1:0);
 				
 				listingInfo.setListingStatus(1);
 				listingInfo.setCreateOperatorId(Integer.valueOf(operatorId));
 				listingInfo.setUpateOperatorId(Integer.valueOf(operatorId));
+				listingInfo.setSettleAccountName(SymmetricEncrypt.encryptStr(strArray[20].trim()));
+				listingInfo.setSettleCardAccount(SymmetricEncrypt.encryptStr(strArray[21].trim()));
+				listingInfo.setSettleSubBankName(strArray[22].trim());
 			}
 			catch(Exception e)
 			{
@@ -240,7 +244,7 @@ public class ImportFileService {
 				throw e;
 			}
 			list.add(listingInfo);
-			logger.debug("listingInfo["+i + "] = " + listingInfo);
+			logger.info("listingInfo["+i + "] = " + listingInfo);
 			}
 		return list;
 	}

@@ -208,15 +208,13 @@ public class ListingInfoController extends BaseController {
 			logger.debug("<---------------enter listInfoImport------------------------>");
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 			Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-			logger.debug(">>>>>fileMap=" + fileMap);
-			logger.debug(">>>>>fileMap.size()=" + fileMap.size());
-			String fileName = file.getOriginalFilename();
-			logger.debug(">>>>>fileName=" + fileName);
-			logger.debug(">>>>>file.getName()=" + file.getName());
+			logger.info(">>>>>fileMap=" + fileMap);
+			logger.info(">>>>>fileMap.size()=" + fileMap.size());
+
 
 			// 获取上传地址
 			String importRecordsPath = importFileService.importListingRecordsFilePath();
-			logger.debug(">>>>>importRecordsPath=" + importRecordsPath);
+			logger.info(">>>>>importRecordsPath=" + importRecordsPath);
 
 			// 上传产品文件到服务器
 			String fileNames = upload(fileMap, importRecordsPath);
@@ -228,25 +226,22 @@ public class ListingInfoController extends BaseController {
 			// 上传服务器成功后，记录挂牌产品文件的信息 global_file
 			GlobalFilePo globalFile = globalFileService.insertGlobalFile(filePath, originalFilename,super.getMemberId(),super.getSelfId());
 			
-			logger.debug(">>>>>globalFile=" + globalFile);			
+			logger.info(">>>>>globalFile=" + globalFile);			
 			
 			// 解析产品信息
 			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, super.getExchangeId(),super.getSelfId());
-			logger.debug(">>>>>List<ListingInfoPo>=" + list);
+			logger.info(">>>>>List<ListingInfoPo>=" + list);
 			String recordsNumbers = "";
 			try {
 				// 把产品信息记录到数据库中
 				recordsNumbers = listingInfoService.listingRecords(list);
 				logger.debug("recordsNumbers=" + recordsNumbers);
 			} catch (Exception e) {
-				// e.printStackTrace();
-				logger.error(">>>>>把产品信息记录到数据库中 globalFile.getId()=" + globalFile.getId());
-				logger.error(">>>>>把产品信息记录到数据库中 error" + e.getMessage());
-				globalFileService.deleteGlobalFileById(globalFile.getId());
+				e.printStackTrace();
 				Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
 				return resultError(ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 			}
-			logger.debug("<---------------out listInfoImport------------------------>");
+			logger.info("<---------------out listInfoImport------------------------>");
 			return resultSuccess(recordsNumbers);
 
 		} catch (FatpException e) {

@@ -261,11 +261,11 @@ public class ListingInfoDataSupportService {
 			for (ListingInfoPo po : poilist) {
 				try {
 					int importNums = liDao.insert(po);// 插入listing_info表
-					System.out.println("--------插入listing_info表:" + importNums);
 					result += 1;
+					System.err.println(result+"--------插入listing_info表:" + importNums);
 					List<ListingTradePo> tradePo = getListingTradePo(po);
 					for (ListingTradePo tp : tradePo) {
-						System.out.println("--------插入listing_trade表" + tp);
+						System.err.println(result+"--------插入listing_trade表" + tp);
 						listingTradeDao.insert(tp);// 插入listing_trade表
 					}
 				} catch (Exception e) {
@@ -286,6 +286,7 @@ public class ListingInfoDataSupportService {
 		} else {
 			errRecord = "成功导入[ " + result + " ]条,失败【" + errRecord + "】";
 		}
+		System.out.println("----excel导入结果信息="+errRecord);
 		return errRecord;
 	}
 
@@ -296,12 +297,13 @@ public class ListingInfoDataSupportService {
  */
 	private List<ListingTradePo> getListingTradePo(ListingInfoPo po) {
 		String pValue = po.getProfitValue();
+		System.out.println("---------ListingInfoPo="+po);
 		List<ListingTradePo> plist = new ArrayList<ListingTradePo>();
 		if (pValue != null && !pValue.equals("")) {
 			String[] pv = pValue.split(",");
 			for (int i =0;i<pv.length;i++) {
 				String profit = pv[i];
-				System.out.println(i+"-------------------profit="+profit);
+				System.out.println("---------"+i+"----------profit="+profit);
 				if (profit != null && !profit.equals("")) {
 					String[] minToMax = profit.split(":");
 
@@ -315,6 +317,7 @@ public class ListingInfoDataSupportService {
 					tradePo.setCreateOperatorId(po.getCreateOperatorId());
 					tradePo.setUpateOperatorId(po.getUpateOperatorId());
 					plist.add(tradePo);
+					System.out.println("---------"+i+"----------tradePo--------"+tradePo);
 				}
 			}
 		}
