@@ -34,6 +34,36 @@ public class CalInterestUtil {
     	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
         return interest.add(addInterest);
     }
+    
+    /**
+     * 计算季利息
+     *
+     * @param param
+     * @param zeroplace
+     * @param paramInt
+     * @return
+     * @author zhiya.chai
+     */
+    public static BigDecimal calSeasonProfit(CalInterestParam param, int zeroplace, int paramInt) {
+    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 4, zeroplace, paramInt);
+    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
+        return interest.add(addInterest);
+    }
+    
+    /**
+     * 计算半年利息
+     *
+     * @param param
+     * @param zeroplace
+     * @param paramInt
+     * @return
+     * @author zhiya.chai
+     */
+    public static BigDecimal calHalfAYearProfit(CalInterestParam param, int zeroplace, int paramInt) {
+    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 2, zeroplace, paramInt);
+    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
+        return interest.add(addInterest);
+    }
 
     /**
      * 计算日利息
@@ -141,7 +171,7 @@ public class CalInterestUtil {
 	        case ACT_360:
 	        	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), interestDay, 360, zeroplace, paramInt);
 	        case ACT_ACT:
-	       	 	return calProfitByACT(param.getValueDate(),param.getExpireDate(),interestDay, param.getPrincipal(),param.getInvestProfitParamList(),zeroplace, paramInt);
+	       	 	return calProfitByACT(param.getExpireDate(),param.getExpireDate(),interestDay, param.getPrincipal(),param.getInvestProfitParamList(),zeroplace, paramInt);
 	        default:
 	       	 return BigDecimal.ZERO;
     	}

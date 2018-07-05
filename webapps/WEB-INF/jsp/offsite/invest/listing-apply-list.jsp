@@ -30,15 +30,16 @@
   </table>
 </div>
 <div class="bjui-pageContent" id="bidlist-payoffline-cfm-list">
- <table data-toggle="tablefixed" data-width="100%" data-height="300">
+ <table data-toggle="tablefixed" data-width="100%">
     	<thead>
     	<tr>
-    		<th align="center" width="15%">序号</th>
-    		<th align="center" width="20%">登记总额</th>
-    		<th align="center" width="20%">登记数量</th>
+    		<th align="center" width="10%">序号</th>
+    		<th align="center" width="15%">登记总额</th>
+    		<th align="center" width="15%">登记数量</th>
     		<th align="center" width="15%">登记人数</th>
     		<th align="center" width="15%">登记状态</th>
-    		<th align="center" width="15%">操作</th>
+    		<th align="center" width="15%">创建时间</th>
+    		<th align="center" width="20%">操作</th>
     	</tr>
     	</thead>
     	<tbody>
@@ -50,6 +51,7 @@
     			<td align="center">${obj.totalNum}</td>
     			<td align="center">${obj.totalPeopleNum}</td>
     			<td align="center">${obj.getApplyStatusDesc()}</td>
+    			<td align="center"><fmt:formatDate value="${obj.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
     			<td align="center">
     				<a href="/offsite/invest/deleteapply.do?id=${obj.applyGuid}" 
 	    					class="btn btn-red" data-toggle="doajax" data-mask="true" data-loadingmask="false" data-callback='function(){$(this).dialog("refresh","dialog-apply-list");}' data-confirm-msg="确定要删除吗？">删除</a>

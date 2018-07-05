@@ -83,9 +83,11 @@ public abstract class PlanGenStragey {
 			interest = CalInterestUtil.calYearProfit(param, zeroplace, paramInt);
 			break;
 		case 按季计息:
-			//TODO
+			interest = CalInterestUtil.calSeasonProfit(param, zeroplace, paramInt);
+			break;
 		case 按半年计息:
-			//TODO
+			interest = CalInterestUtil.calHalfAYearProfit(param, zeroplace, paramInt);
+			break;
 		default:
 			break;
 		}

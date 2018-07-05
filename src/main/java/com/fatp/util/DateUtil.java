@@ -2,6 +2,8 @@ package com.fatp.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,6 +21,8 @@ public class DateUtil extends DateUtils {
 
 	private static String yyyyMM = "yyyyMM";
 	private static String yyyy = "yyyy";
+	private static String MM = "MM";
+	private static String dd = "dd";
 	private static String yyyy_MM_dd = "yyyy-MM-dd";
 	
 	private static String[] parsePatterns = {
@@ -37,17 +41,6 @@ public class DateUtil extends DateUtils {
 		}
 		return null;
 	}
-	
-	public static int getdiffDays(Date MaxDay,Date minDay){
-		try {
-			long diff = MaxDay.getTime() - minDay.getTime();
-			Long days = diff / (1000 * 60 * 60 * 24);
-			return days.intValue();
-		} catch (Exception e) {
-			
-		}
-		return 0;
-	}
 	/**
 	 * 去掉时间相减
 	 * @param maxDay
@@ -65,6 +58,87 @@ public class DateUtil extends DateUtils {
 		} catch (Exception e) {
 		}
 		return 0;
+	}
+	/**
+	 * 月份相减，得到N月零N天  int[0]:月，int[1]天
+	 * @param minDay
+	 * @param maxDay
+	 * @return
+	 */
+	public static int[] getDiffByMonth(Date maxDay,Date minDay) {
+		int y = Period.between(LocalDate.of(getYear(minDay), getMonth(minDay), getDay(minDay)),  LocalDate.of(getYear(maxDay), getMonth(maxDay), getDay(maxDay))).getYears();
+		int m = Period.between(LocalDate.of(getYear(minDay), getMonth(minDay), getDay(minDay)),  LocalDate.of(getYear(maxDay), getMonth(maxDay), getDay(maxDay))).getMonths();
+		m = y * 12 + m;
+		Date calDate = add(minDay, Calendar.MONTH, m);
+		if(calDate.before(maxDay)) {
+        	return new int[]{m,getDiffByDate(maxDay, calDate)};
+        } else if(calDate.after(maxDay)){
+        	Date calDate2 = add(calDate, Calendar.MONTH, -1);
+        	return new int[]{m-1,getDiffByDate(maxDay, calDate2)};
+        } else {
+        	return new int[]{m,0};
+        } 
+	}
+	/**
+	 * 年份相减，得到N年零N天  int[0]:年，int[1]天
+	 * @param minDay
+	 * @param maxDate
+	 * @return
+	 */
+	public static int[] getDiffByYear(Date maxDay,Date minDay) {
+		int y = Period.between(LocalDate.of(getYear(minDay), getMonth(minDay), getDay(minDay)),  LocalDate.of(getYear(maxDay), getMonth(maxDay), getDay(maxDay))).getYears();
+		if(y == 0) {
+			return new int[]{0,getDiffByDate(maxDay, minDay)};
+		}
+		Date calDate = add(minDay, Calendar.YEAR, y);
+		if(calDate.before(maxDay)) {
+			return new int[]{y,getDiffByDate(maxDay, calDate)};
+		} else if(calDate.after(maxDay)){
+			 Date calDate2 = add(calDate, Calendar.YEAR, -1);
+			 return new int[]{y-1,getDiffByDate(maxDay, calDate2)};
+		} else {
+			return new int[]{0,1};
+		}
+	}
+	/**
+	 * 季相减，得到N季零N天  int[0]:季，int[1]天
+	 * @param minDay
+	 * @param maxDate
+	 * @return
+	 */
+	public static int[] getDiffBySeason(Date maxDay,Date minDay) {
+		int []months = getDiffByMonth(maxDay, minDay);
+		int m = months[0];
+		int d = months[1];
+		if(m % 3 == 0 ){
+			return new int[]{m/3 , d};
+		} else {
+			//剩余月数按天计算
+			int sm = m % 3;
+			Date calDate = add(minDay, Calendar.MONTH, m - sm);
+			d = getDiffByDate(maxDay, calDate);
+			return new int[]{m/3 , d};
+		}
+	}
+	/**
+	 * 半年相减，得到N半年零N天  int[0]:半年，int[1]天
+	 * @param minDay
+	 * @param maxDate
+	 * @return
+	 */
+	public static int[] getDiffByHalfAYear(Date maxDay,Date minDay) {
+		int []months = getDiffByMonth(maxDay, minDay);
+		int m = months[0];
+		int d = months[1];
+		if(m % 6 == 0 ){
+			return new int[]{m/6 , d};
+		} else {
+			//剩余月数按天计算
+			int sm = m % 6;
+			Date calDate = add(minDay, Calendar.MONTH, m - sm);
+			d = getDiffByDate(maxDay, calDate);
+			return new int[]{m/6 , d};
+		}
 	}
 	/**
 	 * 判断结束日期与开始日期的时间差是否大于某个特定的值
@@ -147,7 +221,27 @@ public class DateUtil extends DateUtils {
 		SimpleDateFormat format = new SimpleDateFormat(yyyy);
 		return  Integer.parseInt(format.format(date));
 	}
+	/**
+	 * 获取月
+	 * @param date
+	 * @author zhiya.chai
+	 * @date 2017年5月17日 上午10:10:29
+	 */
+	public static int getMonth(Date date){
+		SimpleDateFormat format = new SimpleDateFormat(MM);
+		return  Integer.parseInt(format.format(date));
+	}
 	
+	/**
+	 * 获取日
+	 * @param date
+	 * @author zhiya.chai
+	 * @date 2017年5月17日 上午10:10:29
+	 */
+	public static int getDay(Date date){
+		SimpleDateFormat format = new SimpleDateFormat(dd);
+		return  Integer.parseInt(format.format(date));
+	}
 	/**
 	 * 获取当前日期所属月的天数与传入的天数的最小值
 	 * @return int

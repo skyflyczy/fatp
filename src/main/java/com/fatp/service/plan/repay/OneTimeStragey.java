@@ -14,10 +14,8 @@ import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.YesNo;
 import com.fatp.enums.biz.RepayStatus;
-import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
-import com.fatp.enums.project.ListingLimitType;
 import com.fatp.exception.FatpException;
 import com.fatp.po.biz.BizplanPayinvestPo;
 import com.fatp.po.biz.BizplanRepayPo;
@@ -58,11 +56,13 @@ public class OneTimeStragey extends PlanGenStragey{
 		//组装计算利息参数,生成利息
 		CalInterestParam param = genCalInterestParam(periodResult, listingInfoPo);
 		//得到计息数量
-		param.setInterestCount(getInterestCount(listingInfoPo, periodResult));
+		genInterestCount(listingInfoPo, periodResult, param);
 		List<BizplanPayinvestPo> payinvestList = tradeDetailList.stream().map(tradeDetail ->{
 			param.setPrincipal(tradeDetail.getTradeMoney());
 			param.setInvestProfitParamList(super.genInvestProfitParamList(listingTradeList,tradeDetail.getAddInvestProfit()));
-			param.setAddInvestProfitDays(tradeDetail.getAddInvestProfitDays() == null ? 0 : tradeDetail.getAddInvestProfitDays().intValue());
+			if(tradeDetail.getAddInvestProfitDays() != null) {
+				param.setAddInvestProfitDays(param.getAddInvestProfitDays() + tradeDetail.getAddInvestProfitDays().intValue());
+			}
 			//计算利息
 			BigDecimal interest = super.calProfit(param);
 			BizplanPayinvestPo payinvest = super.genBasePayinvest(operatorId, tradeDetail);
@@ -139,25 +139,35 @@ public class OneTimeStragey extends PlanGenStragey{
 		return repay;
 	}
 	/**
-	 * 获取计息数量
+	 * 生成计息数量
 	 * @param listingInfoPo
 	 * @param periodResult
 	 * @return
 	 */
-	private int getInterestCount(ListingInfoPo listingInfoPo,PeriodResult periodResult) {
-		if(listingInfoPo.getExpireDateStyle().intValue() ==  ExpireDateStyle.固定期限.style) {
-			return listingInfoPo.getListingLimit();
+	private void genInterestCount(ListingInfoPo listingInfoPo,PeriodResult periodResult,CalInterestParam param) {
+		if(listingInfoPo.getInterestRate().intValue() == InterestRate.按日计息.value) {
+			int days = DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setInterestCount(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value ? (days + 1) : days);
+			return;
+		} else if(listingInfoPo.getInterestRate().intValue() == InterestRate.按月计息.value) {
+			int [] months = DateUtil.getDiffByMonth(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setInterestCount(months[0]);
+			param.setAddInvestProfitDays(months[1]);
+		} else if(listingInfoPo.getInterestRate().intValue() == InterestRate.按年计息.value) {
+			int []years = DateUtil.getDiffByYear(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setInterestCount(years[0]);
+			param.setAddInvestProfitDays(years[1]);
+		} else if(listingInfoPo.getInterestRate().intValue() == InterestRate.按季计息.value) {
+			int [] seasons = DateUtil.getDiffBySeason(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setInterestCount(seasons[0]);
+			param.setAddInvestProfitDays(seasons[1]);
+		} else if(listingInfoPo.getInterestRate().intValue() == InterestRate.按半年计息.value) {
+			int [] hs = DateUtil.getDiffByHalfAYear(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setInterestCount(hs[0]);
+			param.setAddInvestProfitDays(hs[1]);
 		}
-		//固定到期日
-		if(listingInfoPo.getListingLimitType().intValue() == ListingLimitType.年.type 
-				|| listingInfoPo.getListingLimitType().intValue() == ListingLimitType.月.type) {
-			return listingInfoPo.getListingLimit();
-		}
-		//如果按天计算
 		if(listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
-			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate()) + 1;
-		} else {
-			return (int)DateUtil.getDiffByDate(periodResult.getInterestEndDate(), periodResult.getInterestStartDate());
+			param.setAddInvestProfitDays(param.getAddInvestProfitDays() + 1);
 		}
 	}
 	/**
@@ -174,5 +184,4 @@ public class OneTimeStragey extends PlanGenStragey{
 		result.setInterestEndDate(getInterestEndDate(listingInfoPo, result.getInterestStartDate()));
 		return result;
 	}
-
 }

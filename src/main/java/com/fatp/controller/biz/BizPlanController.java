@@ -223,6 +223,7 @@ public class BizPlanController extends BaseController{
 		map.put("planRepayDateBegin", DateUtils.formatDate(new Date()));
 		map.put("planRepayDateEnd",  DateUtils.formatDate(DateUtils.addDays(new Date(), 5)));
 		map.put("noRepayStatus", RepayStatus.还款完成.status);
+		map.put("isDelete", YesNo.否.value);
 		map.put("sortColumns", " PlanRepayDate ");
 		int pageNo = Integer.parseInt(String.valueOf(map.get(Constant._PAGEINDEX)));
 		int pageSize = Integer.parseInt(String.valueOf(map.get(Constant._PAGESIZE)));
