@@ -253,40 +253,45 @@ public class ListingInfoDataSupportService {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	public String listingRecords(List<ListingInfoPo> poilist) throws Exception {
-		int result = 0;
-		SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
-		ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);
-		String errRecord = "";
+		int successNum = 0;
+		int failNum=0;
+		String errBizCode = "";
+		String importResult="";
+		SqlSession sqlSession=null;
 		try {
+			sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
+			ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);
 			for (ListingInfoPo po : poilist) {
 				try {
 					int importNums = liDao.insert(po);// 插入listing_info表
-					System.out.println("--------插入listing_info表:" + importNums);
-					result += 1;
+					successNum ++;
+					System.err.println(successNum+"--------插入listing_info表:" + importNums);
 					List<ListingTradePo> tradePo = getListingTradePo(po);
 					for (ListingTradePo tp : tradePo) {
-						System.out.println("--------插入listing_trade表" + tp);
+						System.err.println(successNum+"--------插入listing_trade表" + tp);
 						listingTradeDao.insert(tp);// 插入listing_trade表
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					errRecord += po.getListingGuid() + ";";
+					failNum++;
+					errBizCode += po.getPartnerBizCode() + ";";
 				}
 			}
 			sqlSession.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			//throw e;
 		} finally {
-			sqlSession.close();
+			if(sqlSession!=null)sqlSession.close();		
 		}
 
-		if (errRecord.equals("")) {
-			errRecord = "成功导入[ " + result + " ]条";
+		if (errBizCode.equals("")) {
+			importResult = "成功导入[ " + successNum + " ]条";
 		} else {
-			errRecord = "成功导入[ " + result + " ]条,失败【" + errRecord + "】";
+			importResult = "成功导入[ " + successNum + " ]条； 失败["+failNum+"]条，产品编号【" + errBizCode + "】。";
 		}
-		return errRecord;
+		System.out.println("----excel导入结果信息="+importResult);
+		return importResult;
 	}
 
 	/**
@@ -296,12 +301,13 @@ public class ListingInfoDataSupportService {
  */
 	private List<ListingTradePo> getListingTradePo(ListingInfoPo po) {
 		String pValue = po.getProfitValue();
+		System.out.println("---------ListingInfoPo="+po);
 		List<ListingTradePo> plist = new ArrayList<ListingTradePo>();
 		if (pValue != null && !pValue.equals("")) {
 			String[] pv = pValue.split(",");
 			for (int i =0;i<pv.length;i++) {
 				String profit = pv[i];
-				System.out.println(i+"-------------------profit="+profit);
+				System.out.println("---------"+i+"----------profit="+profit);
 				if (profit != null && !profit.equals("")) {
 					String[] minToMax = profit.split(":");
 
@@ -315,6 +321,7 @@ public class ListingInfoDataSupportService {
 					tradePo.setCreateOperatorId(po.getCreateOperatorId());
 					tradePo.setUpateOperatorId(po.getUpateOperatorId());
 					plist.add(tradePo);
+					System.out.println("---------"+i+"----------tradePo--------"+tradePo);
 				}
 			}
 		}

@@ -8,5 +8,5 @@
 </div>
 
 <div class="bjui-pageFooter">
-	<button type="button" class="btn-close pull-right" data-icon="close">关闭</button>	
+	
 </div>

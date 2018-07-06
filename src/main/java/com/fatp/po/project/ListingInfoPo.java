@@ -401,21 +401,6 @@ public class ListingInfoPo implements Serializable {
 		this.listingStatus = listingStatus;
 	}
 
-	public String toString() {
-		return "{ListingInfoPo [id=" + id + "][exchangeId=" + exchangeId + "][issuer=" + issuer + "][listingManager="
-				+ listingManager + "][investManager=" + investManager + "][listingCode=" + listingCode
-				+ "][listingGuid=" + listingGuid + "][partnerBizCode=" + partnerBizCode + "][partnerBiz=" + partnerBiz
-				+ "][listingName=" + listingName + "][listingFullName=" + listingFullName + "][listingMoney="
-				+ listingMoney + "][listingLimit=" + listingLimit + "][listingLimitType=" + listingLimitType
-				+ "][investProfitType=" + investProfitType + "][expireDateStyle=" + expireDateStyle + "][valueDate="
-				+ valueDate + "][expireDate=" + expireDate + "][payInterestType=" + payInterestType + "][interestType="
-				+ interestType + "][interestRate=" + interestRate + "][interestBase=" + interestBase
-				+ "][interestBaseDays=" + interestBaseDays + "][expireDateInterest=" + expireDateInterest
-				+ "][listingStatus=" + listingStatus + "][createTime=" + createTime + "][createOperatorId="
-				+ createOperatorId + "][updateTime=" + updateTime + "][upateOperatorId=" + upateOperatorId
-				+ "][profitValue=" + profitValue+ "][versionNo=" + versionNo + "]}";
-	}
-
 	//保存预期收益率值（%）
 	public void setProfitValue(String value) {
 		this.profitValue = value;
@@ -463,5 +448,22 @@ public class ListingInfoPo implements Serializable {
 
 	public void setGlobalFileId(Integer globalFileId) {
 		this.globalFileId = globalFileId;
+	}
+
+	public String toString() {
+		return "{[id=" + id + "][exchangeId=" + exchangeId + "][issuer=" + issuer + "][listingManager=" + listingManager
+				+ "][investManager=" + investManager + "][listingCode=" + listingCode + "][listingGuid=" + listingGuid
+				+ "][partnerBizCode=" + partnerBizCode + "][partnerBiz=" + partnerBiz + "][listingName=" + listingName
+				+ "][listingFullName=" + listingFullName + "][listingMoney=" + listingMoney + "][minInvestMoney="
+				+ minInvestMoney + "][listingLimit=" + listingLimit + "][listingLimitType=" + listingLimitType
+				+ "][investProfitType=" + investProfitType + "][expireDateStyle=" + expireDateStyle + "][valueDate="
+				+ valueDate + "][expireDate=" + expireDate + "][payInterestType=" + payInterestType + "][interestType="
+				+ interestType + "][interestRate=" + interestRate + "][interestBase=" + interestBase
+				+ "][interestBaseDays=" + interestBaseDays + "][expireDateInterest=" + expireDateInterest
+				+ "][listingStatus=" + listingStatus + "][settleAccountName=" + settleAccountName
+				+ "][settleCardAccount=" + settleCardAccount + "][SettleSubBankName=" + settleSubBankName
+				+ "][globalFileId=" + globalFileId + "][createTime=" + createTime + "][createOperatorId="
+				+ createOperatorId + "][updateTime=" + updateTime + "][upateOperatorId=" + upateOperatorId
+				+ "][versionNo=" + versionNo + "][profitValue=" + profitValue + "]}";
 	}
 }
