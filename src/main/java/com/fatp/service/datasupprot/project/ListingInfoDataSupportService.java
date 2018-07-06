@@ -255,7 +255,7 @@ public class ListingInfoDataSupportService {
 	public String listingRecords(List<ListingInfoPo> poilist) throws Exception {
 		int successNum = 0;
 		int failNum=0;
-		String errIdRecord = "";
+		String errBizCode = "";
 		String importResult="";
 		SqlSession sqlSession=null;
 		try {
@@ -274,7 +274,7 @@ public class ListingInfoDataSupportService {
 				} catch (Exception e) {
 					e.printStackTrace();
 					failNum++;
-					errIdRecord += po.getListingGuid() + ";";
+					errBizCode += po.getPartnerBizCode() + ";";
 				}
 			}
 			sqlSession.commit();
@@ -285,10 +285,10 @@ public class ListingInfoDataSupportService {
 			if(sqlSession!=null)sqlSession.close();		
 		}
 
-		if (errIdRecord.equals("")) {
+		if (errBizCode.equals("")) {
 			importResult = "成功导入[ " + successNum + " ]条";
 		} else {
-			importResult = "成功导入[ " + successNum + " ]条,失败["+failNum+"]条，guid【" + errIdRecord + "】";
+			importResult = "成功导入[ " + successNum + " ]条； 失败["+failNum+"]条，产品编号【" + errBizCode + "】。";
 		}
 		System.out.println("----excel导入结果信息="+importResult);
 		return importResult;

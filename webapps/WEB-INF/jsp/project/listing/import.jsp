@@ -26,18 +26,19 @@
 		            	<input type="submit" class="btn-blue pull-left submitButton" value="导入数据" class="file">
 		            </td>
 	            </tr>
-			</tbody>
-		 </table>
-		<table id="userfiles" class="table other-table table-bordered">
-		 	<thead>
-		 	</thead>
-		 	<thead>
-		 		<tr><th >${importFinalResult}</th></tr>
-		 	</thead>	
-		 </table>		 
-		 
-		 
-		 
+			 	<tr>
+				 	<td>
+						<label class="control-label x120 pull-right" >导入结果：</label> 
+					</td>
+					<td>
+		            	<label style="color: blue" class="control-label x120" id="fe" name="fe" value=""/>
+		            </td>
+		            <td>
+		            	<button type="button" class="btn-close pull-left" data-icon="close">关闭</button>
+		            </td>
+	            </tr>			
+	            </tbody>
+		 </table>	 		 
 	</form>
 </div>
 <script type="text/javascript">
@@ -49,6 +50,11 @@ function applySaveCallback(json) {
 	}
 }
 function uploadSuccess(json) {
+	document.getElementById('fe').innerHTML=json.message;
+	
+}
+
+function uploadSuccess5555(json) {
 	if(json.statusCode == 200) {
 		$(this).alertmsg("correct", json.message);
 		$(this).dialog("closeCurrent");
