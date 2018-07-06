@@ -264,13 +264,13 @@ public class ListingInfoDataSupportService {
 			for (ListingInfoPo po : poilist) {
 				try {
 					int importNums = liDao.insert(po);// 插入listing_info表
-					successNum ++;
 					System.err.println(successNum+"--------插入listing_info表:" + importNums);
 					List<ListingTradePo> tradePo = getListingTradePo(po);
 					for (ListingTradePo tp : tradePo) {
 						System.err.println(successNum+"--------插入listing_trade表" + tp);
 						listingTradeDao.insert(tp);// 插入listing_trade表
 					}
+					successNum ++;
 				} catch (Exception e) {
 					e.printStackTrace();
 					failNum++;

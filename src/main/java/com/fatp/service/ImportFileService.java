@@ -55,7 +55,7 @@ public class ImportFileService {
 	 * @return
 	 */
 	public String importListingRecordsFilePath() {
-		return sysParmService.getProjectUploadAddress() + File.separator + getRandomNum() + File.separator + "listing_records"
+		return sysParmService.getProjectUploadAddress() +  getRandomNum() + File.separator + "listing_records"
 				+ File.separator + getRandomNum() + File.separator;
 	}
 	/**
@@ -144,12 +144,9 @@ public class ImportFileService {
 					logger.info(i+"  strArray["+j + "] = " + strArray[j]);
 			
 			ListingInfoPo listingInfo = new ListingInfoPo();
-//			if (StringUtils.isBlank(strArray[0]) || !strArray[0].trim().equals(projectCode)) {
-//				throw new FatpException("投资明细文件第" + (i + 2) + "行产品信息错误，请检查后重新上传");
-//			}
 			
 			try{
-				listingInfo.setId((int)System.currentTimeMillis());
+				listingInfo.setId((int)System.currentTimeMillis()+(int)Math.random()*100);
 				listingInfo.setExchangeId(exchangeId);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
@@ -243,8 +240,14 @@ public class ImportFileService {
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
-				throw e;
+				String err =e.getMessage();
+				if(err==null){			
+					err ="格式不正确";
+				}else{
+					err = err.substring(err.indexOf(':')+1);
+				}
+				e.printStackTrace();			
+				throw new FatpException("挂牌文件第" + (i + 2) + "行产品信息错误【"+err+"】，请检查后重新上传");
 			}
 			list.add(listingInfo);
 			logger.info("listingInfo["+i + "] = " + listingInfo);
