@@ -205,7 +205,7 @@ public class ListingInfoController extends BaseController {
 	@ResponseBody
 	private Object listInfoImport(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) {
 		try {
-			logger.debug("<---------------enter listInfoImport------------------------>");
+			logger.info("<---------------enter listInfoImport------------------------>");
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 			Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 			logger.info(">>>>>fileMap=" + fileMap);
@@ -242,6 +242,7 @@ public class ListingInfoController extends BaseController {
 				return resultError(ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 			}
 			logger.info("<---------------out listInfoImport------------------------>");
+			request().setAttribute("importFinalResult", recordsNumbers);
 			return resultSuccess(recordsNumbers);
 
 		} catch (FatpException e) {

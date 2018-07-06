@@ -239,6 +239,7 @@ public class ImportFileService {
 				
 				listingInfo.setGlobalFileId(fileid);;
 				listingInfo.setListingStatus(1);
+				listingInfo.setInterestBaseDays(365);
 			}
 			catch(Exception e)
 			{

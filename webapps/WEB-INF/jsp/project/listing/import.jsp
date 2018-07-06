@@ -3,9 +3,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <div class="bjui-pageContent">
-	<form id="file_form" data-loadingmask="true" method="post" enctype="multipart/form-data"
+	<form id="file_form" data-loadingmask="true" data-callback="uploadSuccess"  method="post" enctype="multipart/form-data"
 		action="<%=request.getContextPath()%>/project/listinginfo/listInfoImport.do"
-		data-toggle="validate" data-reload="true">
+		data-toggle="validate" data-reload="true" style="height: 149px; ">
 	<input type="hidden" id="excelFileName" name="excelFileName" value=""/>
 	<input type="hidden" id="excelFilePath" name="excelFilePath" value=""/>
 		<table id="userfiles" class="table other-table table-bordered">
@@ -28,6 +28,16 @@
 	            </tr>
 			</tbody>
 		 </table>
+		<table id="userfiles" class="table other-table table-bordered">
+		 	<thead>
+		 	</thead>
+		 	<thead>
+		 		<tr><th >${importFinalResult}</th></tr>
+		 	</thead>	
+		 </table>		 
+		 
+		 
+		 
 	</form>
 </div>
 <script type="text/javascript">
@@ -38,18 +48,13 @@ function applySaveCallback(json) {
 		$(this).alertmsg("error", json.message);
 	}
 }
-function uploadSuccess(file, data, $upload) {
-	var json = $.parseJSON(data);
-    if (json[BJUI.keys.statusCode] == BJUI.statusCode.ok) {
-    	var showFileName = json.originalFilename;
-    	var linkFileName = json.linkFileName;
-    	$("#excelFileName").val(showFileName+":"+linkFileName);
-    	$("#excelFilePath").val(json.excelFilePath);
-    	$("#div_1").html('<a target="_blank" class="label-tag" style="position:relative;display:block;" href="'+json.accessPath+linkFileName+'">'+showFileName+'<button data-url="/offsite/invest/delfile.do" data-data="excelFilePath='+json.excelFilePath+'&fileName='+linkFileName+'" data-callback="afterDelFile" data-toggle="doajax" class="close" data-confirm-msg="确定删除该文件吗？" data-callback="afterDelFile">×</button></a>');
-    	showStaticValue(json);
-    }else {
-    	$(this).alertmsg("error", json.message);
-    }
+function uploadSuccess(json) {
+	if(json.statusCode == 200) {
+		$(this).alertmsg("correct", json.message);
+		$(this).dialog("closeCurrent");
+	}else {
+		$(this).alertmsg("error", json.message);
+	}
 }
 function showStaticValue(json) {
 	$("#totalMoneyShow").text($.formatMoney(json.recordsResult.totalMoney)+" 元");
