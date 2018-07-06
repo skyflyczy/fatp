@@ -11,6 +11,7 @@ import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.biz.PayinvestStatus;
 import com.fatp.enums.project.ExpireDateStyle;
+import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
 import com.fatp.enums.project.ListingLimitType;
 import com.fatp.po.biz.BizplanPayinvestPo;
@@ -28,7 +29,7 @@ import com.fatp.util.UUIDUtil;
  * @date 2018年6月21日 下午3:46:23
  */
 public abstract class PlanGenStragey {
-
+	
 	/**
 	 * 生成还款兑付计划
 	 * @param listingInfoPo
@@ -37,6 +38,7 @@ public abstract class PlanGenStragey {
 	 * @param tradeDetailList
 	 */
 	public abstract void genRepayAndPayInvesetPlan(ListingInfoPo listingInfoPo,List<ListingTrade> listingTradeList,BizImportApply apply,List<BizimportTradeDetail> tradeDetailList,int operatorId);
+	
 	/**
 	 * 生成基础的兑付信息
 	 * @param operatorId
@@ -112,6 +114,25 @@ public abstract class PlanGenStragey {
 			return param;
 		}).collect(Collectors.toList());
 		return list;
+	}
+	/**
+	 * 生成计息参数
+	 * @param valueDate
+	 * @param expireDate
+	 * @param interestRate
+	 * @param interestBase
+	 * @param interestCount
+	 * @return
+	 */
+	protected CalInterestParam genCalInterestParam(Date valueDate,Date expireDate
+			,InterestRate interestRate,InterestBase interestBase,int interestCount) {
+		CalInterestParam param = new CalInterestParam();
+		param.setValueDate(valueDate);
+		param.setExpireDate(expireDate);
+		param.setInterestRate(interestRate);
+		param.setInterestBase(interestBase);
+		param.setInterestCount(interestCount);
+		return param;
 	}
 	/**
 	 * 获取计息结束日期

@@ -30,9 +30,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calYearProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 1, zeroplace, paramInt);
-    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
-        return interest.add(addInterest);
+    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 1, zeroplace, paramInt);
     }
     
     /**
@@ -45,9 +43,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calSeasonProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 4, zeroplace, paramInt);
-    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
-        return interest.add(addInterest);
+    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 4, zeroplace, paramInt);
     }
     
     /**
@@ -60,9 +56,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calHalfAYearProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 2, zeroplace, paramInt);
-    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);;
-        return interest.add(addInterest);
+    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 2, zeroplace, paramInt);
     }
 
     /**
@@ -77,7 +71,7 @@ public class CalInterestUtil {
     public static BigDecimal calDaysProfit(CalInterestParam param, int zeroplace, int paramInt) {
         InterestBase interestBase = param.getInterestBase();
         BigDecimal principal = param.getPrincipal();//本金
-        int interestDay = (param.getInterestCount() + param.getAddInvestProfitDays());//计息天数
+        int interestDay = param.getInterestCount();//计息天数
         switch (interestBase) {
             case ACT_365:
             	return calProfitByLadder(param.getInvestProfitParamList(), principal, interestDay, 365, zeroplace, paramInt);
@@ -133,8 +127,6 @@ public class CalInterestUtil {
                 interest = calProfitByLadder(investProfitParamList, principal, interestDay, PLAIN_YEAR_DAYS, zeroplace, paramInt);
             }
         }
-        //获取尾年天数
-
         return interest;
     }
 
@@ -148,33 +140,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calMonthProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	BigDecimal interest = calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(),12, zeroplace, paramInt);
-    	BigDecimal addInterest = calAddInterest(param, zeroplace, paramInt);
-        return interest.add(addInterest);
-    }
-    /**
-     * 计算加息部分
-     * @param param
-     * @param zeroplace
-     * @param paramInt
-     * @return
-     */
-    private static BigDecimal calAddInterest(CalInterestParam param, int zeroplace, int paramInt){
-    	if(param.getAddInvestProfitDays() <= 0) {
-    		return BigDecimal.ZERO;
-    	}
-    	InterestBase interestBase = param.getInterestBase();
-    	int interestDay = param.getAddInvestProfitDays();
-    	switch (interestBase) {
-	        case ACT_365:
-	        	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), interestDay, 365, zeroplace, paramInt);
-	        case ACT_360:
-	        	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), interestDay, 360, zeroplace, paramInt);
-	        case ACT_ACT:
-	       	 	return calProfitByACT(param.getExpireDate(),param.getExpireDate(),interestDay, param.getPrincipal(),param.getInvestProfitParamList(),zeroplace, paramInt);
-	        default:
-	       	 return BigDecimal.ZERO;
-    	}
+    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(),12, zeroplace, paramInt);
     }
     /**
      * 阶梯利率计算

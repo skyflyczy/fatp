@@ -58,10 +58,7 @@ public class BizplanRepayDataSupportService {
 	 * @return
 	 */
 	public void updateDeletStatusByApply(Map<String,Object> map) {
-		int n = bizplanRepayDao.updateDeletStatusByApply(map);
-		if(n <= 0) {
-			throw new FatpException("更新还款计划失败");
-		}
+		bizplanRepayDao.updateDeletStatusByApply(map);
 	}
 	/**
 	 * 根据Guid获取还款计划

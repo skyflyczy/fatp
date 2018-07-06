@@ -74,6 +74,7 @@ public class PlanService extends BaseService{
 		List<ListingTrade> listingTradeList =  listingInfoDataSupportService.getTradeByListingInfoId(listingInfoId);
 		if(CollectionUtils.isEmpty(listingTradeList)){
 			logger.error("生成还款兑付计划，获取挂牌交易信息为空：listingInfoId：" + listingInfoId);
+			updateApplyStatus(apply, ApplyStatus.登记成功);
 			return;
 		}
 		List<BizimportTradeDetail> tradeDetailList = investApplyDataSupportService.findTradeDetailByApplyId(applyId);

@@ -62,10 +62,7 @@ public class BizplanPayinvestDataSupportService {
 	 * @param map
 	 */
 	public void updatePayinvestDeleteStatusByApplyId(Map<String,Object> map) {
-		int n =bizplanPayinvestDao.updatePayinvestDeleteStatusByApplyId(map);
-		if(n <= 0) {
-			throw new FatpException("更新兑付明细删除状态失败");
-		}
+		bizplanPayinvestDao.updatePayinvestDeleteStatusByApplyId(map);
 	}
 	/**
 	 * 加密

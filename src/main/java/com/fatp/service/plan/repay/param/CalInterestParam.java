@@ -25,8 +25,6 @@ public class CalInterestParam {
 	private Date valueDate;
 	//到期日
 	private Date expireDate;
-	//加息天数
-	private int addInvestProfitDays;
 	/**
 	 * 收益利息阶梯
 	 */
@@ -76,11 +74,4 @@ public class CalInterestParam {
 	public void setInterestCount(int interestCount) {
 		this.interestCount = interestCount;
 	}
-	public int getAddInvestProfitDays() {
-		return addInvestProfitDays;
-	}
-	public void setAddInvestProfitDays(int addInvestProfitDays) {
-		this.addInvestProfitDays = addInvestProfitDays;
-	}
-	
 }
