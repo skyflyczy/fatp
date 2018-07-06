@@ -106,7 +106,7 @@ public class ListingInfoService extends BaseService{
 	 * 挂牌产品交易导入
 	 * @param fileInfo
 	 */
-	@Transactional(rollbackFor=Exception.class)
+
 	public String listingRecords(List<ListingInfoPo> listing)throws Exception  {
 
 		
