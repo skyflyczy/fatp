@@ -31,7 +31,7 @@
 						<label class="control-label x120 pull-right" >导入结果：</label> 
 					</td>
 					<td>
-		            	<label style="color: blue" class="control-label x120" id="fe" name="fe" value=""/>
+		            	<label style="color: blue" class="control-label x320 pull-left" id="fe" name="fe" value=""/>
 		            </td>
 		            <td>
 		            	<button type="button" class="btn-close pull-left" data-icon="close">关闭</button>

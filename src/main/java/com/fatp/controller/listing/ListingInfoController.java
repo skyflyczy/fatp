@@ -204,6 +204,7 @@ public class ListingInfoController extends BaseController {
 	@RequestMapping("listInfoImport")
 	@ResponseBody
 	private Object listInfoImport(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) {
+		String inportResult = DateUtils.getDate("yyyy-MM-dd HH:mm:ss");
 		try {
 			logger.info("<---------------enter listInfoImport------------------------>");
 			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -231,15 +232,14 @@ public class ListingInfoController extends BaseController {
 			// 解析产品信息
 			List<ListingInfoPo> list = importFileService.importListingInfo(filePath, globalFile.getId(),super.getExchangeId(),super.getSelfId());
 			logger.info(">>>>>List<ListingInfoPo>=" + list);
-			String inportResult = DateUtils.getDate("yyyy-MM-dd HH:mm:ss");
 			try {
 				// 把产品信息记录到数据库中
-				inportResult += "\\n"+listingInfoService.listingRecords(list);
+				inportResult += "<br>"+listingInfoService.listingRecords(list);
 				logger.debug("recordsNumbers=" + inportResult);
 			} catch (Exception e) {
 				e.printStackTrace();
 				Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-				return resultError(ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
+				return resultError(inportResult+"<br>"+ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 			}
 			logger.info("<---------------out listInfoImport------------------------>");
 			request().setAttribute("importFinalResult", inportResult);
@@ -248,12 +248,12 @@ public class ListingInfoController extends BaseController {
 		} catch (FatpException e) {
 			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-			return resultError(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage())
+			return resultError(inportResult+"<br>"+(StringUtils.isNotBlank(e.getMessage()) ? e.getMessage() : e.getErrorCode().getMessage()))
 					.toJSONString();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Xlogger.error(XMsgError.buildSimple(getClass().getName(), "listInfoImport", e));
-			return resultError(ErrorCode.LISTING_INVESTRECORDS_IMPORT_FAIL.getMessage()).toJSONString();
+			return resultError(inportResult+"<br>"+ErrorCode.LISTING_IMPORT_FAIL.getMessage()).toJSONString();
 		}
 	}
 
