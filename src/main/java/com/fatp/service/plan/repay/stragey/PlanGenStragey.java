@@ -1,6 +1,7 @@
 package com.fatp.service.plan.repay.stragey;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,16 +10,20 @@ import java.util.stream.Collectors;
 import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.enums.YesNo;
 import com.fatp.enums.biz.PayinvestStatus;
+import com.fatp.enums.biz.RepayStatus;
 import com.fatp.enums.project.ExpireDateStyle;
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
 import com.fatp.enums.project.ListingLimitType;
 import com.fatp.po.biz.BizplanPayinvestPo;
+import com.fatp.po.biz.BizplanRepayPo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.plan.repay.CalInterestUtil;
 import com.fatp.service.plan.repay.param.CalInterestParam;
 import com.fatp.service.plan.repay.param.InvestProfitParam;
+import com.fatp.service.plan.repay.result.PeriodResult;
 import com.fatp.util.DateUtil;
 import com.fatp.util.UUIDUtil;
 
@@ -32,21 +37,12 @@ import com.fatp.util.UUIDUtil;
 public abstract class PlanGenStragey {
 	
 	/**
-	 * 生成还款兑付计划
-	 * @param listingInfoPo
-	 * @param listingTradeList
-	 * @param apply
-	 * @param tradeDetailList
-	 */
-	public abstract void genRepayAndPayInvesetPlan(ListingInfoPo listingInfoPo,List<ListingTrade> listingTradeList,BizImportApply apply,List<BizimportTradeDetail> tradeDetailList,int operatorId);
-	
-	/**
 	 * 生成基础的兑付信息
 	 * @param operatorId
 	 * @param tradeDetail
 	 * @return
 	 */
-	protected BizplanPayinvestPo genBasePayinvest(int operatorId,BizimportTradeDetail tradeDetail) {
+	public BizplanPayinvestPo genBasePayinvest(int operatorId,BizimportTradeDetail tradeDetail) {
 		BizplanPayinvestPo payinvest = new BizplanPayinvestPo();
 		payinvest.setCardAccount(tradeDetail.getCardAccount());
 		payinvest.setCreateOperatorId(operatorId);
@@ -56,13 +52,40 @@ public abstract class PlanGenStragey {
 		payinvest.setSubBankName(tradeDetail.getSubBankName());
 		payinvest.setUpdateOperatorId(operatorId);
 		payinvest.setPayinvestStatus(PayinvestStatus.未兑付.status);
+		payinvest.setIsDelete(YesNo.否.value);
 		return payinvest;
+	}
+	/**
+	 * 生成还款对象
+	 * @param operatorId
+	 * @param listingInfoPo
+	 * @param periodResult
+	 * @param repayDate
+	 * @return
+	 */
+	public BizplanRepayPo genBizplanRepay(int operatorId,ListingInfoPo listingInfoPo,PeriodResult periodResult,int applyId) {
+		BizplanRepayPo repay = new BizplanRepayPo();
+		repay.setCreateOperatorId(operatorId);
+		repay.setListingInfoId(listingInfoPo.getId());
+		repay.setRepayPlanGuid(UUIDUtil.getUUID());
+		repay.setPeriodNumber(periodResult.getPeriod());
+		repay.setPrincipal(BigDecimal.ZERO);
+		repay.setInterest(BigDecimal.ZERO);
+		//repay.setInterestDay(interestDay);
+		repay.setInterestEndDate(periodResult.getInterestEndDate());
+		repay.setInterestStartDate(periodResult.getInterestStartDate());
+		repay.setPlanRepayDate(periodResult.getRepayDate());
+		repay.setRepayStatus(RepayStatus.未还款.status);
+		repay.setUpdateOperatorId(operatorId);
+		repay.setBizImportApplyId(applyId);
+		repay.setIsDelete(YesNo.否.value);
+		return repay;
 	}
 	/**
 	 * 计算收益
 	 * @param param
 	 */
-	protected BigDecimal calProfit(CalInterestParam param){
+	public BigDecimal calProfit(CalInterestParam param){
 		return calProfit(param, 2, BigDecimal.ROUND_DOWN);
 	}
 	/**
@@ -72,7 +95,7 @@ public abstract class PlanGenStragey {
 	 * @param paramInt
 	 * @return
 	 */
-	public static BigDecimal calProfit(CalInterestParam param, int zeroplace, int paramInt){
+	public BigDecimal calProfit(CalInterestParam param, int zeroplace, int paramInt){
 		BigDecimal interest = BigDecimal.ZERO;//利息
 		InterestRate interestRate = param.getInterestRate();//计息方式
 		switch (interestRate) {
@@ -102,7 +125,7 @@ public abstract class PlanGenStragey {
 	 * @param addInvestProfit  加息
 	 * @return
 	 */
-	protected List<InvestProfitParam> genInvestProfitParamList(List<ListingTrade> listingTradeList,BigDecimal addInvestProfit) {
+	public List<InvestProfitParam> genInvestProfitParamList(List<ListingTrade> listingTradeList,BigDecimal addInvestProfit) {
 		List<InvestProfitParam> list = listingTradeList.stream().map(listingTrade -> {
 			InvestProfitParam param = new InvestProfitParam();
 			param.setMinInvestMoney(listingTrade.getMinInvestMoney());
@@ -125,7 +148,7 @@ public abstract class PlanGenStragey {
 	 * @param interestCount
 	 * @return
 	 */
-	protected CalInterestParam genCalInterestParam(Date valueDate,Date expireDate
+	public CalInterestParam genCalInterestParam(Date valueDate,Date expireDate
 			,InterestRate interestRate,InterestBase interestBase,int interestCount) {
 		CalInterestParam param = new CalInterestParam();
 		param.setValueDate(valueDate);
@@ -140,7 +163,7 @@ public abstract class PlanGenStragey {
 	 * @param listingInfoPo
 	 * @return
 	 */
-	protected Date getInterestEndDate(ListingInfoPo listingInfoPo,Date interestStartDate) {
+	public Date getInterestEndDate(ListingInfoPo listingInfoPo,Date interestStartDate) {
 		if(listingInfoPo.getExpireDateStyle().intValue() == ExpireDateStyle.固定到期日.style) {
 			return listingInfoPo.getExpireDate();
 		}
@@ -154,4 +177,82 @@ public abstract class PlanGenStragey {
 		}
 		return listingInfoPo.getExpireDate();
 	}
+	/**
+	 * 生成计算利息参数集合
+	 * @param listingInfoPo
+	 * @param interestStartDate 计息开始日期
+	 * @param interestEndDate 计息结束日期
+	 * @return
+	 */
+	public List<CalInterestParam> genCalInterestParamList(ListingInfoPo listingInfoPo,Date interestStartDate,Date interestEndDate) {
+		List<CalInterestParam> list = new ArrayList<>(); 
+		InterestRate interestRate = InterestRate.getInterestRateByValue(listingInfoPo.getInterestRate().intValue());
+		InterestBase interestBase = InterestBase.getInterestBaseByValue(listingInfoPo.getInterestBase().intValue());
+		//计算利息结束日期，根据到期日是否计息判断是否加一天
+		Date calInterestEndDate = listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value ? DateUtil.add(interestEndDate, Calendar.DATE, 1) : interestEndDate;
+		if(interestRate == InterestRate.按日计息) {
+			int dayCount = DateUtil.getDiffByDate(calInterestEndDate, interestStartDate);
+			list.add(genCalInterestParam(interestStartDate, interestEndDate, interestRate, interestBase, dayCount));
+		} else if(interestRate == InterestRate.按月计息) {
+			int [] months = DateUtil.getDiffByMonth(calInterestEndDate, interestStartDate);
+			int monthCount = months[0];//月份数量
+			int dayCount = months[1];//天数
+			Date splitDate = DateUtil.add(interestStartDate, Calendar.MONTH, monthCount);//整月拆分日期
+			if(monthCount > 0) {
+				list.add(genCalInterestParam(interestStartDate, splitDate, InterestRate.按月计息, interestBase, monthCount));
+			}
+			if(dayCount > 0) {
+				list.add(genCalInterestParam(splitDate, interestEndDate, InterestRate.按日计息, interestBase, dayCount));
+			}
+		} else if(interestRate == InterestRate.按年计息) {
+			int []years = DateUtil.getDiffByYear(calInterestEndDate, interestStartDate);
+			int yearCount = years[0];
+			int dayCount = years[1];
+			Date splitDate = DateUtil.add(interestStartDate, Calendar.YEAR, yearCount);//整年拆分日期
+			if(yearCount > 0) {
+				list.add(genCalInterestParam(interestStartDate, splitDate, InterestRate.按年计息, interestBase, yearCount));
+			}
+			if(dayCount > 0) {
+				list.add(genCalInterestParam(splitDate, interestEndDate, InterestRate.按日计息, interestBase, dayCount));
+			}
+		} else if(interestRate == InterestRate.按季计息) {
+			int [] seasons = DateUtil.getDiffBySeason(calInterestEndDate, interestStartDate);
+			int seasonCount = seasons[0];//季节数量
+			int dayCount = seasons[1];//天数
+			Date splitDate = DateUtil.add(interestStartDate, Calendar.MONTH, seasonCount*3);//整季拆分日期
+			if(seasonCount > 0) {
+				list.add(genCalInterestParam(interestStartDate, splitDate, InterestRate.按季计息, interestBase, seasonCount));
+			}
+			if(dayCount > 0) {
+				list.add(genCalInterestParam(splitDate, interestEndDate, InterestRate.按日计息, interestBase, dayCount));
+			}
+		} else if(listingInfoPo.getInterestRate().intValue() == InterestRate.按半年计息.value) {
+			int [] hs = DateUtil.getDiffByHalfAYear(calInterestEndDate,interestStartDate);
+			int hsCount = hs[0];//半年数量
+			int dayCount = hs[1];//天数
+			Date splitDate = DateUtil.add(interestStartDate, Calendar.MONTH, hsCount*6);//整半年拆分日期
+			if(hsCount > 0) {
+				list.add(genCalInterestParam(interestStartDate, splitDate, InterestRate.按半年计息, interestBase, hsCount));
+			}
+			if(dayCount > 0) {
+				list.add(genCalInterestParam(splitDate, interestEndDate, InterestRate.按日计息, interestBase, dayCount));
+			}
+		}
+		return list;
+	}
+	/**
+	 * 获取期数集合信息
+	 * @param listingInfoPo
+	 * @param apply
+	 * @return
+	 */
+	public abstract List<PeriodResult> periodResultList(ListingInfoPo listingInfoPo,BizImportApply apply);
+	/**
+	 * 获取本期的本金
+	 * @param totalPrincipal //总本金
+	 * @param periodNum 期数
+	 * @param totalPeriodNum 总期数
+	 * @return
+	 */
+	public abstract BigDecimal periodPrincipal(BigDecimal totalPrincipal,int periodNum,int totalPeriodNum);
 }

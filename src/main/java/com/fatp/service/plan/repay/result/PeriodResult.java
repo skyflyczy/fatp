@@ -1,5 +1,6 @@
 package com.fatp.service.plan.repay.result;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -11,16 +12,10 @@ import java.util.Date;
 public class PeriodResult {
 
 	private int period;//第几期
-	
 	private Date interestStartDate;//起息日
-	
 	private Date interestEndDate;//计息截止日
-	
 	private Date repayDate;//当期还款日
-	
 	private Date investDate;//当期兑付日
-	
-	private int interestType;//计息方式 
 	
 	public static PeriodResult build(){
 		return new PeriodResult();
@@ -70,13 +65,5 @@ public class PeriodResult {
 		this.investDate = investDate;
 		return this;
 	}
-
-	public int getInterestType() {
-		return interestType;
-	}
-
-	public PeriodResult setInterestType(int interestType) {
-		this.interestType = interestType;
-		return this;
-	}
+	
 }

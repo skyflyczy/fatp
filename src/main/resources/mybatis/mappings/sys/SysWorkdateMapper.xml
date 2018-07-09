@@ -50,5 +50,12 @@
     	ORDER BY WorkDate ASC 
     	LIMIT 0,1 
     </select>
+    
+    <select id="getBeforeWorkDate" parameterType="java.util.Map" resultType="com.fatp.po.sys.SysWorkdatePo">
+    	SELECT * FROM sys_workdate 
+    	WHERE IsWorked = 1 AND WorkDate &lt;=#{workDate}
+    	ORDER BY WorkDate DESC 
+    	LIMIT #{start},1 
+    </select>
 </mapper>
 

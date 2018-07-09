@@ -25,7 +25,6 @@ import com.fatp.po.user.MemberOperatorPo;
 import com.fatp.service.sys.SysMenuService;
 import com.fatp.service.user.MemberOperatorService;
 import com.fatp.util.SessionUtil;
-import com.huajin.baymax.encrypt.SymmetricEncrypt;
 import com.huajin.baymax.logger.XMsgError;
 import com.huajin.baymax.logger.Xlogger;
 import com.huajin.baymax.memcache.client.MemcachedCache;
@@ -75,15 +74,7 @@ public class GlobalInterceptor extends HandlerInterceptorAdapter  {
     		return true;
     	}
     	//2.检查登录
-    	String sessionId = null;
-    	FlashUpload flashUpload = handlerMethod.getMethodAnnotation(FlashUpload.class); //登录验证
-    	if(flashUpload != null) { //只允许上传附件的地址传入参数sessionId
-    		sessionId = request.getParameter("jsessionid");
-    		sessionId = SymmetricEncrypt.decryptStr(sessionId.replaceAll("@", "+"));
-    	}
-    	if(StringUtils.isBlank(sessionId)) {
-    		sessionId = SessionFactory.getCurrentSessionId(request, response);
-    	}
+    	String sessionId = SessionFactory.getCurrentSessionId(request, response);
 		//2.2.检查登录用户
     	MemberOperatorPo operator = SessionUtil.getOperator(memcachedCache, sessionId, memberOperatorService);
 		if(operator == null || operator.getId() == null) {

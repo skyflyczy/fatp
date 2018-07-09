@@ -1,16 +1,17 @@
 package com.fatp.service.plan.repay.stragey;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
-import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.po.project.ListingInfoPo;
+import com.fatp.service.datasupprot.sys.SysWorkdateDataSupportService;
 import com.fatp.service.plan.repay.result.PeriodResult;
 import com.fatp.util.DateUtil;
 
@@ -21,15 +22,12 @@ import com.fatp.util.DateUtil;
  */
 @Service("monthInterestStragey")
 public class MonthInterestStragey extends PlanGenStragey{
+	
+	@Autowired
+	private SysWorkdateDataSupportService sysWorkdateDataSupportService;
 
 	@Override
-	public void genRepayAndPayInvesetPlan(ListingInfoPo listingInfoPo,
-			List<ListingTrade> listingTradeList, BizImportApply apply,
-			List<BizimportTradeDetail> tradeDetailList, int operatorId) {
-		
-	}
-	
-	private List<PeriodResult> getPeriodResult(ListingInfoPo listingInfoPo,BizImportApply apply){
+	public List<PeriodResult> periodResultList(ListingInfoPo listingInfoPo,BizImportApply apply){
 		List<PeriodResult> list = new ArrayList<>();
 		//计息开始日期
 		Date interestStartDate = apply.getValueDate() == null ? listingInfoPo.getValueDate() : apply.getValueDate();
@@ -38,22 +36,43 @@ public class MonthInterestStragey extends PlanGenStragey{
 		int month[] = DateUtil.getDiffByMonth(interestEndDate, interestStartDate);
 		int monthCount = month[0];
 		int dayCount = month[1];
-		int period = 1 ;
-		
+		Date nextStartDate = interestStartDate;
 		if(monthCount > 0) {
-			for(int i = 0 ; i < monthCount ; i ++) {
+			//按月计息
+			for(int i = 1 ; i <= monthCount ; i ++) {
 				PeriodResult pr = PeriodResult.build();
-				pr.setInterestStartDate(interestStartDate);
-				Date calResultDate = DateUtil.add(interestStartDate, Calendar.MONTH, 1);
-				
+				pr.setPeriod(i);//期数
+				pr.setInterestStartDate(nextStartDate);
+				Date calResultDate = DateUtil.add(interestStartDate, Calendar.MONTH, i);
+				pr.setInterestEndDate(calResultDate);
+				//获取还款日期
+				Date repayDate = sysWorkdateDataSupportService.getBeforeWorkDate(pr.getInterestEndDate(), 1);
+				pr.setRepayDate(repayDate);
 				list.add(pr);
+				nextStartDate = calResultDate;
 			}
+		}
+		if(dayCount > 0) {
+			//按日计息
+			int period = list.size() + 1; //期数
+			PeriodResult pr = PeriodResult.build();
+			pr.setPeriod(period);
+			pr.setInterestStartDate(nextStartDate);
+			pr.setInterestEndDate(interestEndDate);
+			Date repayDate = sysWorkdateDataSupportService.getBeforeWorkDate(pr.getInterestEndDate(), 1);
+			pr.setRepayDate(repayDate);
+			list.add(pr);
 		}
 		return list;
 	}
-	
-	public static void main(String[] args) {
-		Date date = DateUtil.convertDate("2017-02-28", "yyyy-MM-dd");
-		System.out.println(DateUtil.formatDate(DateUtil.add(date, Calendar.MONTH, 1),"yyyy-MM-dd"));
+
+	@Override
+	public BigDecimal periodPrincipal(BigDecimal totalPrincipal, int periodNum,
+			int totalPeriodNum) {
+		if(periodNum == totalPeriodNum) {
+			return totalPrincipal;
+		}
+		return BigDecimal.ZERO;
 	}
+
 }

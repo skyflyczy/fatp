@@ -21,4 +21,11 @@ public interface SysWorkdateDao {
 	 * @return SysWorkdate
 	 */
 	public SysWorkdatePo getBelongWorkDate(Map<String, Object> map);
+	
+	/**
+	 * 获取前N个工作日的日期
+	 * @param map
+	 * @return
+	 */
+	public SysWorkdatePo getBeforeWorkDate(Map<String, Object> map);
 }

@@ -306,7 +306,9 @@ public class InvestApplyController extends BaseController{
 			log.error("下载文件异常...",e);
 		}
 	}
-
+	/**
+	 * 下载投资明细
+	 */
 	@RequestMapping("downinvesttemplate")
 	public void downInvestTemplate() {
 		FileInputStream inputStream = null;

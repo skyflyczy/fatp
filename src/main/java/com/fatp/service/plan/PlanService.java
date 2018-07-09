@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
@@ -16,8 +17,6 @@ import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
-import com.fatp.service.plan.repay.PlanFactory;
-import com.fatp.service.plan.repay.stragey.PlanGenStragey;
 
 /**
  * 生成还款兑付计划入口
@@ -30,9 +29,10 @@ public class PlanService extends BaseService{
 	
 	@Autowired
 	private ListingInfoDataSupportService listingInfoDataSupportService;
-	
 	@Autowired
 	private InvestApplyDataSupportService investApplyDataSupportService;
+	@Autowired
+	private GenPlanService genPlanService;
 	
 	/**
 	 * 异步生成计划
@@ -59,6 +59,7 @@ public class PlanService extends BaseService{
 	 * @param applyId
 	 * @param operatorId
 	 */
+	@Transactional(rollbackFor=Exception.class)
 	public void genPlan(int listingInfoId,int applyId,int operatorId) {
 		//获取挂牌产品信息
 		ListingInfoPo listingInfoPo = listingInfoDataSupportService.getLisingInfoPoById(listingInfoId);
@@ -84,14 +85,8 @@ public class PlanService extends BaseService{
 			updateApplyStatus(apply, ApplyStatus.登记失败,"客户交易信息为空");
 			return;
 		}
-		PlanGenStragey planGenStagey = PlanFactory.getInstance().chooseStrategy(listingInfoPo.getPayInterestType().intValue());
-		if(planGenStagey == null) {
-			logger.error("获取计划生成策略为空，不能生成还款计划，listingInfoId：" + listingInfoPo.getId());
-			updateApplyStatus(apply, ApplyStatus.登记失败,"付息方式出错");
-			return;
-		}
 		try {
-			planGenStagey.genRepayAndPayInvesetPlan(listingInfoPo, listingTradeList, apply, tradeDetailList, operatorId);
+			genPlanService.genRepayAndPayInvesetPlan(listingInfoPo, listingTradeList, apply, tradeDetailList, operatorId);
 			updateApplyStatus(apply, ApplyStatus.登记成功,"成功");
 		} catch (FatpException e) {
 			logger.error("生成还款兑付计划失败,applyId：{}",applyId,e);
@@ -101,6 +96,7 @@ public class PlanService extends BaseService{
 			updateApplyStatus(apply, ApplyStatus.登记失败,"生成还款兑付计划异常");
 		}
 	}
+
 	/**
 	 * 更新登记状态
 	 * @param apply
@@ -113,5 +109,4 @@ public class PlanService extends BaseService{
 		po.setStatusMsg(statusMsg);
 		investApplyDataSupportService.updateApplyStatus(po);
 	}
-
 }

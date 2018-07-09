@@ -14,6 +14,7 @@ import com.fatp.enums.YesNo;
 import com.fatp.exception.FatpException;
 import com.fatp.po.sys.SysWorkdatePo;
 import com.fatp.util.DateUtil;
+import com.huajin.baymax.util.DateUtils;
 /**
  * 工作日支持类
  * 
@@ -58,5 +59,26 @@ public class SysWorkdateDataSupportService {
 		} else {
 			return workDate.getWorkDate();
 		}
+	}
+	/**
+	 * 获取N天前的工作日
+	 * @param date
+	 * @param days
+	 * @return
+	 */
+	public Date getBeforeWorkDate(Date date,int days){
+		days = days < 0 ? 0 : days;
+		boolean isWorkDate = isWorkDate(date);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("workDate", DateUtils.formatDate(date, "yyyy-MM-dd"));
+		if(isWorkDate){
+			//当前日期属于工作日
+			map.put("start", days);
+		}else{
+			//当前日期不属于工作日
+			map.put("start", days-1);
+		}
+		SysWorkdatePo workDate = sysWorkdateDao.getBeforeWorkDate(map);
+		return workDate == null ? null : workDate.getWorkDate();
 	}
 }
