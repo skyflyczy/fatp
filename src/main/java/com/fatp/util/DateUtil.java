@@ -97,7 +97,7 @@ public class DateUtil extends DateUtils {
 			 Date calDate2 = add(calDate, Calendar.YEAR, -1);
 			 return new int[]{y-1,getDiffByDate(maxDay, calDate2)};
 		} else {
-			return new int[]{0,1};
+			return new int[]{y,0};
 		}
 	}
 	/**
