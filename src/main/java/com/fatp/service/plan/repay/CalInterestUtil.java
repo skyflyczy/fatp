@@ -114,9 +114,9 @@ public class CalInterestUtil {
             	interest = calProfitByLadder(investProfitParamList, principal, firstYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt);
             }
             if (DateUtil.isLeapYear(lastYear)) {//是否是闰年
-            	interest = calProfitByLadder(investProfitParamList, principal, lastYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt);
+            	interest = interest.add(calProfitByLadder(investProfitParamList, principal, lastYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt));
             } else {
-            	interest = calProfitByLadder(investProfitParamList, principal, lastYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt);
+            	interest = interest.add(calProfitByLadder(investProfitParamList, principal, lastYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt));
             }
             int diffYeay = lastYear - firstYear - 1;//相差年份
             interest = interest.add(calProfitByLadder(investProfitParamList, principal, diffYeay, 1, zeroplace, paramInt));

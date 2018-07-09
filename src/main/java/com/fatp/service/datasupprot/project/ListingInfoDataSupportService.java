@@ -79,6 +79,16 @@ public class ListingInfoDataSupportService {
 		return listingInfo;
 	}
 	/**
+	 * 根据Id查找挂牌信息
+	 * @param id
+	 * @return
+	 */
+	public ListingInfo getLisingInfoById(Integer id) {
+		ListingInfo listingInfo = listingInfoDao.getLisingInfoById(id);
+		decryptStr(listingInfo);
+		return listingInfo;
+	}
+	/**
 	 * 根据Id获取挂牌信息
 	 * @param id
 	 * @return

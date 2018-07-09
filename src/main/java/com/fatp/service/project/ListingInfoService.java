@@ -13,7 +13,6 @@ import com.fatp.domain.listing.ListingTrade;
 import com.fatp.enums.FlowFeedTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
-import com.fatp.po.GlobalFilePo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.TimelineDetailDataSupportService;
@@ -55,6 +54,14 @@ public class ListingInfoService extends BaseService{
 	 */
 	public ListingInfo getByListingGuid(String listingGuid) {
 		return listingInfoDataSupportService.getByListingGuid(listingGuid);
+	}
+	/**
+	 * 根据Id查找挂牌信息
+	 * @param id
+	 * @return
+	 */
+	public ListingInfo getLisingInfoById(Integer id) {
+		return listingInfoDataSupportService.getLisingInfoById(id);
 	}
 	/**
 	 * 根据挂牌Id查找挂牌交易信息

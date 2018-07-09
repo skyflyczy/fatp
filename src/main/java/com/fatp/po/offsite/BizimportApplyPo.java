@@ -60,6 +60,10 @@ public class BizimportApplyPo implements Serializable{
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd")  
 	private java.util.Date valueDate;
+	/**
+	 * 状态信息
+	 */
+	private String statusMsg;
 
 	public void setId(Integer value) {
 		this.id = value;
@@ -127,5 +131,12 @@ public class BizimportApplyPo implements Serializable{
 	public void setIsDelete(int isDelete) {
 		this.isDelete = isDelete;
 	}
+	public String getStatusMsg() {
+		return statusMsg;
+	}
+	public void setStatusMsg(String statusMsg) {
+		this.statusMsg = statusMsg;
+	}
+	
 }
 

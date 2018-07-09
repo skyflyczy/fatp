@@ -25,6 +25,8 @@ public interface ListingInfoDao {
 	
 	public ListingInfoPo getPoById(Integer id);
 	
+	public ListingInfo getLisingInfoById(Integer id);
+	
 	public List<ListingInfo> findByCondition(Map<String, Object> map);
 	
 	public int listInfoImport(String fileInfo);

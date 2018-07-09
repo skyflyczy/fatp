@@ -35,9 +35,10 @@
     	<tr>
     		<th align="center" width="10%">序号</th>
     		<th align="center" width="15%">登记总额</th>
-    		<th align="center" width="15%">登记数量</th>
-    		<th align="center" width="15%">登记人数</th>
+    		<th align="center" width="10%">登记数量</th>
+    		<th align="center" width="10%">登记人数</th>
     		<th align="center" width="15%">登记状态</th>
+    		<th align="center" width="15%">登记信息</th>
     		<th align="center" width="15%">创建时间</th>
     		<th align="center" width="20%">操作</th>
     	</tr>
@@ -51,6 +52,7 @@
     			<td align="center">${obj.totalNum}</td>
     			<td align="center">${obj.totalPeopleNum}</td>
     			<td align="center">${obj.getApplyStatusDesc()}</td>
+    			<td align="center">${obj.statusMsg}</td>
     			<td align="center"><fmt:formatDate value="${obj.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
     			<td align="center">
     				<a href="/offsite/invest/deleteapply.do?id=${obj.applyGuid}" 

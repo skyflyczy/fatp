@@ -189,6 +189,10 @@ public class BizPlanController extends BaseController{
 			if(planRepay == null) {
 				return resultError("没有此还款计划");
 			}
+			ListingInfo listingInfo = listingInfoService.getLisingInfoById(planRepay.getListingInfoId());
+			if(listingInfo == null) {
+				return resultError("没有此挂牌产品信息");
+			}
 			Map<String, Object> map = new HashMap<>();
 			map.put("repayPlanId", planRepay.getId());
 			List<BizplanPayinvest> list = bizplanPayinvestService.findPlanPayinvest(map);
@@ -197,7 +201,7 @@ public class BizPlanController extends BaseController{
 			response().setContentType("application/msexcel");
 			response().setHeader("Content-Disposition", "attachment;fileName="+filename+".xls");
 	        outputStream = response().getOutputStream();
-	        bizplanPayinvestService.genPayinvestListExcel(list, outputStream);
+	        bizplanPayinvestService.genPayinvestListExcel(list, outputStream,listingInfo);
 	        outputStream.flush();
 	        return resultSuccess();
 		}catch(Exception e) {

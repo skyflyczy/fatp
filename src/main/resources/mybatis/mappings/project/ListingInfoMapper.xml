@@ -118,11 +118,18 @@
     	update listing_info set ListingStatus = #{listingStatus} where id = #{id} AND VersionNo = #{versionNo} 
     </delete>
     
-    <select id="getByListingGuid" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
+   <select id="getByListingGuid" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
     	SELECT *
 	    FROM listing_info 
         WHERE 
 	        ListingGuid = #{listingGuid} 
+	</select>
+	
+	<select id="getLisingInfoById" parameterType="java.util.Map" resultType="com.fatp.domain.listing.ListingInfo">
+    	SELECT *
+	    FROM listing_info 
+        WHERE 
+	        Id = #{id}  
 	</select>
 	
 	<select id="getPoById" parameterType="java.lang.Integer" resultType="com.fatp.po.project.ListingInfoPo">

@@ -15,12 +15,14 @@ import org.springframework.stereotype.Service;
 
 import com.fatp.domain.biz.BizplanPayinvest;
 import com.fatp.domain.biz.BizplanRepay;
+import com.fatp.domain.listing.ListingInfo;
 import com.fatp.enums.biz.PayinvestStatus;
 import com.fatp.enums.biz.RepayStatus;
 import com.fatp.exception.FatpException;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.biz.BizplanPayinvestDataSupportService;
 import com.fatp.service.datasupprot.biz.BizplanRepayDataSupportService;
+import com.fatp.util.StringUtil;
 
 @Service
 public class BizplanPayinvestService extends BaseService{
@@ -78,7 +80,7 @@ public class BizplanPayinvestService extends BaseService{
 	 * @param os
 	 * @throws IOException
 	 */
-	public void genPayinvestListExcel(List<BizplanPayinvest> list, OutputStream os) throws IOException{
+	public void genPayinvestListExcel(List<BizplanPayinvest> list, OutputStream os,ListingInfo listingInfo) throws IOException{
 		//创建HSSFWorkbook对象(excel的文档对象)  
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		//建立新的sheet对象（excel的表单）  
@@ -90,7 +92,7 @@ public class BizplanPayinvestService extends BaseService{
 				//TODO 转账类型？行内转帐填1；同城跨行转帐填2；异地汇款填3；超级网银实时转账4；超级网银有5万元/笔限制
 				currentRow.createCell(0).setCellValue("1");
 				//TODO 付款人清分子账号：必填，最大14位长度
-				currentRow.createCell(1).setCellValue("");//留空
+				currentRow.createCell(1).setCellValue(StringUtil.isNotBlank(listingInfo.getSettleCardAccount()) ? listingInfo.getSettleCardAccount() : "");
 				//收款人账号栏：必填，最大32位
 				currentRow.createCell(2).setCellValue(payinvest.getCardAccount());
 				//收款人名称栏：必填，最大90个汉字

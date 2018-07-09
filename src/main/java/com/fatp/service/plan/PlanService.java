@@ -10,13 +10,14 @@ import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.enums.offsite.ApplyStatus;
+import com.fatp.exception.FatpException;
 import com.fatp.po.offsite.BizimportApplyPo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.BaseService;
 import com.fatp.service.datasupprot.offsite.InvestApplyDataSupportService;
 import com.fatp.service.datasupprot.project.ListingInfoDataSupportService;
 import com.fatp.service.plan.repay.PlanFactory;
-import com.fatp.service.plan.repay.PlanGenStragey;
+import com.fatp.service.plan.repay.stragey.PlanGenStragey;
 
 /**
  * 生成还款兑付计划入口
@@ -74,27 +75,30 @@ public class PlanService extends BaseService{
 		List<ListingTrade> listingTradeList =  listingInfoDataSupportService.getTradeByListingInfoId(listingInfoId);
 		if(CollectionUtils.isEmpty(listingTradeList)){
 			logger.error("生成还款兑付计划，获取挂牌交易信息为空：listingInfoId：" + listingInfoId);
-			updateApplyStatus(apply, ApplyStatus.登记成功);
+			updateApplyStatus(apply, ApplyStatus.登记成功,"登记成功。收益率为空，未生成还款兑付计划");
 			return;
 		}
 		List<BizimportTradeDetail> tradeDetailList = investApplyDataSupportService.findTradeDetailByApplyId(applyId);
 		if(CollectionUtils.isEmpty(tradeDetailList)) {
 			logger.error("生成还款兑付计划，获取客户交易信息为空：applyId：" + applyId);
-			updateApplyStatus(apply, ApplyStatus.登记失败);
+			updateApplyStatus(apply, ApplyStatus.登记失败,"客户交易信息为空");
 			return;
 		}
 		PlanGenStragey planGenStagey = PlanFactory.getInstance().chooseStrategy(listingInfoPo.getPayInterestType().intValue());
 		if(planGenStagey == null) {
 			logger.error("获取计划生成策略为空，不能生成还款计划，listingInfoId：" + listingInfoPo.getId());
-			updateApplyStatus(apply, ApplyStatus.登记失败);
+			updateApplyStatus(apply, ApplyStatus.登记失败,"付息方式出错");
 			return;
 		}
 		try {
 			planGenStagey.genRepayAndPayInvesetPlan(listingInfoPo, listingTradeList, apply, tradeDetailList, operatorId);
-			updateApplyStatus(apply, ApplyStatus.登记成功);
+			updateApplyStatus(apply, ApplyStatus.登记成功,"成功");
+		} catch (FatpException e) {
+			logger.error("生成还款兑付计划失败,applyId：{}",applyId,e);
+			updateApplyStatus(apply, ApplyStatus.登记失败,e.getMessage());
 		} catch (Exception e) {
 			logger.error("生成还款兑付计划失败,applyId：{}",applyId,e);
-			updateApplyStatus(apply, ApplyStatus.登记失败);
+			updateApplyStatus(apply, ApplyStatus.登记失败,"生成还款兑付计划异常");
 		}
 	}
 	/**
@@ -102,10 +106,11 @@ public class PlanService extends BaseService{
 	 * @param apply
 	 * @param applyStatus
 	 */
-	private void updateApplyStatus(BizImportApply apply,ApplyStatus applyStatus) {
+	private void updateApplyStatus(BizImportApply apply,ApplyStatus applyStatus,String statusMsg) {
 		BizimportApplyPo po = new BizimportApplyPo();
 		po.setApplyStatus(applyStatus.status);
 		po.setId(apply.getId());
+		po.setStatusMsg(statusMsg);
 		investApplyDataSupportService.updateApplyStatus(po);
 	}
 
