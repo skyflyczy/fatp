@@ -146,7 +146,7 @@ public class ImportFileService {
 			ListingInfoPo listingInfo = new ListingInfoPo();
 			
 			try{
-				listingInfo.setId((int)System.currentTimeMillis()+(int)Math.random()*100);
+				listingInfo.setId(getmicTime().intValue());
 				listingInfo.setExchangeId(exchangeId);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
@@ -218,11 +218,12 @@ public class ImportFileService {
 					listingInfo.setInterestRate(5);
 				}	
 				//计息基准：1、ACT/365，2、ACT/360，3、ACT/ACT
-				listingInfo.setInterestBase(1);
-				if(strArray[18].trim().equals("ACT//360")){
+				String ibase =strArray[18];
+				listingInfo.setInterestBase(3);
+				if(ibase.indexOf("360")>0){
 					listingInfo.setInterestBase(2);
-				}else if(strArray[18].trim().equals("ACT//ACT")){
-					listingInfo.setInterestBase(3);
+				}else if(ibase.indexOf("365")>0){
+					listingInfo.setInterestBase(1);
 				}
 				
 				//到期日是否计息：1是0否
@@ -277,4 +278,9 @@ public class ImportFileService {
 		Random random = new Random(System.currentTimeMillis());
 		return Math.abs(random.nextInt()) + "";
 	}
+	private  Long getmicTime() {
+		Long cutime = System.currentTimeMillis() * 1000; // 微秒
+		Long nanoTime = System.nanoTime(); // 纳秒
+		return cutime + (nanoTime - nanoTime / 1000000 * 1000000) / 1000;
+		}
 }
