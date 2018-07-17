@@ -188,16 +188,17 @@ public class ImportFileService {
 				listingInfo.setExpireDate(Date.valueOf(strArray[14].trim()));
 				
 				//付息方式：一次性还本付息（1），等额本息(2),按月付息到期还本(3)，按季付息到期还本(4),按半年息到期还本(5),按年付息到期还本(6);
+				String payType =strArray[15];
 				listingInfo.setPayInterestType(1);
-				if(strArray[15].trim().equals("等额本息")){
+				if(payType.indexOf("等额本息")>0){
 					listingInfo.setPayInterestType(2);
-				}else if(strArray[15].trim().equals("按月付息到期还本")){
+				}else if(payType.indexOf("按月")>0){
 					listingInfo.setPayInterestType(3);
-				}else if(strArray[15].trim().equals("按季付息到期还本")){
+				}else if(payType.indexOf("按季")>0){
 					listingInfo.setPayInterestType(4);
-				}else if(strArray[15].trim().equals("按半年息到期还本")){
+				}else if(payType.indexOf("按半年")>0){
 					listingInfo.setPayInterestType(5);
-				}else if(strArray[15].trim().equals("按年付息到期还本")){
+				}else if(payType.indexOf("按年")>0){
 					listingInfo.setPayInterestType(6);
 				}					
 				
