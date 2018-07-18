@@ -182,14 +182,19 @@ public abstract class PlanGenStragey {
 	 * @param listingInfoPo
 	 * @param interestStartDate 计息开始日期
 	 * @param interestEndDate 计息结束日期
+	 * @param isEndPeriod 是否是最后一期
 	 * @return
 	 */
-	public List<CalInterestParam> genCalInterestParamList(ListingInfoPo listingInfoPo,Date interestStartDate,Date interestEndDate) {
+	public List<CalInterestParam> genCalInterestParamList(ListingInfoPo listingInfoPo,Date interestStartDate,Date interestEndDate,boolean isEndPeriod) {
 		List<CalInterestParam> list = new ArrayList<>(); 
 		InterestRate interestRate = InterestRate.getInterestRateByValue(listingInfoPo.getInterestRate().intValue());
 		InterestBase interestBase = InterestBase.getInterestBaseByValue(listingInfoPo.getInterestBase().intValue());
 		//计算利息结束日期，根据到期日是否计息判断是否加一天
-		Date calInterestEndDate = listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value ? DateUtil.add(interestEndDate, Calendar.DATE, 1) : interestEndDate;
+		Date calInterestEndDate = interestEndDate;
+		if(isEndPeriod && listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
+			//如果是最后一期，并且到期日计息，加一天
+			calInterestEndDate = DateUtil.add(interestEndDate, Calendar.DATE, 1);
+		}
 		if(interestRate == InterestRate.按日计息) {
 			int dayCount = DateUtil.getDiffByDate(calInterestEndDate, interestStartDate);
 			list.add(genCalInterestParam(interestStartDate, interestEndDate, interestRate, interestBase, dayCount));

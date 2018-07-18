@@ -1,5 +1,7 @@
 package com.fatp.enums.project;
 
+import com.fatp.util.StringUtil;
+
 public enum InvestProfitType {
 
 	固定收益率(1),
@@ -14,6 +16,18 @@ public enum InvestProfitType {
 
 	public int getType() {
 		return type;
+	}
+	
+	public static InvestProfitType getInvestProfitTypeByName(String name) {
+		if(StringUtil.isBlank(name)) {
+			return InvestProfitType.固定收益率;
+		}
+		for(InvestProfitType type : InvestProfitType.values()) {
+			if(type.name().equals(name)) {
+				return type;
+			}
+		}
+		return InvestProfitType.固定收益率;
 	}
 	
 }

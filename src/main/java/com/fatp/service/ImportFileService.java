@@ -16,6 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fatp.domain.offsite.BizimportTradeDetail;
+import com.fatp.enums.YesNo;
+import com.fatp.enums.project.ExpireDateStyle;
+import com.fatp.enums.project.InterestBase;
+import com.fatp.enums.project.InterestRate;
+import com.fatp.enums.project.InterestType;
+import com.fatp.enums.project.InvestProfitType;
+import com.fatp.enums.project.ListingLimitType;
+import com.fatp.enums.project.PayInterestType;
 import com.fatp.enums.user.IdTypeDesc;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
@@ -24,6 +32,7 @@ import com.fatp.service.sys.SysParamService;
 import com.fatp.service.sys.SysbizcodeSequenceService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.DateUtil;
+import com.fatp.util.StringUtil;
 import com.fatp.util.UUIDUtil;
 import com.huajin.baymax.encrypt.SymmetricEncrypt;
 import com.huajin.pdfconvertor.PdfProcessSupport;
@@ -162,73 +171,65 @@ public class ImportFileService {
 				listingInfo.setListingMoney(new BigDecimal(strArray[6].trim()));
 				listingInfo.setListingLimit(Integer.valueOf(strArray[7].trim()));
 				//产品期限类型：1天2月3年
-				listingInfo.setListingLimitType(1);
-				if(strArray[8].trim().equals("月")){
-					listingInfo.setListingLimitType(2);
-				}else if(strArray[8].trim().equals("年")){
-					listingInfo.setListingLimitType(3);
-				}					
+				int listingLimitType = StringUtil.isBlank(strArray[8]) ? ListingLimitType.天.type : ListingLimitType.getListingLimitTypeByName(strArray[8].trim()).type;
+				listingInfo.setListingLimitType(listingLimitType);
 				//起投金额（元）
 				listingInfo.setMinInvestMoney(new BigDecimal(strArray[9].trim()));
 				//收益率类型：1固定收益率；2阶梯收益率，3浮动收益率'
-				listingInfo.setInvestProfitType(1);
-				if(strArray[10].trim().equals("阶梯收益率")){
-					listingInfo.setInvestProfitType(2);
-				}else if(strArray[10].trim().equals("浮动收益率")){
-					listingInfo.setInvestProfitType(3);
-				}					
+				int investProfitType = StringUtil.isBlank(strArray[10]) ? InvestProfitType.固定收益率.type : InvestProfitType.getInvestProfitTypeByName(strArray[10].trim()).type;
+				listingInfo.setInvestProfitType(investProfitType);
 				listingInfo.setProfitValue(strArray[11].trim());				
 				listingInfo.setValueDate(Date.valueOf(strArray[12].trim()));
 				
 				//到期日规则 1：固定期限 2：固定到期日
-				listingInfo.setExpireDateStyle(1);
+				listingInfo.setExpireDateStyle(ExpireDateStyle.固定期限.style);
 				if(strArray[13].trim().equals("固定到期日")){
-					listingInfo.setExpireDateStyle(2);
+					listingInfo.setExpireDateStyle(ExpireDateStyle.固定到期日.style);
 				}
 				listingInfo.setExpireDate(Date.valueOf(strArray[14].trim()));
 				
 				//付息方式：一次性还本付息（1），等额本息(2),按月付息到期还本(3)，按季付息到期还本(4),按半年息到期还本(5),按年付息到期还本(6);
 				String payType =strArray[15];
-				listingInfo.setPayInterestType(1);
+				listingInfo.setPayInterestType(PayInterestType.一次性到期还本付息.type);
 				if(payType.indexOf("等额本息")>0){
-					listingInfo.setPayInterestType(2);
+					listingInfo.setPayInterestType(PayInterestType.等额本息.type);
 				}else if(payType.indexOf("按月")>0){
-					listingInfo.setPayInterestType(3);
+					listingInfo.setPayInterestType(PayInterestType.按月付息到期还本.type);
 				}else if(payType.indexOf("按季")>0){
-					listingInfo.setPayInterestType(4);
+					listingInfo.setPayInterestType(PayInterestType.按季付息到期还本.type);
 				}else if(payType.indexOf("按半年")>0){
-					listingInfo.setPayInterestType(5);
+					listingInfo.setPayInterestType(PayInterestType.按半年息到期还本.type);
 				}else if(payType.indexOf("按年")>0){
-					listingInfo.setPayInterestType(6);
+					listingInfo.setPayInterestType(PayInterestType.按年付息到期还本.type);
 				}					
 				
 				//计息方式：单利1，复利2
-				listingInfo.setInterestType(1);
+				listingInfo.setInterestType(InterestType.单利.type);
 				if(strArray[16].trim().equals("复利")){
-					listingInfo.setInterestType(2);
+					listingInfo.setInterestType(InterestType.复利.type);
 				}
 				//计息频率：1按日计息，2按月计息，3按年计息,4按季计息，5按半年计息
-				listingInfo.setInterestRate(1);
+				listingInfo.setInterestRate(InterestRate.按日计息.value);
 				if(strArray[17].trim().equals("按月计息")){
-					listingInfo.setInterestRate(2);
+					listingInfo.setInterestRate(InterestRate.按月计息.value);
 				}else if(strArray[17].trim().equals("按年计息")){
-					listingInfo.setInterestRate(3);
+					listingInfo.setInterestRate(InterestRate.按年计息.value);
 				}else if(strArray[17].trim().equals("按季计息")){
-					listingInfo.setInterestRate(4);
+					listingInfo.setInterestRate(InterestRate.按季计息.value);
 				}else if(strArray[17].trim().equals("按半年计息")){
-					listingInfo.setInterestRate(5);
+					listingInfo.setInterestRate(InterestRate.按半年计息.value);
 				}	
 				//计息基准：1、ACT/365，2、ACT/360，3、ACT/ACT
 				String ibase =strArray[18];
-				listingInfo.setInterestBase(3);
+				listingInfo.setInterestBase(InterestBase.ACT_ACT.value);
 				if(ibase.indexOf("360")>0){
-					listingInfo.setInterestBase(2);
+					listingInfo.setInterestBase(InterestBase.ACT_360.value);
 				}else if(ibase.indexOf("365")>0){
-					listingInfo.setInterestBase(1);
+					listingInfo.setInterestBase(InterestBase.ACT_365.value);
 				}
 				
 				//到期日是否计息：1是0否
-				listingInfo.setExpireDateInterest(strArray[19].trim().equals("是")?1:0);
+				listingInfo.setExpireDateInterest(strArray[19].trim().equals("是")?YesNo.是.value:YesNo.否.value);
 				
 				listingInfo.setCreateOperatorId(Integer.valueOf(operatorId));
 				listingInfo.setUpateOperatorId(Integer.valueOf(operatorId));

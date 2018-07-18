@@ -28,6 +28,8 @@ import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.po.project.ListingTradePo;
+import com.fatp.util.BigDecimalUtil;
+import com.fatp.util.StringUtil;
 import com.fatp.util.UUIDUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -277,7 +279,7 @@ public class ListingInfoDataSupportService {
 					for (ListingTradePo tp : tradePo) {
 						listingTradeDao.insert(tp);// 插入listing_trade表
 					}
-					int importNums = liDao.insert(po);// 插入listing_info表
+					liDao.insert(po);// 插入listing_info表
 					successNum ++;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -311,26 +313,28 @@ public class ListingInfoDataSupportService {
 		String pValue = po.getProfitValue();
 		System.out.println("---------ListingInfoPo="+po);
 		List<ListingTradePo> plist = new ArrayList<ListingTradePo>();
-		if (pValue != null && !pValue.equals("")) {
-			String[] pv = pValue.split(",");
-			for (int i =0;i<pv.length;i++) {
-				String profit = pv[i];
-				System.out.println("---------"+i+"----------profit="+profit);
-				if (profit != null && !profit.equals("")) {
-					String[] minToMax = profit.split(":");
-
-					ListingTradePo tradePo = new ListingTradePo();
-					tradePo.setId(po.getId()+i);
-					tradePo.setListingInfoId(po.getId());// 挂牌产品Id,listing_info.id
-					BigDecimal bd = new BigDecimal(minToMax[1]);
-					BigDecimal bd2 = new BigDecimal("0.01");
-					tradePo.setInvestProfit(bd.multiply(bd2));// 拟定年化收益率,没有乘以%InvestProfit
-					tradePo.setMaxInvestMoney(new BigDecimal(minToMax[0]));// 最高投资金额，元（不包含此值）
-					tradePo.setCreateOperatorId(po.getCreateOperatorId());
-					tradePo.setUpateOperatorId(po.getUpateOperatorId());
-					plist.add(tradePo);
-					System.out.println("---------"+i+"----------tradePo--------"+tradePo);
-				}
+		if (StringUtil.isBlank(pValue)) {
+			return plist;
+		}
+		String[] pv = pValue.split(",");
+		BigDecimal minInvestMoney = po.getMinInvestMoney() == null ? BigDecimal.ZERO : po.getMinInvestMoney();
+		for (int i =0;i<pv.length;i++) {
+			String profit = pv[i];
+			System.out.println("---------"+i+"----------profit="+profit);
+			if (profit != null && !profit.equals("")) {
+				String[] minToMax = profit.split(":");
+				ListingTradePo tradePo = new ListingTradePo();
+				tradePo.setListingInfoId(po.getId());// 挂牌产品Id,listing_info.id
+				BigDecimal bd = new BigDecimal(minToMax[1]);
+				BigDecimal bd2 = new BigDecimal("0.01");
+				tradePo.setInvestProfit(bd.multiply(bd2));// 拟定年化收益率,没有乘以%InvestProfit
+				tradePo.setMaxInvestMoney(BigDecimalUtil.convertDefaultZero(minToMax[0]));// 最高投资金额，元（不包含此值）
+				tradePo.setMinInvestMoney(minInvestMoney);
+				tradePo.setCreateOperatorId(po.getCreateOperatorId());
+				tradePo.setUpateOperatorId(po.getUpateOperatorId());
+				plist.add(tradePo);
+				minInvestMoney = tradePo.getMaxInvestMoney();
+				System.out.println("---------"+i+"----------tradePo--------"+tradePo);
 			}
 		}
 		System.out.println("-------------------plist--------"+plist);

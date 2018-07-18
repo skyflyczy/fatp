@@ -89,7 +89,7 @@ public class GenPlanService extends BaseService{
 			ListingInfoPo listingInfoPo,PeriodResult periodResult,List<ListingTrade> listingTradeList,int operatorId,int applyId,int totalPeriodNum) {
 		List<BizplanPayinvestPo> payinvestList = tradeDetailList.stream().map(tradeDetail ->{
 			//组装计算利息参数,生成利息
-			List<CalInterestParam> calInterestParamList = planGenStagey.genCalInterestParamList(listingInfoPo, periodResult.getInterestStartDate(), periodResult.getInterestEndDate());
+			List<CalInterestParam> calInterestParamList = planGenStagey.genCalInterestParamList(listingInfoPo, periodResult.getInterestStartDate(), periodResult.getInterestEndDate(),periodResult.getPeriod() == totalPeriodNum);
 			//生成利息参数集合
 			List<InvestProfitParam> investProfitParamList = planGenStagey.genInvestProfitParamList(listingTradeList,tradeDetail.getAddInvestProfit());
 			//组装计算利息参数,生成利息

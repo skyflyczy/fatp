@@ -1,5 +1,7 @@
 package com.fatp.enums.project;
 
+import com.fatp.util.StringUtil;
+
 public enum ListingLimitType {
 	天(1),
 	月(2),
@@ -11,13 +13,13 @@ public enum ListingLimitType {
 		this.type = type;
 	}
 	
-	public static ListingLimitType getProjectLimitType(Integer type){
-		if(type == null) {
+	public static ListingLimitType getListingLimitTypeByName(String name) {
+		if(StringUtil.isBlank(name)) {
 			return ListingLimitType.天;
 		}
 		for(ListingLimitType desc : ListingLimitType.values()){
-			if(desc.type == type){
-				return desc;
+			if(desc.name().equals(name)){
+					return desc;
 			}
 		}
 		return ListingLimitType.天;
