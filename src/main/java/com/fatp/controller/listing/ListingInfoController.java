@@ -234,7 +234,7 @@ public class ListingInfoController extends BaseController {
 			logger.info(">>>>>List<ListingInfoPo>=" + list);
 			try {
 				// 把产品信息记录到数据库中
-				inportResult += "<br>"+listingInfoService.listingRecords(list);
+				inportResult += "<br>"+listingInfoService.listingRecords(list,super.getMemberOperator().getRealName());
 				logger.debug("recordsNumbers=" + inportResult);
 			} catch (Exception e) {
 				e.printStackTrace();

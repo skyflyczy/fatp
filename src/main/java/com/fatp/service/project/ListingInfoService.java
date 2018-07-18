@@ -114,13 +114,16 @@ public class ListingInfoService extends BaseService{
 	 * @param fileInfo
 	 */
 
-	public String listingRecords(List<ListingInfoPo> listing)throws Exception  {
+	public String listingRecords(List<ListingInfoPo> listing,String createOperatorName)throws Exception  {
 
 		
 		//导入挂牌产品信息
 		String result =listingInfoDataSupportService.listingRecords(listing);
 		
-		
+		//新增动态
+		for(ListingInfoPo po : listing) {
+			timelineDetailDataSupportService.createListingInfoTimeLine(po, FlowFeedTypeDesc.创建, "", createOperatorName);
+		}
 		return result;
 	}	
 }
