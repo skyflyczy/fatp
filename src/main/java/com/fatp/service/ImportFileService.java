@@ -190,15 +190,15 @@ public class ImportFileService {
 				//付息方式：一次性还本付息（1），等额本息(2),按月付息到期还本(3)，按季付息到期还本(4),按半年息到期还本(5),按年付息到期还本(6);
 				String payType =strArray[15];
 				listingInfo.setPayInterestType(PayInterestType.一次性到期还本付息.type);
-				if(payType.indexOf("等额本息")>0){
+				if(payType.indexOf("等额本息")>-1){
 					listingInfo.setPayInterestType(PayInterestType.等额本息.type);
-				}else if(payType.indexOf("按月")>0){
+				}else if(payType.indexOf("按月")>-1){
 					listingInfo.setPayInterestType(PayInterestType.按月付息到期还本.type);
-				}else if(payType.indexOf("按季")>0){
+				}else if(payType.indexOf("按季")>-1){
 					listingInfo.setPayInterestType(PayInterestType.按季付息到期还本.type);
-				}else if(payType.indexOf("按半年")>0){
+				}else if(payType.indexOf("按半年")>-1){
 					listingInfo.setPayInterestType(PayInterestType.按半年息到期还本.type);
-				}else if(payType.indexOf("按年")>0){
+				}else if(payType.indexOf("按年")>-1){
 					listingInfo.setPayInterestType(PayInterestType.按年付息到期还本.type);
 				}					
 				
@@ -221,9 +221,9 @@ public class ImportFileService {
 				//计息基准：1、ACT/365，2、ACT/360，3、ACT/ACT
 				String ibase =strArray[18];
 				listingInfo.setInterestBase(InterestBase.ACT_ACT.value);
-				if(ibase.indexOf("360")>0){
+				if(ibase.indexOf("360")>-1){
 					listingInfo.setInterestBase(InterestBase.ACT_360.value);
-				}else if(ibase.indexOf("365")>0){
+				}else if(ibase.indexOf("365")>-1){
 					listingInfo.setInterestBase(InterestBase.ACT_365.value);
 				}
 				
