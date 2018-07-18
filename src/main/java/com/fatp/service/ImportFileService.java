@@ -155,7 +155,6 @@ public class ImportFileService {
 			ListingInfoPo listingInfo = new ListingInfoPo();
 			
 			try{
-				listingInfo.setId(getmicTime().intValue());
 				listingInfo.setExchangeId(exchangeId);
 				//新增挂牌代码,系统自动生成
 				listingInfo.setListingCode(sysbizcodeSequenceService.getListingInfoSequence());
@@ -280,9 +279,4 @@ public class ImportFileService {
 		Random random = new Random(System.currentTimeMillis());
 		return Math.abs(random.nextInt()) + "";
 	}
-	private  Long getmicTime() {
-		Long cutime = System.currentTimeMillis() * 1000; // 微秒
-		Long nanoTime = System.nanoTime(); // 纳秒
-		return cutime + (nanoTime - nanoTime / 1000000 * 1000000) / 1000;
-		}
 }

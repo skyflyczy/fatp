@@ -10,9 +10,6 @@ import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.ExecutorType;
-import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +25,7 @@ import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.po.project.ListingTradePo;
+import com.fatp.service.BaseService;
 import com.fatp.util.BigDecimalUtil;
 import com.fatp.util.StringUtil;
 import com.fatp.util.UUIDUtil;
@@ -41,7 +39,7 @@ import com.huajin.baymax.encrypt.SymmetricEncrypt;
  * @date 2018年6月12日 下午3:37:53
  */
 @Service
-public class ListingInfoDataSupportService {
+public class ListingInfoDataSupportService extends BaseService{
 
 	@Autowired
 	private ListingInfoDao listingInfoDao;
@@ -262,45 +260,32 @@ public class ListingInfoDataSupportService {
 		}
 	}
 
-	@Autowired
-	private SqlSessionTemplate sqlSessionTemplate;
+	@Transactional(rollbackFor=Exception.class)
 	public String listingRecords(List<ListingInfoPo> poilist) throws Exception {
 		int successNum = 0;
 		int failNum=0;
 		String errBizCode = "";
 		String importResult="";
-		SqlSession sqlSession=null;
-		try {
-			sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
-			ListingInfoDao liDao = sqlSession.getMapper(ListingInfoDao.class);
-			for (ListingInfoPo po : poilist) {
-				try {
-					List<ListingTradePo> tradePo = getListingTradePo(po);
-					for (ListingTradePo tp : tradePo) {
-						listingTradeDao.insert(tp);// 插入listing_trade表
-					}
-					liDao.insert(po);// 插入listing_info表
-					successNum ++;
-				} catch (Exception e) {
-					e.printStackTrace();
-					failNum++;
-					errBizCode += po.getPartnerBizCode() + ";";
+		for (ListingInfoPo po : poilist) {
+			try {
+				listingInfoDao.insert(po);
+				List<ListingTradePo> tradePo = getListingTradePo(po);
+				for (ListingTradePo tp : tradePo) {
+					listingTradeDao.insert(tp);// 插入listing_trade表
 				}
+				successNum ++;
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("导入产品信息失败：",e);
+				failNum++;
+				errBizCode += po.getPartnerBizCode() + ";";
 			}
-			sqlSession.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			//throw e;
-		} finally {
-			if(sqlSession!=null)sqlSession.close();		
 		}
-
 		if (errBizCode.equals("")) {
 			importResult = "成功导入[ " + successNum + " ]条";
 		} else {
 			importResult = "成功导入[ " + successNum + " ]条； 失败["+failNum+"]条，产品编号【" + errBizCode + "】。";
 		}
-		System.out.println("----excel导入结果信息="+importResult);
 		return importResult;
 	}
 

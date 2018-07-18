@@ -306,10 +306,14 @@ $("#expireDate,#valueDate").on("input propertychange afterchange.bjui.datepicker
 	var valueDate = $('#valueDate').val();
 	var expireDate = $('#expireDate').val();
 	if(valueDate && expireDate) {
-		$("#listingLimit").val(1).selectpicker('refresh');
-		valueDate = valueDate.parseDate("yyyy-MM-dd");
-		expireDate = expireDate.parseDate("yyyy-MM-dd");
-		$("#listingLimit").val((expireDate-valueDate)/86400000);
+		var limitType = $("#listingLimitType").val();
+		if(limitType == 1) {
+			//天
+			$("#listingLimit").val(1).selectpicker('refresh');
+			valueDate = valueDate.parseDate("yyyy-MM-dd");
+			expireDate = expireDate.parseDate("yyyy-MM-dd");
+			$("#listingLimit").val((expireDate-valueDate)/86400000);
+		}
 	}
 });
 </script>
