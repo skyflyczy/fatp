@@ -47,11 +47,11 @@ function afterRepayCompleted(json){
  <table data-toggle="tablefixed" data-width="100%">
     	<thead>
     	<tr>
-    		<th align="center" width="15%">期数</th>
-    		<th align="center" width="20%">还款本金</th>
-    		<th align="center" width="20%">还款利息</th>
-    		<th align="center" width="15%">还款总额</th>
-    		<th align="center" width="15%">应还日期</th>
+    		<th align="center" width="10%">期数</th>
+    		<th align="center" width="20%">还款本金（元）</th>
+    		<th align="center" width="20%">还款利息（元）</th>
+    		<th align="center" width="20%">还款总额（元）</th>
+    		<th align="center" width="25%">日期</th>
     		<th align="center" width="15%">创建时间</th>
     		<th align="center" width="15%">还款状态</th>
     		<th align="center" width="15%">操作</th>
@@ -65,7 +65,11 @@ function afterRepayCompleted(json){
     			<td align="center"><fmt:formatNumber value="${obj.principal}" pattern="0.00" maxFractionDigits="2"/> 元</td>
     			<td align="center"><fmt:formatNumber value="${obj.interest}" pattern="0.00" maxFractionDigits="2"/> 元</td>
     			<td align="center"><fmt:formatNumber value="${obj.principal + obj.interest }" pattern="0.00" maxFractionDigits="2"/> 元</td>
-    			<td align="center"><fmt:formatDate value="${obj.planRepayDate}" pattern="yyyy-MM-dd"/></td>
+    			<td align="center">
+    			还款日期：<fmt:formatDate value="${obj.planRepayDate}" pattern="yyyy-MM-dd"/><br/>
+    			计息开始日期：<fmt:formatDate value="${obj.interestStartDate}" pattern="yyyy-MM-dd"/><br/>
+    			计息截止日期：<fmt:formatDate value="${obj.interestEndDate}" pattern="yyyy-MM-dd"/>
+    			</td>
     			<td align="center"><fmt:formatDate value="${obj.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
     			<td align="center">${obj.getRepayStatusDesc()}</td>
     			<td align="center">
