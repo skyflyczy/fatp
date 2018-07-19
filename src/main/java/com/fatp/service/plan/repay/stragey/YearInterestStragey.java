@@ -38,7 +38,7 @@ public class YearInterestStragey extends PlanGenStragey{
 		int dayCount = years[1];
 		Date nextStartDate = interestStartDate;
 		if(yearCount > 0) {
-			for(int i = 1 ; i <= yearCount ; i ++) {
+			for(int i = 1 ; i <= yearCount/12 ; i ++) {
 				PeriodResult pr = PeriodResult.build();
 				pr.setPeriod(i);//期数
 				pr.setInterestStartDate(nextStartDate);
@@ -51,7 +51,7 @@ public class YearInterestStragey extends PlanGenStragey{
 				nextStartDate = calResultDate;
 			}
 		}
-		if(dayCount > 0) {
+		if( yearCount % 12 != 0 || dayCount > 0) {
 			int period = list.size() + 1; //期数
 			PeriodResult pr = PeriodResult.build();
 			pr.setPeriod(period);

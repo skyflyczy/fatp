@@ -33,12 +33,12 @@ public class HalfAYearInterestStragey extends PlanGenStragey{
 		Date interestStartDate = apply.getValueDate() == null ? listingInfoPo.getValueDate() : apply.getValueDate();
 		//计息结束日期
 		Date interestEndDate = getInterestEndDate(listingInfoPo, interestStartDate);
-		int years[] = DateUtil.getDiffByMonth(interestEndDate, interestStartDate);
-		int yearCount = years[0];
-		int dayCount = years[1];
+		int months[] = DateUtil.getDiffByMonth(interestEndDate, interestStartDate);
+		int monthCount = months[0];
+		int dayCount = months[1];
 		Date nextStartDate = interestStartDate;
-		if(yearCount > 0) {
-			for(int i = 1 ; i <= yearCount ; i ++) {
+		if(monthCount > 0) {
+			for(int i = 1 ; i <= monthCount/6 ; i ++) {
 				PeriodResult pr = PeriodResult.build();
 				pr.setPeriod(i);//期数
 				pr.setInterestStartDate(nextStartDate);
@@ -51,7 +51,7 @@ public class HalfAYearInterestStragey extends PlanGenStragey{
 				nextStartDate = calResultDate;
 			}
 		}
-		if(dayCount > 0) {
+		if(monthCount % 6 != 0 || dayCount > 0) {
 			int period = list.size() + 1; //期数
 			PeriodResult pr = PeriodResult.build();
 			pr.setPeriod(period);

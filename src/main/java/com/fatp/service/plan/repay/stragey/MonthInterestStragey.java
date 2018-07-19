@@ -33,9 +33,9 @@ public class MonthInterestStragey extends PlanGenStragey{
 		Date interestStartDate = apply.getValueDate() == null ? listingInfoPo.getValueDate() : apply.getValueDate();
 		//计息结束日期
 		Date interestEndDate = getInterestEndDate(listingInfoPo, interestStartDate);
-		int month[] = DateUtil.getDiffByMonth(interestEndDate, interestStartDate);
-		int monthCount = month[0];
-		int dayCount = month[1];
+		int months[] = DateUtil.getDiffByMonth(interestEndDate, interestStartDate);
+		int monthCount = months[0];
+		int dayCount = months[1];
 		Date nextStartDate = interestStartDate;
 		if(monthCount > 0) {
 			//按月计息
