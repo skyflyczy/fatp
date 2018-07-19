@@ -85,12 +85,14 @@ public class BizplanPayinvestService extends BaseService{
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		//建立新的sheet对象（excel的表单）  
 		HSSFSheet sheet = workbook.createSheet("兑付明细");
+		//增加表头
+		genExcelTitle(sheet);
 		if(CollectionUtils.isNotEmpty(list)) {
 			for(int i = 0 ; i < list.size() ; i ++) {
 				BizplanPayinvest payinvest = list.get(0);
-				HSSFRow currentRow = sheet.createRow(i);
+				HSSFRow currentRow = sheet.createRow(i+1);
 				//TODO 转账类型？行内转帐填1；同城跨行转帐填2；异地汇款填3；超级网银实时转账4；超级网银有5万元/笔限制
-				currentRow.createCell(0).setCellValue("1");
+				currentRow.createCell(0).setCellValue("");
 				//付款人清分子账号：必填，最大14位长度
 				currentRow.createCell(1).setCellValue(StringUtil.isNotBlank(listingInfo.getSettleCardAccount()) ? listingInfo.getSettleCardAccount() : "");
 				//留空
@@ -123,5 +125,40 @@ public class BizplanPayinvestService extends BaseService{
 		}
 		workbook.write(os);
 		workbook.close();
+	}
+	
+	private HSSFRow genExcelTitle(HSSFSheet sheet) {
+		HSSFRow titleRow=sheet.createRow(0); 
+		//TODO 转账类型？行内转帐填1；同城跨行转帐填2；异地汇款填3；超级网银实时转账4；超级网银有5万元/笔限制
+		titleRow.createCell(0).setCellValue("转账类型");
+		//付款人清分子账号：必填，最大14位长度
+		titleRow.createCell(1).setCellValue("付款人清分子账号");
+		//留空
+		titleRow.createCell(2).setCellValue("");
+		//收款人账号栏：必填，最大32位
+		titleRow.createCell(3).setCellValue("收款人账号");
+		//收款人名称栏：必填，最大90个汉字
+		titleRow.createCell(4).setCellValue("收款人名称");
+		//收款方所在省：异地汇款必填，行内转帐和同城跨行不必填，填入视为空，最大10个汉字
+		titleRow.createCell(5).setCellValue("收款方所在省");
+		//收款方所在市县：异地汇款必填，行内转帐和同城跨行不必填，最大10个汉字填入视为空
+		titleRow.createCell(6).setCellValue("收款方所在市县");
+		//收款方开户行名称：同城跨行、异地汇款必填，行内转帐不必填，填入视为空，最大90个汉字
+		titleRow.createCell(7).setCellValue("收款方开户行名称");
+		//金额栏：必填，最大百亿位，可以有2位小数位，也可没有小数位
+		titleRow.createCell(8).setCellValue("金额");
+		//预约转账标志，非必填，不填留空，要预约转账时填Y
+		titleRow.createCell(9).setCellValue("预约转账标志");
+		//TODO 用途，必输，请输入款项真实用途，企业对用途的真实性负责，最大50位
+		titleRow.createCell(10).setCellValue("用途");
+		//预约转账日期：如预约转账标志设为Y则必填，没有设为Y不必填，格式为YYYYMMDD,暂不支持预约转账
+		titleRow.createCell(11).setCellValue("预约转账日期");
+		//币种：留空
+		titleRow.createCell(12).setCellValue("币种");
+		//钞汇标志：留空
+		titleRow.createCell(13).setCellValue("钞汇标志");
+		//联行号：跨行交易收款方联行号，非必填，如填写将加快到账速度。不填写则落单，银行作业人员添加行号后再发出。最大12位
+		titleRow.createCell(14).setCellValue("联行号");
+		return titleRow;
 	}
 }
