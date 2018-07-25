@@ -53,7 +53,7 @@ public class GenPlanService extends BaseService{
 			//生成兑付列表
 			List<BizplanPayinvestPo> payinvestList = genPlanPayInvestList(planGenStagey, tradeDetailList, listingInfoPo, periodResult, listingTradeList, operatorId, apply.getId(),totalPeriodNum);
 			//生成还款计划
-			BizplanRepayPo repay = planGenStagey.genBizplanRepay(operatorId, listingInfoPo, periodResult, apply.getId());
+			BizplanRepayPo repay = planGenStagey.genBizplanRepay(operatorId, listingInfoPo, periodResult, apply.getId(),totalPeriodNum);
 			BigDecimal principal = repay.getPrincipal(); //应还本金
 			BigDecimal interest = repay.getInterest(); //应还利息
 			for(BizplanPayinvestPo payInvest : payinvestList) {

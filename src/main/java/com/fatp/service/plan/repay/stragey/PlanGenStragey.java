@@ -63,7 +63,7 @@ public abstract class PlanGenStragey {
 	 * @param repayDate
 	 * @return
 	 */
-	public BizplanRepayPo genBizplanRepay(int operatorId,ListingInfoPo listingInfoPo,PeriodResult periodResult,int applyId) {
+	public BizplanRepayPo genBizplanRepay(int operatorId,ListingInfoPo listingInfoPo,PeriodResult periodResult,int applyId,int totalPeriodNum) {
 		BizplanRepayPo repay = new BizplanRepayPo();
 		repay.setCreateOperatorId(operatorId);
 		repay.setListingInfoId(listingInfoPo.getId());
@@ -72,7 +72,14 @@ public abstract class PlanGenStragey {
 		repay.setPrincipal(BigDecimal.ZERO);
 		repay.setInterest(BigDecimal.ZERO);
 		//repay.setInterestDay(interestDay);
-		repay.setInterestEndDate(periodResult.getInterestEndDate());
+		//计息截止日：是指这一日期也算利息
+		if(periodResult.getPeriod() == totalPeriodNum 
+				&& listingInfoPo.getExpireDateInterest().intValue() == YesNo.是.value) {
+			//最后一期 并且到期日计息
+			repay.setInterestEndDate(periodResult.getInterestEndDate());
+		} else {
+			repay.setInterestEndDate(DateUtil.add(periodResult.getInterestEndDate(),Calendar.DATE, -1));
+		}
 		repay.setInterestStartDate(periodResult.getInterestStartDate());
 		repay.setPlanRepayDate(periodResult.getRepayDate());
 		repay.setRepayStatus(RepayStatus.未还款.status);
