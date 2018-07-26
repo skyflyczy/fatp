@@ -28,6 +28,9 @@ public enum IdTypeDesc {
 				return item;
 			}
 		}
+		if(name !=null && name.contains("营业执照")) {
+			return IdTypeDesc.统一社会信用代码;
+		}
 		return null;
 	}
 	public static IdTypeDesc fromIdIdType(int type) {

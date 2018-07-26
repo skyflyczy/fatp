@@ -89,7 +89,7 @@ public class BizplanPayinvestService extends BaseService{
 		genExcelTitle(sheet);
 		if(CollectionUtils.isNotEmpty(list)) {
 			for(int i = 0 ; i < list.size() ; i ++) {
-				BizplanPayinvest payinvest = list.get(0);
+				BizplanPayinvest payinvest = list.get(i);
 				HSSFRow currentRow = sheet.createRow(i+1);
 				//TODO 转账类型？行内转帐填1；同城跨行转帐填2；异地汇款填3；超级网银实时转账4；超级网银有5万元/笔限制
 				currentRow.createCell(0).setCellValue("");
