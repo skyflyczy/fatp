@@ -33,6 +33,7 @@ import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.domain.offsite.BizimportTradeDetail;
 import com.fatp.domain.offsite.InvestApply;
 import com.fatp.domain.offsite.InvestRecordsResult;
+import com.fatp.enums.offsite.ApplyStatus;
 import com.fatp.exception.ErrorCode;
 import com.fatp.exception.FatpException;
 import com.fatp.interceptor.FlashUpload;
@@ -218,8 +219,11 @@ public class InvestApplyController extends BaseController{
 		int applySumNum = 0;
 		if(CollectionUtils.isNotEmpty(applyList)) {
 			for(BizImportApply apply : applyList) {
-				applySumMoney = applySumMoney.add(apply.getTotalMoney());
-				applySumNum = applySumNum + apply.getTotalNum();
+				if(apply.getApplyStatus().intValue() == ApplyStatus.登记成功.status
+						|| apply.getApplyStatus().intValue() == ApplyStatus.登记中.status) {
+					applySumMoney = applySumMoney.add(apply.getTotalMoney());
+					applySumNum = applySumNum + apply.getTotalNum();
+				}
 			}
 		}
 		request().setAttribute("applySumMoney", applySumMoney);

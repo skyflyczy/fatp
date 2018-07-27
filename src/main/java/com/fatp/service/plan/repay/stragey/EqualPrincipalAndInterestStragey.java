@@ -7,13 +7,20 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fatp.domain.offsite.BizImportApply;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.datasupprot.sys.SysWorkdateDataSupportService;
 import com.fatp.service.plan.repay.result.PeriodResult;
 import com.fatp.util.DateUtil;
-
+/**
+ * 等额本息
+ * 
+ * @author zhiya.chai
+ * @date 2018年7月27日 下午12:50:21
+ */
+@Service("equalPrincipalAndInterestStragey")
 public class EqualPrincipalAndInterestStragey extends PlanGenStragey{
 	
 	@Autowired

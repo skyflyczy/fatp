@@ -30,7 +30,7 @@ public class PlanFactory {
 		} else if(payInterestType == PayInterestType.按月付息到期还本.type){
 			return (PlanGenStragey)FatpContext.getContext().getBean("monthInterestStragey");
 		} else if(payInterestType == PayInterestType.等额本息.type){
-			
+			return (PlanGenStragey)FatpContext.getContext().getBean("equalPrincipalAndInterestStragey");
 		}
 		return null;
 	}
