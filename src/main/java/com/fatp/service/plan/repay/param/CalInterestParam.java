@@ -2,7 +2,6 @@ package com.fatp.service.plan.repay.param;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import com.fatp.enums.project.InterestBase;
 import com.fatp.enums.project.InterestRate;
@@ -25,10 +24,8 @@ public class CalInterestParam {
 	private Date valueDate;
 	//到期日
 	private Date expireDate;
-	/**
-	 * 收益利息阶梯
-	 */
-	private List<InvestProfitParam> investProfitParamList;
+	//利率
+	private BigDecimal investProfit;
 	
 	
 	public BigDecimal getPrincipal() {
@@ -61,17 +58,17 @@ public class CalInterestParam {
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
 	}
-	public List<InvestProfitParam> getInvestProfitParamList() {
-		return investProfitParamList;
-	}
-	public void setInvestProfitParamList(
-			List<InvestProfitParam> investProfitParamList) {
-		this.investProfitParamList = investProfitParamList;
-	}
 	public int getInterestCount() {
 		return interestCount;
 	}
 	public void setInterestCount(int interestCount) {
 		this.interestCount = interestCount;
 	}
+	public BigDecimal getInvestProfit() {
+		return investProfit;
+	}
+	public void setInvestProfit(BigDecimal investProfit) {
+		this.investProfit = investProfit;
+	}
+	
 }

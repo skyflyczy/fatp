@@ -1,14 +1,10 @@
 package com.fatp.service.plan.repay;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import com.fatp.enums.project.InterestBase;
 import com.fatp.service.plan.repay.param.CalInterestParam;
-import com.fatp.service.plan.repay.param.InvestProfitParam;
 import com.fatp.util.DateUtil;
 
 /**
@@ -30,7 +26,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calYearProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 1, zeroplace, paramInt);
+    	return coreCal(param.getInvestProfit(), param.getPrincipal(), param.getInterestCount(), 1, zeroplace, paramInt);
     }
     
     /**
@@ -43,7 +39,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calSeasonProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 4, zeroplace, paramInt);
+    	return coreCal(param.getInvestProfit(), param.getPrincipal(), param.getInterestCount(), 4, zeroplace, paramInt);
     }
     
     /**
@@ -56,7 +52,7 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calHalfAYearProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(), 2, zeroplace, paramInt);
+    	return coreCal(param.getInvestProfit(), param.getPrincipal(), param.getInterestCount(), 2, zeroplace, paramInt);
     }
 
     /**
@@ -74,11 +70,11 @@ public class CalInterestUtil {
         int interestDay = param.getInterestCount();//计息天数
         switch (interestBase) {
             case ACT_365:
-            	return calProfitByLadder(param.getInvestProfitParamList(), principal, interestDay, 365, zeroplace, paramInt);
+            	return coreCal(param.getInvestProfit(), principal, interestDay, 365, zeroplace, paramInt);
             case ACT_360:
-            	return calProfitByLadder(param.getInvestProfitParamList(), principal, interestDay, 360, zeroplace, paramInt);
+            	return coreCal(param.getInvestProfit(), principal, interestDay, 360, zeroplace, paramInt);
             case ACT_ACT:
-                return calProfitByACT(param.getValueDate(),param.getExpireDate(),interestDay, principal,param.getInvestProfitParamList(),zeroplace, paramInt);
+                return calProfitByACT(param.getValueDate(),param.getExpireDate(),interestDay, principal,param.getInvestProfit(),zeroplace, paramInt);
             default:
                 return BigDecimal.ZERO;
         }
@@ -96,7 +92,7 @@ public class CalInterestUtil {
      * @return
      */
     private static BigDecimal calProfitByACT(Date valueDate,Date expireDate,int interestDay,
-    		BigDecimal principal, List<InvestProfitParam> investProfitParamList, int zeroplace, int paramInt) {
+    		BigDecimal principal, BigDecimal investProfit, int zeroplace, int paramInt) {
         int firstYear = DateUtil.getYear(valueDate);
         int lastYear = DateUtil.getYear(expireDate);
         BigDecimal interest = BigDecimal.ZERO;//利息
@@ -109,22 +105,22 @@ public class CalInterestUtil {
                 lastYearDays = (interestDay - calInterestDay) + lastYearDays;
             }
             if (DateUtil.isLeapYear(firstYear)) {//是否是闰年
-            	interest = calProfitByLadder(investProfitParamList, principal, firstYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt);
+            	interest = coreCal(investProfit, principal, firstYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt);
             } else {
-            	interest = calProfitByLadder(investProfitParamList, principal, firstYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt);
+            	interest = coreCal(investProfit, principal, firstYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt);
             }
             if (DateUtil.isLeapYear(lastYear)) {//是否是闰年
-            	interest = interest.add(calProfitByLadder(investProfitParamList, principal, lastYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt));
+            	interest = interest.add(coreCal(investProfit, principal, lastYearDays, LEAP_YEAR_DAYS, zeroplace, paramInt));
             } else {
-            	interest = interest.add(calProfitByLadder(investProfitParamList, principal, lastYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt));
+            	interest = interest.add(coreCal(investProfit, principal, lastYearDays, PLAIN_YEAR_DAYS, zeroplace, paramInt));
             }
             int diffYeay = lastYear - firstYear - 1;//相差年份
-            interest = interest.add(calProfitByLadder(investProfitParamList, principal, diffYeay, 1, zeroplace, paramInt));
+            interest = interest.add(coreCal(investProfit, principal, diffYeay, 1, zeroplace, paramInt));
         } else {
             if (DateUtil.isLeapYear(firstYear)) {//是否是闰年
-                interest = calProfitByLadder(investProfitParamList, principal, interestDay, LEAP_YEAR_DAYS, zeroplace, paramInt);
+                interest = coreCal(investProfit, principal, interestDay, LEAP_YEAR_DAYS, zeroplace, paramInt);
             } else {
-                interest = calProfitByLadder(investProfitParamList, principal, interestDay, PLAIN_YEAR_DAYS, zeroplace, paramInt);
+                interest = coreCal(investProfit, principal, interestDay, PLAIN_YEAR_DAYS, zeroplace, paramInt);
             }
         }
         return interest;
@@ -140,11 +136,11 @@ public class CalInterestUtil {
      * @author zhiya.chai
      */
     public static BigDecimal calMonthProfit(CalInterestParam param, int zeroplace, int paramInt) {
-    	return calProfitByLadder(param.getInvestProfitParamList(), param.getPrincipal(), param.getInterestCount(),12, zeroplace, paramInt);
+    	return coreCal(param.getInvestProfit(), param.getPrincipal(), param.getInterestCount(),12, zeroplace, paramInt);
     }
     /**
-     * 阶梯利率计算
-     * @param investProfitParamList 阶梯利率集合
+     * 核心计算
+     * @param investProfit 利率
      * @param principal 计算本金
      * @param interestDay 计息天数
      * @param interestBaseDay 计息基准天数
@@ -152,43 +148,7 @@ public class CalInterestUtil {
      * @param paramInt
      * @return
      */
-    private static BigDecimal calProfitByLadder(List<InvestProfitParam> investProfitParamList,
-    		BigDecimal principal,int interestDay,int interestBaseDay,int zeroplace, int paramInt) {
-    	Collections.sort(investProfitParamList);  //阶梯利率排序,金额从小到大排序
-        for(InvestProfitParam investProfitParam : investProfitParamList) {
-        	if(principal.compareTo(investProfitParam.getMinInvestMoney()) >= 0 
-        			&& principal.compareTo(investProfitParam.getMaxInvestMoney()) < 0) {
-        		//如果本金在这个区间内，按照此区间计算
-        		return principal.multiply(investProfitParam.getInvestProfit()).multiply(new BigDecimal(interestDay)).divide(new BigDecimal(interestBaseDay),zeroplace,paramInt).setScale(zeroplace, paramInt);
-        	}
-        }
-        //如果都不在此区间，则本金证明大于等于最后一个阶梯，则按照最后一个阶梯计算
-        InvestProfitParam investProfitParam = investProfitParamList.get(investProfitParamList.size()-1);
-        return principal.multiply(investProfitParam.getInvestProfit()).multiply(new BigDecimal(interestDay)).divide(new BigDecimal(interestBaseDay),zeroplace,paramInt).setScale(zeroplace, paramInt);
+    private static BigDecimal coreCal(BigDecimal investProfit,BigDecimal principal,int interestDay,int interestBaseDay,int zeroplace, int paramInt) {
+        return principal.multiply(investProfit).multiply(new BigDecimal(interestDay)).divide(new BigDecimal(interestBaseDay),zeroplace,paramInt).setScale(zeroplace, paramInt);
     }
-    
-    public static void main(String[] args) {
-    	List<InvestProfitParam> list = new ArrayList<InvestProfitParam>();
-    	InvestProfitParam p = new InvestProfitParam();
-    	p.setMinInvestMoney(new BigDecimal("1000"));
-    	p.setMaxInvestMoney(new BigDecimal("3000"));
-    	p.setInvestProfit(new BigDecimal("0.2"));
-    	InvestProfitParam p1 = new InvestProfitParam();
-    	p1.setMinInvestMoney(new BigDecimal("0"));
-    	p1.setMaxInvestMoney(new BigDecimal("1000"));
-    	p1.setInvestProfit(new BigDecimal("0.1"));
-    	list.add(p);
-    	list.add(p1);
-    	CalInterestParam param = new CalInterestParam();
-    	param.setInterestCount(32);
-    	param.setExpireDate(DateUtil.autoParseDate("2018-06-31"));
-    	param.setValueDate(DateUtil.autoParseDate("2018-06-01"));
-    	param.setPrincipal(new BigDecimal("4000"));
-    	param.setInterestBase(InterestBase.ACT_ACT);
-    	param.setInvestProfitParamList(list);
-    	int zeroplace = 2;
-    	System.out.println(CalInterestUtil.calMonthProfit(param, zeroplace,  BigDecimal.ROUND_DOWN));
-    	System.out.println(CalInterestUtil.calDaysProfit(param, zeroplace,  BigDecimal.ROUND_DOWN));
-    	System.out.println(CalInterestUtil.calYearProfit(param, zeroplace,  BigDecimal.ROUND_DOWN));
-	}
 }

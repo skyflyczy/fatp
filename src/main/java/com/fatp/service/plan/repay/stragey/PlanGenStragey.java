@@ -3,9 +3,10 @@ package com.fatp.service.plan.repay.stragey;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.fatp.domain.listing.ListingTrade;
 import com.fatp.domain.offsite.BizImportApply;
@@ -22,7 +23,6 @@ import com.fatp.po.biz.BizplanRepayPo;
 import com.fatp.po.project.ListingInfoPo;
 import com.fatp.service.plan.repay.CalInterestUtil;
 import com.fatp.service.plan.repay.param.CalInterestParam;
-import com.fatp.service.plan.repay.param.InvestProfitParam;
 import com.fatp.service.plan.repay.result.PeriodResult;
 import com.fatp.util.DateUtil;
 import com.fatp.util.UUIDUtil;
@@ -127,24 +127,30 @@ public abstract class PlanGenStragey {
 		return interest;
 	} 
 	/**
-	 * 生成阶梯利息参数
+	 * 根据阶梯利率获取投资利率
 	 * @param listingTradeList
-	 * @param addInvestProfit  加息
+	 * @param principal
+	 * @param addInvestProfit
 	 * @return
 	 */
-	public List<InvestProfitParam> genInvestProfitParamList(List<ListingTrade> listingTradeList,BigDecimal addInvestProfit) {
-		List<InvestProfitParam> list = listingTradeList.stream().map(listingTrade -> {
-			InvestProfitParam param = new InvestProfitParam();
-			param.setMinInvestMoney(listingTrade.getMinInvestMoney());
-			param.setMaxInvestMoney(listingTrade.getMaxInvestMoney());
-			if(addInvestProfit != null) {
-				param.setInvestProfit(listingTrade.getInvestProfit().add(addInvestProfit));
-			} else {
-				param.setInvestProfit(listingTrade.getInvestProfit());
+	public BigDecimal getInvestProfitByLadder(List<ListingTrade> listingTradeList,BigDecimal principal,BigDecimal addInvestProfit) {
+		//阶梯利率排序,金额从小到大排序
+		Collections.sort(listingTradeList, new Comparator<ListingTrade>() {
+			@Override
+			public int compare(ListingTrade o1, ListingTrade o2) {
+				return o1.getMinInvestMoney().compareTo(o2.getMinInvestMoney());
 			}
-			return param;
-		}).collect(Collectors.toList());
-		return list;
+		});
+		for(ListingTrade listingTrade : listingTradeList) {
+        	if(principal.compareTo(listingTrade.getMinInvestMoney()) >= 0 
+        			&& principal.compareTo(listingTrade.getMaxInvestMoney()) < 0) {
+        		//如果本金在这个区间内，按照此区间计算
+        		return addInvestProfit != null ? listingTrade.getInvestProfit().add(addInvestProfit) : listingTrade.getInvestProfit();
+        	}
+        }
+		//如果都不在此区间，则本金证明大于等于最后一个阶梯，则按照最后一个阶梯计算
+		ListingTrade listingTrade = listingTradeList.get(listingTradeList.size() - 1);
+		return addInvestProfit != null ? listingTrade.getInvestProfit().add(addInvestProfit) : listingTrade.getInvestProfit();
 	}
 	/**
 	 * 生成计息参数
@@ -260,11 +266,12 @@ public abstract class PlanGenStragey {
 	 */
 	public abstract List<PeriodResult> periodResultList(ListingInfoPo listingInfoPo,BizImportApply apply);
 	/**
-	 * 获取本期的本金
+	 * 获取本期的本金  [0]：应还本金  [1]：计息本金
 	 * @param totalPrincipal //总本金
 	 * @param periodNum 期数
 	 * @param totalPeriodNum 总期数
+	 * @param investProfit 收益率
 	 * @return
 	 */
-	public abstract BigDecimal periodPrincipal(BigDecimal totalPrincipal,int periodNum,int totalPeriodNum);
+	public abstract BigDecimal[] periodPrincipal(BigDecimal totalPrincipal,int periodNum,int totalPeriodNum,BigDecimal investProfit);
 }

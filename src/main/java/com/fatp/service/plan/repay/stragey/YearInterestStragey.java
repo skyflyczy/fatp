@@ -65,11 +65,12 @@ public class YearInterestStragey extends PlanGenStragey{
 	}
 
 	@Override
-	public BigDecimal periodPrincipal(BigDecimal totalPrincipal, int periodNum,int totalPeriodNum) {
+	public BigDecimal[] periodPrincipal(BigDecimal totalPrincipal, int periodNum,int totalPeriodNum,BigDecimal investProfit) {
+		BigDecimal payPrincipal = BigDecimal.ZERO;
 		if(periodNum == totalPeriodNum) {
-			return totalPrincipal;
+			payPrincipal = totalPrincipal;
 		}
-		return BigDecimal.ZERO;
+		return new BigDecimal[]{payPrincipal,totalPrincipal};
 	}
 	
 	public static void main(String[] args) {

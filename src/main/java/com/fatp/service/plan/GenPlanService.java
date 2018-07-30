@@ -22,7 +22,6 @@ import com.fatp.service.datasupprot.biz.BizplanPayinvestDataSupportService;
 import com.fatp.service.datasupprot.biz.BizplanRepayDataSupportService;
 import com.fatp.service.plan.repay.PlanFactory;
 import com.fatp.service.plan.repay.param.CalInterestParam;
-import com.fatp.service.plan.repay.param.InvestProfitParam;
 import com.fatp.service.plan.repay.result.PeriodResult;
 import com.fatp.service.plan.repay.stragey.PlanGenStragey;
 
@@ -90,17 +89,16 @@ public class GenPlanService extends BaseService{
 		List<BizplanPayinvestPo> payinvestList = tradeDetailList.stream().map(tradeDetail ->{
 			//组装计算利息参数,生成利息
 			List<CalInterestParam> calInterestParamList = planGenStagey.genCalInterestParamList(listingInfoPo, periodResult.getInterestStartDate(), periodResult.getInterestEndDate(),periodResult.getPeriod() == totalPeriodNum);
-			//生成利息参数集合
-			List<InvestProfitParam> investProfitParamList = planGenStagey.genInvestProfitParamList(listingTradeList,tradeDetail.getAddInvestProfit());
+			//根据阶梯利率获取利率
+			BigDecimal investProfit = planGenStagey.getInvestProfitByLadder(listingTradeList, tradeDetail.getTradeMoney(), tradeDetail.getAddInvestProfit());
 			//组装计算利息参数,生成利息
 			BizplanPayinvestPo payinvest = planGenStagey.genBasePayinvest(operatorId, tradeDetail);
 			BigDecimal interest = BigDecimal.ZERO;
-			if(periodResult.getPeriod() == 8) {
-				System.out.println("------------------");
-			}
+			//获取应还本金和计息本金
+			BigDecimal principals[] = planGenStagey.periodPrincipal(tradeDetail.getTradeMoney(),periodResult.getPeriod(),totalPeriodNum,investProfit);
 			for(CalInterestParam param : calInterestParamList) {
-				param.setInvestProfitParamList(investProfitParamList);
-				param.setPrincipal(tradeDetail.getTradeMoney());
+				param.setInvestProfit(investProfit);
+				param.setPrincipal(principals[1]);
 				//计算利息
 				interest = interest.add(planGenStagey.calProfit(param));
 			}
@@ -108,13 +106,13 @@ public class GenPlanService extends BaseService{
 				//加息天数  最后一期加
 				InterestBase interestBase = InterestBase.getInterestBaseByValue(listingInfoPo.getInterestBase().intValue());
 				CalInterestParam param = planGenStagey.genCalInterestParam(periodResult.getInterestEndDate(), periodResult.getInterestEndDate(), InterestRate.按日计息, interestBase, tradeDetail.getAddInvestProfitDays().intValue());
-				param.setInvestProfitParamList(investProfitParamList);
-				param.setPrincipal(tradeDetail.getTradeMoney());
+				param.setInvestProfit(investProfit);
+				param.setPrincipal(principals[1]);
 				//计算加息
 				interest = interest.add(planGenStagey.calProfit(param));
 			}
 			payinvest.setPeriodNumber(periodResult.getPeriod());
-			payinvest.setPrincipal(planGenStagey.periodPrincipal(tradeDetail.getTradeMoney(),periodResult.getPeriod(),totalPeriodNum));
+			payinvest.setPrincipal(principals[0]);
 			payinvest.setInterest(interest);
 			payinvest.setBizImportApplyId(applyId);
 			return payinvest;

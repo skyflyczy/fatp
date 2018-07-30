@@ -40,9 +40,9 @@ public class OneTimeStragey extends PlanGenStragey{
 	}
 
 	@Override
-	public BigDecimal periodPrincipal(BigDecimal totalPrincipal, int periodNum,
-			int totalPeriodNum) {
-		return totalPrincipal;
+	public BigDecimal[] periodPrincipal(BigDecimal totalPrincipal, int periodNum,
+			int totalPeriodNum,BigDecimal investProfit) {
+		return new BigDecimal[]{totalPrincipal,totalPrincipal};
 	}
 	
 }
