@@ -42,6 +42,22 @@ public class BizplanPayinvestPo {
 	 */
 	private String subBankName;
 	/**
+	 * 转账类型
+	 */
+	private Integer transferType;
+	/**
+	 * 支行省份
+	 */
+	private String subBankProvince;
+	/**
+	 * 支行城市
+	 */
+	private String subBankCity;
+	/**
+	 * 备注
+	 */
+	private String remarks;
+	/**
 	 * 兑付期次
 	 */
 	private Integer periodNumber;
@@ -212,5 +228,30 @@ public class BizplanPayinvestPo {
 	public void setBizImportApplyId(Integer bizImportApplyId) {
 		this.bizImportApplyId = bizImportApplyId;
 	}
+	public Integer getTransferType() {
+		return transferType;
+	}
+	public void setTransferType(Integer transferType) {
+		this.transferType = transferType;
+	}
+	public String getSubBankProvince() {
+		return subBankProvince;
+	}
+	public void setSubBankProvince(String subBankProvince) {
+		this.subBankProvince = subBankProvince;
+	}
+	public String getSubBankCity() {
+		return subBankCity;
+	}
+	public void setSubBankCity(String subBankCity) {
+		this.subBankCity = subBankCity;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	
 }
 

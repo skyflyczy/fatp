@@ -53,6 +53,10 @@ public abstract class PlanGenStragey {
 		payinvest.setUpdateOperatorId(operatorId);
 		payinvest.setPayinvestStatus(PayinvestStatus.未兑付.status);
 		payinvest.setIsDelete(YesNo.否.value);
+		payinvest.setTransferType(tradeDetail.getTransferType());
+		payinvest.setSubBankProvince(tradeDetail.getSubBankProvince());
+		payinvest.setSubBankCity(tradeDetail.getSubBankCity());
+		payinvest.setRemarks(tradeDetail.getRemarks());
 		return payinvest;
 	}
 	/**

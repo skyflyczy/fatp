@@ -92,7 +92,7 @@ public class BizplanPayinvestService extends BaseService{
 				BizplanPayinvest payinvest = list.get(i);
 				HSSFRow currentRow = sheet.createRow(i+1);
 				//TODO 转账类型？行内转帐填1；同城跨行转帐填2；异地汇款填3；超级网银实时转账4；超级网银有5万元/笔限制
-				currentRow.createCell(0).setCellValue("");
+				currentRow.createCell(0).setCellValue(payinvest.getTransferType() == null ? "" : String.valueOf(payinvest.getTransferType()));
 				//付款人清分子账号：必填，最大14位长度
 				currentRow.createCell(1).setCellValue(StringUtil.isNotBlank(listingInfo.getSettleCardAccount()) ? listingInfo.getSettleCardAccount() : "");
 				//留空
@@ -102,9 +102,9 @@ public class BizplanPayinvestService extends BaseService{
 				//收款人名称栏：必填，最大90个汉字
 				currentRow.createCell(4).setCellValue(payinvest.getInvestUserRealName());
 				//收款方所在省：异地汇款必填，行内转帐和同城跨行不必填，填入视为空，最大10个汉字
-				currentRow.createCell(5).setCellValue("");
+				currentRow.createCell(5).setCellValue(payinvest.getSubBankProvince() == null ? "" : payinvest.getSubBankProvince());
 				//收款方所在市县：异地汇款必填，行内转帐和同城跨行不必填，最大10个汉字填入视为空
-				currentRow.createCell(6).setCellValue("");
+				currentRow.createCell(6).setCellValue(payinvest.getSubBankCity() == null ? "" : payinvest.getSubBankCity());
 				//收款方开户行名称：同城跨行、异地汇款必填，行内转帐不必填，填入视为空，最大90个汉字
 				currentRow.createCell(7).setCellValue(payinvest.getSubBankName());
 				//金额栏：必填，最大百亿位，可以有2位小数位，也可没有小数位
@@ -112,7 +112,7 @@ public class BizplanPayinvestService extends BaseService{
 				//预约转账标志，非必填，不填留空，要预约转账时填Y
 				currentRow.createCell(9).setCellValue("");
 				//TODO 用途，必输，请输入款项真实用途，企业对用途的真实性负责，最大50位
-				currentRow.createCell(10).setCellValue("兑付");
+				currentRow.createCell(10).setCellValue(payinvest.getRemarks() == null ? "兑付" : payinvest.getRemarks());
 				//预约转账日期：如预约转账标志设为Y则必填，没有设为Y不必填，格式为YYYYMMDD,暂不支持预约转账
 				currentRow.createCell(11).setCellValue("");
 				//币种：留空

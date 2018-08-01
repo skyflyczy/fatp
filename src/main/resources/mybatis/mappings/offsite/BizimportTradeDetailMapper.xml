@@ -19,6 +19,10 @@
         	addInvestProfitDays ,
         	CardAccount ,
         	SubBankName ,
+        	TransferType,
+        	SubBankProvince,
+        	SubBankCity,
+        	Remarks,
         	CreateTime ,
         	UpdateTime 
         ) VALUES 
@@ -40,6 +44,10 @@
         	#{obj.addInvestProfitDays} ,
         	#{obj.cardAccount} ,
         	#{obj.subBankName} ,
+        	#{obj.transferType} ,
+        	#{obj.subBankProvince} ,
+        	#{obj.subBankCity} ,
+        	#{obj.remarks} ,
         	now() ,
         	now() 
         )

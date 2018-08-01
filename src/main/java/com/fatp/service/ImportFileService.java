@@ -113,6 +113,13 @@ public class ImportFileService {
 			detail.setCardAccount(strArray[10]);
 			detail.setSubBankName(strArray[11]);
 			detail.setExchangeId(exchangeId);
+			if(strArray.length > 12) {
+				//这里包含转账类型、省份、市、备注
+				detail.setTransferType(StringUtils.isBlank(strArray[12]) ? null : new BigDecimal(strArray[12].trim()).intValue());
+				detail.setSubBankProvince(StringUtils.isBlank(strArray[13]) ? "" : strArray[13]);
+				detail.setSubBankCity(StringUtils.isBlank(strArray[14]) ? "" : strArray[14]);
+				detail.setRemarks(StringUtils.isBlank(strArray[15]) ? "" : strArray[15]);
+			}
 			if (detail.getIdTypeId() == null || StringUtils.isBlank(detail.getIdNumber())
 					|| detail.getIdNumber().indexOf(".") >= 0 || StringUtils.isBlank(detail.getUserRealName())
 					|| (detail.getIdTypeId() == IdTypeDesc.身份证.getIdType()

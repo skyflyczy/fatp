@@ -82,6 +82,22 @@ public class BizimportTradeDetailPo implements Serializable{
 	 */
 	private String subBankName;
 	/**
+	 * 转账类型
+	 */
+	private Integer transferType;
+	/**
+	 * 支行省份
+	 */
+	private String subBankProvince;
+	/**
+	 * 支行城市
+	 */
+	private String subBankCity;
+	/**
+	 * 备注
+	 */
+	private String remarks;
+	/**
 	 * 创建时间
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
@@ -206,6 +222,29 @@ public class BizimportTradeDetailPo implements Serializable{
 	public java.util.Date getUpdateTime() {
 		return this.updateTime;
 	}
-
+	public Integer getTransferType() {
+		return transferType;
+	}
+	public void setTransferType(Integer transferType) {
+		this.transferType = transferType;
+	}
+	public String getSubBankProvince() {
+		return subBankProvince;
+	}
+	public void setSubBankProvince(String subBankProvince) {
+		this.subBankProvince = subBankProvince;
+	}
+	public String getSubBankCity() {
+		return subBankCity;
+	}
+	public void setSubBankCity(String subBankCity) {
+		this.subBankCity = subBankCity;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 }
 
