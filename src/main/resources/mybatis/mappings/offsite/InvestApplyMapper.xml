@@ -21,7 +21,7 @@
 						COUNT(bizimport_apply.Id) applyNum 
 						FROM bizimport_apply 
 						LEFT JOIN bizimport_summary ON (bizimport_apply.Id = bizimport_summary.BizImportApplyId) 
-						WHERE (bizimport_apply.ApplyStatus = 3 OR bizimport_apply.ApplyStatus = 2) AND bizimport_apply.IsDelete = 0 AND bizimport_apply.ApplyType = 1 
+						WHERE (bizimport_apply.ApplyStatus = 3 OR bizimport_apply.ApplyStatus = 2 OR bizimport_apply.ApplyStatus = 4) AND bizimport_apply.IsDelete = 0 AND bizimport_apply.ApplyType = 1 
 						GROUP BY bizimport_apply.ListingInfoId 
 					  ) bizimport_summary ON (bizimport_summary.ListingInfoId = listing_info.Id)
 		) t
