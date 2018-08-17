@@ -268,23 +268,23 @@ public class ListingInfoDataSupportService extends BaseService{
 		String importResult="";
 		for (ListingInfoPo po : poilist) {
 			try {
-				listingInfoDao.insert(po);
 				List<ListingTradePo> tradePo = getListingTradePo(po);
 				for (ListingTradePo tp : tradePo) {
 					listingTradeDao.insert(tp);// 插入listing_trade表
 				}
+				listingInfoDao.insert(po);				
 				successNum ++;
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("导入产品信息失败：",e);
 				failNum++;
-				errBizCode += po.getPartnerBizCode() + ";";
+				errBizCode += po.getPartnerBizCode()+"," + e.getMessage()+";";
 			}
 		}
 		if (errBizCode.equals("")) {
 			importResult = "成功导入[ " + successNum + " ]条";
 		} else {
-			importResult = "成功导入[ " + successNum + " ]条； 失败["+failNum+"]条，产品编号【" + errBizCode + "】。";
+			importResult = "成功导入[ " + successNum + " ]条；<font color=red> 失败["+failNum+"]条，产品编号【" + errBizCode + "】。</font>";
 		}
 		return importResult;
 	}
@@ -294,9 +294,9 @@ public class ListingInfoDataSupportService extends BaseService{
  * @param po ListingTradePo
  * @return
  */
-	private List<ListingTradePo> getListingTradePo(ListingInfoPo po) {
+	private List<ListingTradePo> getListingTradePo(ListingInfoPo po)throws Exception {
 		String pValue = po.getProfitValue();
-		System.out.println("---------ListingInfoPo="+po);
+		logger.info("---------ListingInfoPo="+po);
 		List<ListingTradePo> plist = new ArrayList<ListingTradePo>();
 		if (StringUtil.isBlank(pValue)) {
 			return plist;
@@ -305,11 +305,13 @@ public class ListingInfoDataSupportService extends BaseService{
 		BigDecimal minInvestMoney = po.getMinInvestMoney() == null ? BigDecimal.ZERO : po.getMinInvestMoney();
 		for (int i =0;i<pv.length;i++) {
 			String profit = pv[i];
-			System.out.println("---------"+i+"----------profit="+profit);
+			logger.info("---------"+i+"----------profit="+profit);
 			if (profit != null && !profit.equals("")) {
 				String[] minToMax = profit.split(":");
 				ListingTradePo tradePo = new ListingTradePo();
 				tradePo.setListingInfoId(po.getId());// 挂牌产品Id,listing_info.id
+				logger.info("-------------------minToMax[0]="+minToMax[0]);
+				if(minToMax.length<2||minToMax[1]==null)throw new Exception("错误信息(预期收益率值)");
 				BigDecimal bd = new BigDecimal(minToMax[1]);
 				BigDecimal bd2 = new BigDecimal("0.01");
 				tradePo.setInvestProfit(bd.multiply(bd2));// 拟定年化收益率,没有乘以%InvestProfit
@@ -319,7 +321,7 @@ public class ListingInfoDataSupportService extends BaseService{
 				tradePo.setUpateOperatorId(po.getUpateOperatorId());
 				plist.add(tradePo);
 				minInvestMoney = tradePo.getMaxInvestMoney();
-				System.out.println("---------"+i+"----------tradePo--------"+tradePo);
+				logger.info("---------"+i+"----------tradePo--------"+tradePo);
 			}
 		}
 		System.out.println("-------------------plist--------"+plist);

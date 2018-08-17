@@ -256,7 +256,7 @@ public class ImportFileService {
 					err = err.substring(err.indexOf(':')+1);
 				}
 				e.printStackTrace();			
-				throw new FatpException("挂牌文件第" + (i + 2) + "行产品信息错误【"+err+"】，请检查后重新上传");
+				throw new FatpException("<font color=red>产品编号【" + strArray[0] + "】,错误信息("+err+")</font>");
 			}
 			list.add(listingInfo);
 			logger.info("listingInfo["+i + "] = " + listingInfo);
